@@ -15,7 +15,7 @@ pip install jubakit
 * Although not mandatory, [scikit-learn](http://scikit-learn.org/stable/install.html) is required to use some features like K-fold cross validation.
 
 ```
-pip install scikit-learn
+pip install numpy scipy scikit-learn
 ```
 
 ## Quick Start
