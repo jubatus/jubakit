@@ -48,7 +48,3 @@ class StubGenericConfig(GenericConfig):
   @classmethod
   def _default_parameter(cls):
     return None
-
-  @classmethod
-  def _default_converter(cls):
-    return None

@@ -574,16 +574,6 @@ class GenericConfig(BaseConfig):
       'unigram': {'method': 'ngram', 'char_num': '1'},
       'bigram':  {'method': 'ngram', 'char_num': '2'},
       'trigram': {'method': 'ngram', 'char_num': '3'},
-      'mecab':   {
-        'method': 'dynamic',
-        'path': 'libmecab_splitter.so',
-        'function': 'create',
-        'arg': '',
-        'ngram': '1',
-        'base': 'false',
-        'include_features': '*',
-        'exclude_features': '',
-      }
     }
     cfg['string_rules'] = [
       {'key': '*', 'type': 'unigram', 'sample_weight': 'tf', 'global_weight': 'idf'}
@@ -599,3 +589,15 @@ class GenericConfig(BaseConfig):
     Initialize the `converter` section of the config with an empty template.
     """
     self['converter'] = copy.deepcopy(self._CONVERTER_TEMPLATE)
+
+  def add_mecab(self, name='mecab', arg='', ngram=1, base=False, include_features='*', exclude_features=''):
+    self['converter']['string_types'][name] = {
+      'method': 'dynamic',
+      'path': 'libmecab_splitter.so',
+      'function': 'create',
+      'arg': arg,
+      'ngram': str(ngram),
+      'base': 'true' if base else 'false',
+      'include_features': include_features,
+      'exclude_features': exclude_features,
+    }

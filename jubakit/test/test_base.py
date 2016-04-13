@@ -142,4 +142,17 @@ class TestBaseConfig(TestCase):
 class TestGenericConfg(TestCase):
   def test_simple(self):
     config = StubGenericConfig()
-    self.assertEqual({'method': 'test'}, config)
+    self.assertEqual('test', config['method'])
+
+  def test_clear_converter(self):
+    config = StubGenericConfig()
+    self.assertTrue('unigram' in config['converter']['string_types'])
+    config.clear_converter()
+    self.assertFalse('unigram' in config['converter']['string_types'])
+
+  def test_add_mecab(self):
+    config = StubGenericConfig()
+    self.assertFalse('mecab2' in config['converter']['string_types'])
+    config.add_mecab(name='mecab2', ngram=2)
+    self.assertTrue('mecab2' in config['converter']['string_types'])
+    self.assertEqual('2', config['converter']['string_types']['mecab2']['ngram'])
