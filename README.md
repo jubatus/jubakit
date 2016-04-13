@@ -54,11 +54,12 @@ for (idx, label, result) in classifier.classify(dataset):
 
 See the `example` directory for working examples.
 
-| Example                   | Topics                                    | Requires scikit-learn |
-|---------------------------|-------------------------------------------|-----------------------|
-| classifier_csv.py         | Simple usage of Classifier and CSV file   |                       |
-| classifier_kfold.py       | K-fold validation and cross validation    | ✓                     |
-| classifier_parameter.py   | Finding best hyper parameter              | ✓                     |
+| Example                   | Topics                                        | Requires scikit-learn |
+|---------------------------|-----------------------------------------------|-----------------------|
+| classifier_csv.py         | Simple usage of Classifier and CSV file       |                       |
+| classifier_libsvm.py      | Simple usage of Classifier and LIBSVM file    | ✓                     |
+| classifier_kfold.py       | K-fold validation and cross validation        | ✓                     |
+| classifier_parameter.py   | Finding best hyper parameter                  | ✓                     |
 
 ## Concepts
 
