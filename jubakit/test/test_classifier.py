@@ -4,11 +4,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
-import numpy as np
-from scipy.sparse import csr_matrix
+try:
+  import numpy as np
+  from scipy.sparse import csr_matrix
+except ImportError:
+  pass
 
 from jubakit.classifier import Schema, Dataset, Classifier, Config
 
+from . import requireSklearn
 from .stub import *
 
 class SchemaTest(TestCase):
@@ -70,6 +74,7 @@ class DatasetTest(TestCase):
     self.assertEqual(expected_labels, actual_labels)
     self.assertEqual(expected_k1s, actual_k1s)
 
+  @requireSklearn
   def test_from_matrix(self):
     ds = Dataset.from_matrix(
       self._create_matrix(),    # data

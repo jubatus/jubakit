@@ -4,11 +4,17 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
-import numpy as np
-from scipy.sparse import csr_matrix
+try:
+  import numpy as np
+  from scipy.sparse import csr_matrix
+except ImportError:
+  pass
 
 from jubakit.loader.sparse import SparseMatrixLoader
 
+from .. import requireSklearn
+
+@requireSklearn
 class SparseMatrixLoaderTest(TestCase):
   def _create_matrix(self):
     """
