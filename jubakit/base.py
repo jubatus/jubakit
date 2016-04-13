@@ -229,7 +229,9 @@ class BaseDataset(object):
     if not self._static:
       raise RuntimeError('non-static datasets cannot be accessed by index')
 
-    if isinstance(index, collections.Iterable):
+    if isinstance(index, slice):
+      return self.__class__(self._loader, self._schema, True, self._data[index])
+    elif isinstance(index, collections.Iterable):
       subdata = []
       for i in index:
         subdata.append(self._data[i])
