@@ -6,6 +6,7 @@ import jubatus
 
 from .base import BaseSchema, BaseDataset, BaseService, GenericConfig
 from .loader.array import ArrayLoader, ZipArrayLoader
+from .loader.sparse import SparseMatrixLoader
 from .loader.chain import SupervisedDataChainLoader
 from .compat import *
 
@@ -36,7 +37,13 @@ class Schema(BaseSchema):
 
 class Dataset(BaseDataset):
   @classmethod
-  def from_array(self, data, labels, feature_names=None, label_names=None, static=True):
+  def _from_loaders(cls, data_loader, label_loader, label_names, static):
+    loader = SupervisedDataChainLoader(data_loader, label_loader, label_names)
+    schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
+    return Dataset(loader, schema, static)
+
+  @classmethod
+  def from_array(cls, data, labels, feature_names=None, label_names=None, static=True):
     """
     Parameters
     ----------
@@ -46,16 +53,30 @@ class Dataset(BaseDataset):
     label_names : array of shape [n_labels], optional
     """
     # Label is feeded with '_label' key from Loader.
-    loader = SupervisedDataChainLoader(
+    return cls._from_loaders(
       ArrayLoader(data, feature_names),
       ZipArrayLoader(_label=labels),
       label_names,
+      static,
     )
 
-    # Create schema.
-    schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
-
-    return Dataset(loader, schema, static)
+  @classmethod
+  def from_matrix(cls, data, labels, feature_names=None, label_names=None, static=True):
+    """
+    Parameters
+    ----------
+    data : scipy 2-D sparse matrix of shape [n_samples, n_features]
+    labels : array of shape [n_samples]
+    feature_names : array of shape [n_features], optional
+    label_names : array of shape [n_labels], optional
+    """
+    # Label is feeded with '_label' key from Loader.
+    return cls._from_loaders(
+      SparseMatrixLoader(data, feature_names),
+      ZipArrayLoader(_label=labels),
+      label_names,
+      static,
+    )
 
   def get_labels(self):
     if not self._static:

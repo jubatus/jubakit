@@ -4,6 +4,9 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
+import numpy as np
+from scipy.sparse import csr_matrix
+
 from jubakit.classifier import Schema, Dataset, Classifier, Config
 
 from .stub import *
@@ -66,6 +69,42 @@ class DatasetTest(TestCase):
 
     self.assertEqual(expected_labels, actual_labels)
     self.assertEqual(expected_k1s, actual_k1s)
+
+  def test_from_matrix(self):
+    ds = Dataset.from_matrix(
+      self._create_matrix(),    # data
+      [ 0, 1, 0 ],              # labels
+      [ 'k1', 'k2', 'k3'],      # feature_names
+      [ 'pos', 'neg'],          # label_names
+    )
+
+    expected_labels = ['pos', 'neg', 'pos']
+    expected_k1s = [1,None,4]
+    expected_k3s = [2,3,6]
+    actual_labels = []
+    actual_k1s = []
+    actual_k3s = []
+    for (idx, (label, d)) in ds:
+      actual_labels.append(label)
+      actual_k1s.append(dict(d.num_values).get('k1', None))
+      actual_k3s.append(dict(d.num_values).get('k3', None))
+
+    self.assertEqual(expected_labels, actual_labels)
+    self.assertEqual(expected_k1s, actual_k1s)
+    self.assertEqual(expected_k3s, actual_k3s)
+
+  def _create_matrix(self):
+    """
+    Create a sparse matrix:
+
+    [[1, 0, 2],
+     [0, 0, 3],
+     [4, 5, 6]]
+    """
+    row = np.array([0, 0, 1, 2, 2, 2])
+    col = np.array([0, 2, 2, 0, 1, 2])
+    data = np.array([1, 2, 3, 4, 5, 6])
+    return csr_matrix((data, (row, col)), shape=(3, 3))
 
 class ClassifierTest(TestCase):
   def test_simple(self):

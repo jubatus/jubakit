@@ -20,8 +20,10 @@ class SparseMatrixLoader(BaseLoader):
       data = {}
       cols_idx = row_mat.nonzero()[1]
       feature_names = self._feature_names
-      if feature_names is None:
-        feature_names = ['v{0}'.format(i) for i in cols_idx]
+
       for i in cols_idx:
-        data[feature_names[i]] = row_mat[0, i]
+        feature_name = 'v{0}'.format(i)
+        if feature_names is not None:
+          feature_name = feature_names[i]
+        data[feature_name] = row_mat[0, i]
       yield self.preprocess(data)
