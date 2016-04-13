@@ -33,7 +33,9 @@ classifier = Classifier.run(Config())
 
 # Train the classifier.
 print("Training...")
-for _ in classifier.train(train_ds): pass
+for (idx, _) in classifier.train(train_ds):
+  if idx % 1000 == 0:
+    print("Training... ({0} %)".format(100 * idx / len(train_ds)))
 
 # Test the classifier.
 print("Testing...")
@@ -42,6 +44,8 @@ y_pred = []
 for (idx, label, result) in classifier.classify(test_ds):
   y_true.append(label)
   y_pred.append(result[0][0])
+  if idx % 1000 == 0:
+    print("Testing... ({0} %)".format(100 * idx / len(test_ds)))
 
 # Print the result.
 print(jubakit.metrics.classification_report(y_true, y_pred))
