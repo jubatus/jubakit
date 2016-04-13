@@ -58,6 +58,7 @@ See the `example` directory for working examples.
 |---------------------------|-----------------------------------------------|-----------------------|
 | classifier_csv.py         | Simple usage of Classifier and CSV file       |                       |
 | classifier_libsvm.py      | Simple usage of Classifier and LIBSVM file    | ✓                     |
+| classifier_digits.py      | Simple usage of Classifier and digits dataset | ✓                     |
 | classifier_kfold.py       | K-fold validation and cross validation        | ✓                     |
 | classifier_parameter.py   | Finding best hyper parameter                  | ✓                     |
 
