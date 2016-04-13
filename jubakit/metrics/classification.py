@@ -3,6 +3,8 @@
 import sklearn.metrics as skm
 import numpy as np
 
+from ..compat import *
+
 def accuracy_score(y_true, y_pred, *args, **kwargs):
   (y_true, y_pred, _) = _map_labels_to_numeric(y_true, y_pred)
   return skm.accuracy_score(y_true, y_pred, *args, **kwargs)

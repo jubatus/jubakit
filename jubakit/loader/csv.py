@@ -6,6 +6,7 @@ import csv
 import codecs
 
 from ..base import BaseLoader
+from ..compat import *
 
 class CSVLoader(BaseLoader):
   """

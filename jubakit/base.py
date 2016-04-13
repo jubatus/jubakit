@@ -15,6 +15,8 @@ import jubatus
 import msgpackrpc
 import psutil
 
+from .compat import *
+
 class BaseLoader(object):
   """
   Loader loads rows from various data sources.
