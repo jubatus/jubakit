@@ -352,6 +352,8 @@ class _ServiceBackend(object):
   # Disable verbose tornado WARN logs on connect failure.
   logging.getLogger('tornado').setLevel(logging.ERROR)
 
+  assigned_ports = {}
+
   def __init__(self, name, config, port=None):
     self.name = name
     self.config = config
@@ -375,6 +377,7 @@ class _ServiceBackend(object):
         '--timeout', '0',
         '--configpath', config_file.name
       ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+      self.lock_port(self._proc.pid, self.port)
       started = self.wait_until_rpc_ready(self.port)
 
     if not started:
@@ -384,6 +387,7 @@ class _ServiceBackend(object):
     proc = self._proc
     if proc is not None and proc.poll() is None:  # still running
       proc.kill()
+      self.unlock_port(proc.pid, self.port)
 
   def stop(self):
     """
@@ -397,19 +401,43 @@ class _ServiceBackend(object):
 
       (stdout, _) = proc.communicate()
       retval = proc.returncode
+      self.unlock_port(proc.pid, self.port)
       if retval != 0:
         raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
       return stdout
 
   @classmethod
-  def get_next_free_port(cls, start=9199, end=30000):
-    used_ports = set(map(lambda x: x.laddr[1], psutil.net_connections(kind='inet4')))
+  def get_next_free_port(cls, start=10000, end=30000):
+    try:
+      used_ports = set(map(lambda x: x.laddr[1], psutil.net_connections(kind='inet4')))
+    except psutil.AccessDenied:
+      # On some platforms (such as OS X), root privilege is required to get used ports.
+      # In that case we avoid port confliction to the best of our knowledge.
+      used_ports = cls.locked_ports().values()
+
     port = start
     while True:
       if port not in used_ports: return port
       port += 1
       if end < port:
         raise RuntimeError('no free port available in range [{0},{1}]'.format(start, end))
+
+  @classmethod
+  def lock_port(cls, pid, port):
+    cls.locked_ports()[pid] = port
+
+  @classmethod
+  def unlock_port(cls, pid, port):
+    ports = cls.locked_ports()
+    if pid in ports:
+      del ports[pid]
+
+  @classmethod
+  def locked_ports(cls):
+    ports = cls.assigned_ports
+    if ports is not None:
+      return ports
+    return {}
 
   @classmethod
   def wait_until_rpc_ready(cls, port):
