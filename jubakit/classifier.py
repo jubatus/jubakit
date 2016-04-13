@@ -34,7 +34,7 @@ class Schema(BaseSchema):
 
 class Dataset(BaseDataset):
   @classmethod
-  def from_array(self, data, labels, feature_names=None, label_names=None):
+  def from_array(self, data, labels, feature_names=None, label_names=None, static=True):
     """
     Parameters
     ----------
@@ -56,7 +56,7 @@ class Dataset(BaseDataset):
     for name in feature_names:
       mapping[name] = Schema.NUMBER
 
-    return Dataset(loader, Schema(mapping))
+    return Dataset(loader, Schema(mapping), static)
 
   def get_labels(self):
     if not self._static:
