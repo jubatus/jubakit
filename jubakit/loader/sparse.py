@@ -12,18 +12,18 @@ class SparseMatrixLoader(BaseLoader):
   """
 
   def __init__(self, matrix, feature_names=None):
-    self._matrix = matrix
+    self._matrix = matrix.tocsr()
     self._feature_names = feature_names
 
   def __iter__(self):
-    for row_mat in self._matrix:
-      data = {}
-      cols_idx = row_mat.nonzero()[1]
-      feature_names = self._feature_names
+    m = self._matrix
+    for i in range(m.shape[0]):
+      cols = m.indices[m.indptr[i]:m.indptr[i+1]]
 
-      for i in cols_idx:
-        feature_name = 'v{0}'.format(i)
-        if feature_names is not None:
-          feature_name = feature_names[i]
-        data[feature_name] = row_mat[0, i]
+      if self._feature_names is None:
+        fv_names = ['v{0}'.format(col) for col in cols]
+      else:
+        fv_names = [self._feature_names[col] for col in cols]
+
+      data = dict(zip(fv_names, m.data[m.indptr[i]:m.indptr[i+1]]))
       yield self.preprocess(data)

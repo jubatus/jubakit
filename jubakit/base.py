@@ -82,24 +82,24 @@ class BaseSchema(object):
     """
     return self.transform_as_datum(row)
 
+  def _add_to_datum(self, d, t, k, v):
+    """
+    Add value `v` whose type and name are `t` and `k` resp. to Datum `d`.
+    """
+    if t == self.STRING:
+      d.add_string(k, str(v))
+    elif t == self.NUMBER:
+      d.add_number(k, float(v))
+    elif t == self.BINARY:
+      d.add_binary(k, v)
+    else:
+      raise RuntimeError('invalid type {0} for key {1}'.format(t, k))
+
   def transform_as_datum(self, row, d=None, skip_keys=[]):
     """
     Transforms the row as Datum.  If the original Datum `d` is specified,
     feature vectors will be added to it.
     """
-    def _add_to_datum(d, t, k, v):
-      """
-      Add value `v` whose type and name are `t` and `k` resp. to Datum `d`.
-      """
-      if t == self.STRING:
-        d.add_string(k, str(v))
-      elif t == self.NUMBER:
-        d.add_number(k, float(v))
-      elif t == self.BINARY:
-        d.add_binary(k, v)
-      else:
-        assert False
-
     if d is None:
       d = jubatus.common.Datum()
 
@@ -111,7 +111,7 @@ class BaseSchema(object):
       key_name = self._key2name.get(key, key)
       if key_type is None:
         raise RuntimeError('schema does not match: unknown key {0}'.format(key))
-      _add_to_datum(d, key_type, key_name, value)
+      self._add_to_datum(d, key_type, key_name, value)
 
     return d
 
