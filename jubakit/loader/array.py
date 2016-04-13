@@ -2,41 +2,67 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from itertools import izip
-
 from ..base import BaseLoader
+from ..compat import *
 
 class ArrayLoader(BaseLoader):
   """
-  Loader to process array.
+  ArrayLoader is a loader to read from 2-d array.
+  Expected to load row-oriented data.
+
+  For example:
+
+  >>> ArrayLoader([[1,2,3], [4,5,6]], ['k1','k2','k3'])
+
+  ... will load two entries:
+
+    - {'k1': 1, 'k2': 2, 'k3': 3}
+    - {'k1': 4, 'k2': 5, 'k3': 6}
   """
 
-  def __init__(self, array):
+  def __init__(self, array, feature_names=None):
+    if feature_names is None:
+      feature_names = ['v{0}'.format(i) for i in range(len(array[0]))]
+
     self._array = array
+    self._feature_names = feature_names
 
   def __iter__(self):
     for ent in self._array:
-      yield self.preprocess(ent)
+      yield self.preprocess(dict(zip(self._feature_names, ent)))
 
-class SupervisedArrayDataLoader(BaseLoader):
+class ZipArrayLoader(BaseLoader):
   """
-  SupervisedArrayDataLoader is a loader to read from two arrays (samples
-  and their associated targets.)  This loader is expected to be used for
-  supervised training (classifier, regression etc.) datasets loaded or
-  generated from scikit-learn.
+  ZipArrayLoader zips multiple 1-d arrays that have the same length.
+  Expected to load column-oriented data.
+
+  For example:
+
+  >>> ZipArrayLoader([[1,4], [2,5], [3,6]], ['k1','k2','k3'])
+
+  ... or simply:
+
+  >>> ZipArrayLoader(k1=[1,4], k2=[2,5], k3=[3,6])
+
+  ... will load two entries:
+
+    - {'k1': 1, 'k2': 2, 'k3': 3}
+    - {'k1': 4, 'k2': 5, 'k3': 6}
   """
 
-  def __init__(self, data, target, feature_names, target_name='', target_map=None):
-    self._data = data
-    self._target = target
+  def __init__(self, arrays=[], feature_names=None, **named_arrays):
+    if feature_names is None:
+      feature_names = ['v{0}'.format(i) for i in range(len(arrays))]
+
+    if len(arrays) != len(feature_names):
+      raise RuntimeError('number of arrays and feature names mismatch')
+
     self._feature_names = feature_names
-    self._target_name = target_name
-    self._target_map = target_map
+    self._arrays = list(arrays)
+    for name in named_arrays:
+      self._feature_names.append(name)
+      self._arrays.append(named_arrays[name])
 
   def __iter__(self):
-    for (d, t) in izip(self._data, self._target):
-      if self._target_map is not None:
-        t = self._target_map[t]
-      ent = dict(zip(self._feature_names, d))
-      ent.update({self._target_name: t})
-      yield self.preprocess(ent)
+    for ent in zip(*self._arrays):
+      yield self.preprocess(dict(zip(self._feature_names, ent)))

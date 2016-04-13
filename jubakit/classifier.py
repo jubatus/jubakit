@@ -2,10 +2,12 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from .base import BaseSchema, BaseDataset, BaseService, GenericConfig
-from .loader.array import SupervisedArrayDataLoader
-
 import jubatus
+
+from .base import BaseSchema, BaseDataset, BaseService, GenericConfig
+from .loader.array import ArrayLoader, ZipArrayLoader
+from .loader.chain import SupervisedDataChainLoader
+from .compat import *
 
 class Schema(BaseSchema):
   LABEL = 'label'
@@ -43,20 +45,17 @@ class Dataset(BaseDataset):
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """
-
-    # Generate feature names
-    if feature_names is None:
-      feature_names = ['v{0}'.format(i) for i in range(len(data[0]))]
-
     # Label is feeded with '_label' key from Loader.
-    loader = SupervisedArrayDataLoader(data, labels, feature_names, '_label', label_names)
+    loader = SupervisedDataChainLoader(
+      ArrayLoader(data, feature_names),
+      ZipArrayLoader(_label=labels),
+      label_names,
+    )
 
-    # Create schema mapping.
-    mapping = {'_label': Schema.LABEL}
-    for name in feature_names:
-      mapping[name] = Schema.NUMBER
+    # Create schema.
+    schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
 
-    return Dataset(loader, Schema(mapping), static)
+    return Dataset(loader, schema, static)
 
   def get_labels(self):
     if not self._static:
