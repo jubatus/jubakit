@@ -11,7 +11,7 @@ Chain loaders loads records from other loader(s).
 
 class SupervisedDataChainLoader(BaseLoader):
   """
-  SupervisedChainLoader is a loader to read from two loaders that provides
+  SupervisedDataChainLoader is a loader to read from two loaders that provides
   feature vectors and its associated targets (ground truth).
   This loader is expected to be used for supervised training (classifier,
   regression etc.)

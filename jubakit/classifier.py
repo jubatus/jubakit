@@ -11,6 +11,10 @@ from .loader.chain import SupervisedDataChainLoader
 from .compat import *
 
 class Schema(BaseSchema):
+  """
+  Schema for Classifier service.
+  """
+
   LABEL = 'label'
 
   def __init__(self, mapping, fallback=None):
@@ -36,6 +40,10 @@ class Schema(BaseSchema):
     return (label, d)
 
 class Dataset(BaseDataset):
+  """
+  Dataset for Classifier service.
+  """
+
   @classmethod
   def _from_loaders(cls, data_loader, label_loader, label_names, static):
     loader = SupervisedDataChainLoader(data_loader, label_loader, label_names)
@@ -45,6 +53,8 @@ class Dataset(BaseDataset):
   @classmethod
   def from_array(cls, data, labels, feature_names=None, label_names=None, static=True):
     """
+    Converts two arrays (data and its associated labels) to Dataset.
+
     Parameters
     ----------
     data : array of shape [n_samples, n_features]
@@ -63,8 +73,11 @@ class Dataset(BaseDataset):
   @classmethod
   def from_matrix(cls, data, labels, feature_names=None, label_names=None, static=True):
     """
+    Converts a sparse matrix data and its associated label array to Dataset.
+
     Parameters
     ----------
+
     data : scipy 2-D sparse matrix of shape [n_samples, n_features]
     labels : array of shape [n_samples]
     feature_names : array of shape [n_features], optional
@@ -79,6 +92,10 @@ class Dataset(BaseDataset):
     )
 
   def get_labels(self):
+    """
+    Returns labels of each record in the dataset.
+    """
+
     if not self._static:
       raise RuntimeException('non-static datasets cannot fetch list of labels')
 
@@ -86,6 +103,10 @@ class Dataset(BaseDataset):
       yield label
 
 class Classifier(BaseService):
+  """
+  Classifier service.
+  """
+
   @classmethod
   def name(cls):
     return 'classifier'
@@ -95,6 +116,10 @@ class Classifier(BaseService):
     return jubatus.classifier.client.Classifier
 
   def train(self, dataset):
+    """
+    Trains the classifier using the given dataset.
+    """
+
     cli = self._client()
     for (idx, (label, d)) in dataset:
       assert label is not None
@@ -103,6 +128,10 @@ class Classifier(BaseService):
       yield (idx, label)
 
   def classify(self, dataset):
+    """
+    Classify the given dataset using this classifier.
+    """
+
     cli = self._client()
     for (idx, (label, d)) in dataset:
       # Do classification for the record.
@@ -116,6 +145,10 @@ class Classifier(BaseService):
       yield (idx, label, label_score_sorted)
 
 class Config(GenericConfig):
+  """
+  Configuration to run Classifier service.
+  """
+
   @classmethod
   def _default_method(cls):
     return 'AROW'

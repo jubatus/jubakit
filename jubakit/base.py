@@ -59,7 +59,7 @@ class BaseSchema(object):
     Defines a Schema.  Schema is an immutable object and cannot be modified.
     `mapping` is a dict-like object that maps row keys to the data type.
     Optionally you can assign an alias name for the key to handle different
-    oaders with the same configuration.
+    loaders with the same configuration.
     """
     self._fallback = fallback
     self._key2type = {}
@@ -593,6 +593,10 @@ class GenericConfig(BaseConfig):
     self['converter'] = copy.deepcopy(self._CONVERTER_TEMPLATE)
 
   def add_mecab(self, name='mecab', arg='', ngram=1, base=False, include_features='*', exclude_features=''):
+    """
+    Add MeCab feature extraction to string_types.
+    """
+
     self['converter']['string_types'][name] = {
       'method': 'dynamic',
       'path': 'libmecab_splitter.so',

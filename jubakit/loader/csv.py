@@ -21,7 +21,7 @@ class CSVLoader(BaseLoader):
     If `fieldnames` is not specified (which is a default) or specifeid as True,
     the first line of the CSV is used for column names.  If `fieldnames` is
     specified as False, sequential column names are automatically generated
-    like ['c0', 'c1', ...].  If `fieldnames` is a list, it is used as a column
+    like ['c0', 'c1', ...].  If `fieldnames` is a list, it is used as column
     names.
     """
 
