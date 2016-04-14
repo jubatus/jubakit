@@ -177,7 +177,7 @@ class BaseDataset(object):
         # Predict schema.
         if self._schema is None:
           self._schema = BaseSchema.predict(row)
-        self._data.append(self._schema.transform(row))
+        self._data.append(row)
 
       # Don't hold a ref to the loader for static datasets.
       self._loader = None
@@ -213,6 +213,14 @@ class BaseDataset(object):
 
     return self.__class__(self._loader, self._schema, True, new_data)
 
+  def get(self, idx):
+    """
+    Returns the raw entry loaded by Loader.
+    """
+    if not self._static:
+      raise RuntimeError('non-static datasets does not allow raw entry access')
+    return self._data[idx]
+
   def __len__(self):
     """
     Returns the number of entries.
@@ -237,7 +245,7 @@ class BaseDataset(object):
         subdata.append(self._data[i])
       return self.__class__(self._loader, self._schema, True, subdata)
     else:
-      return self._data[index]
+      return self._schema.transform(self._data[index])
 
   def __str__(self):
     return str(self._data)
@@ -249,17 +257,13 @@ class BaseDataset(object):
     """
     Iteratively access each transformed rows.
     """
+    source = self._data if self._static else self._loader
     idx = 0
-    if self._static:
-      for row in self._data:
-        yield (idx, row)
-        idx += 1
-    else:
-      for row in self._loader:
-        if row is None:
-          continue
-        yield (idx, self._schema.transform(row))
-        idx += 1
+    for row in source:
+      if row is None:
+        continue
+      yield (idx, self._schema.transform(row))
+      idx += 1
 
 class BaseService(object):
   """
