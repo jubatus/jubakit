@@ -188,6 +188,12 @@ class BaseDataset(object):
     """
     return self._static
 
+  def get_schema(self):
+    """
+    Returns the Schema for this dataset.
+    """
+    return self._schema
+
   def shuffle(self):
     """
     Returns a new immutable Dataset whose records are shuffled.

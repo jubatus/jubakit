@@ -95,6 +95,11 @@ class BaseDatasetTest(TestCase):
       self.assertEqual({'value': idx+1}, dict(row.num_values))
       expected_idx += 1
 
+  def test_get_schema(self):
+    loader = StubLoader()
+    ds = BaseDataset(loader, self.SCHEMA)
+    self.assertEqual(self.SCHEMA, ds.get_schema())
+
   def test_shuffle(self):
     loader = StubLoader()
     ds = BaseDataset(loader, self.SCHEMA).shuffle()
