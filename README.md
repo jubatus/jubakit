@@ -11,6 +11,7 @@ pip install jubakit
 
 ### Requirements
 
+* Python 2.7, 3.3, 3.4 or 3.5.
 * [Jubatus](http://jubat.us/en/quickstart.html) needs to be installed.
 * Although not mandatory, [scikit-learn](http://scikit-learn.org/stable/install.html) is required to use some features like K-fold cross validation.
 
