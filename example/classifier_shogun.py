@@ -38,4 +38,11 @@ for _ in classifier.train(train_dataset): pass
 
 # Classify using the classifier.
 for (idx, label, result) in classifier.classify(test_dataset):
-  print("label: {0}, estimated: {1}".format(label, result[0][0]).encode('utf-8'))
+  true_family_name = label
+  pred_family_name = result[0][0]
+  first_name = test_dataset.get(idx)['first_name']
+  print("{0} {1} ({2})".format(
+    pred_family_name,
+    first_name,
+    'correct!' if pred_family_name == true_family_name else 'incorrect'
+  ).encode('utf-8'))
