@@ -1,0 +1,47 @@
+language: python
+
+python:
+    - 2.6
+    - 2.7
+    - 3.3
+    - 3.4
+    - 3.5
+
+before_install:
+    - env
+    - uname -a
+
+install:
+    # Install Jubatus
+    - sudo bash -c 'echo "deb http://download.jubat.us/apt binary/" > /etc/apt/sources.list.d/jubatus.list'
+    - sudo apt-get -qq update
+    - sudo apt-get -qq --force-yes install jubatus
+    - source /opt/jubatus/profile
+
+    # Install Conda (see http://conda.pydata.org/docs/travis.html)
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "2.6" || "$TRAVIS_PYTHON_VERSION" == "2.7" ]]; then
+        wget https://repo.continuum.io/miniconda/Miniconda2-latest-Linux-x86_64.sh -O miniconda.sh;
+      else
+        wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh;
+      fi
+    - bash miniconda.sh -b -p $HOME/miniconda
+    - export PATH="$HOME/miniconda/bin:$PATH"
+    - hash -r
+    - conda config --set always_yes yes --set changeps1 no
+    - conda update -q conda
+    - conda info -a
+
+    # Install dependency packages
+    - conda create -q -n test-environment python=$TRAVIS_PYTHON_VERSION scikit-learn pip
+
+    # Activate Conda environment
+    - source activate test-environment
+
+    # Show current environment
+    - python -V
+    - pip --version
+
+script:
+    - pip install -e.[test]
+    - python setup.py test
+    - python tools/run_examples.py
