@@ -144,6 +144,27 @@ class Classifier(BaseService):
       # Note: label may become None.
       yield (idx, label, label_score_sorted)
 
+  @classmethod
+  def train_and_classify(cls, config, train_dataset, test_dataset, metric):
+    """
+    This is an utility method to perform bulk train-test.
+    Run a classifier using the given config, train the classifier, classify
+    using the classifier, then return the calculated metrics.
+    """
+    classifier = cls.run(config)
+
+    for _ in classifier.train(train_dataset):
+      pass
+
+    y_true = []
+    y_pred = []
+    for (idx, label, result) in classifier.classify(test_dataset):
+      if 0 < len(result):
+        y_true.append(label)
+        y_pred.append(result[0][0])
+
+    return metric(y_true, y_pred)
+
 class Config(GenericConfig):
   """
   Configuration to run Classifier service.

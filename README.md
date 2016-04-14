@@ -63,6 +63,7 @@ See the `example` directory for working examples.
 | classifier_libsvm.py      | Handling LIBSVM file                          | ✓                     |
 | classifier_kfold.py       | K-fold cross validation and metrics           | ✓                     |
 | classifier_parameter.py   | Finding best hyper parameter                  | ✓                     |
+| classifier_bulk.py        | Bulk Train-Test Classifier                    |                       |
 
 ## Concepts
 
