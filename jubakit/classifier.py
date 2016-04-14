@@ -98,7 +98,7 @@ class Classifier(BaseService):
     cli = self._client()
     for (idx, (label, d)) in dataset:
       assert label is not None
-      result = cli.train([jubatus.classifier.types.LabeledDatum(str(label), d)])
+      result = cli.train([jubatus.classifier.types.LabeledDatum(unicode_t(label), d)])
       assert result == 1
       yield (idx, label)
 

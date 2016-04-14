@@ -87,7 +87,7 @@ class BaseSchema(object):
     Add value `v` whose type and name are `t` and `k` resp. to Datum `d`.
     """
     if t == self.STRING:
-      d.add_string(k, str(v))
+      d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
       d.add_number(k, float(v))
     elif t == self.BINARY:

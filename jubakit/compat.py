@@ -10,6 +10,8 @@ if sys.version_info < (3, 0):
   range = xrange
   zip = itertools.izip
   zip_longest = itertools.izip_longest
+  unicode_t = unicode
 else:
   # Python 3.x
   zip_longest = itertools.zip_longest
+  unicode_t = str

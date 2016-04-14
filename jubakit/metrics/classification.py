@@ -23,8 +23,8 @@ def classification_report(y_true, y_pred, *args, **kwargs):
 
 def _map_labels_to_numeric(true_labels, pred_labels=[]):
   # Make labels into string.
-  true_labels = map(str, true_labels)
-  pred_labels = map(str, pred_labels)
+  true_labels = map(unicode_t, true_labels)
+  pred_labels = map(unicode_t, pred_labels)
 
   # Replace string labels with numeric label.
   labels = list(set(true_labels + pred_labels))
