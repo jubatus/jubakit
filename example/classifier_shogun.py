@@ -29,8 +29,12 @@ train_dataset = Dataset(train_loader, schema).shuffle()
 test_dataset = Dataset(test_loader, schema)
 
 # Create a Classifier Service.
-cfg = Config(method='PA', parameter={})
-cfg['converter']['string_rules'] = [{'key': 'first_name', 'type': 'unigram', 'sample_weight': 'bin', 'global_weight': 'bin'}]
+cfg = Config(
+  method = 'PA',
+  converter = {
+    'string_rules': [{'key': 'first_name', 'type': 'unigram', 'sample_weight': 'bin', 'global_weight': 'bin'}]
+  }
+)
 classifier = Classifier.run(cfg)
 
 # Train the classifier.
