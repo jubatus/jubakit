@@ -42,9 +42,16 @@ class StubConfig(BaseConfig):
 
 class StubGenericConfig(GenericConfig):
   @classmethod
+  def methods(cls):
+    return ['test', 'test2']
+
+  @classmethod
   def _default_method(cls):
     return 'test'
 
   @classmethod
-  def _default_parameter(cls):
-    return None
+  def _default_parameter(cls, method):
+    if method == 'test':
+      return None
+    elif method == 'test2':
+      return {'param1': 1, 'param2': 2}

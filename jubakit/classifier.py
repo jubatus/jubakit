@@ -150,9 +150,30 @@ class Config(GenericConfig):
   """
 
   @classmethod
+  def methods(cls):
+    return ['perceptron', 'PA', 'PA1', 'PA2', 'CW', 'AROW', 'NHERD', 'NN']
+
+  @classmethod
   def _default_method(cls):
     return 'AROW'
 
   @classmethod
-  def _default_parameter(cls):
-    return {'regularization_weight': 1.0}
+  def _default_parameter(cls, method):
+    if method in ('perceptron',
+                  'PA', 'passive_aggressive'):
+      return None
+    elif method in ('PA1', 'passive_aggressive_1',
+                    'PA2', 'passive_aggressive_2',
+                    'CW', 'confidence_weighted',
+                    'AROW',
+                    'NHERD', 'normal_herd'):
+      return {'regularization_weight': 1.0}
+    elif method in ('NN', 'nearest_neighbor'):
+      return {
+        'method': 'euclid_lsh',
+        'parameter': {'hash_num': 64},
+        'nearest_neighbor_num': 128,
+        'local_sensitivity': 1.0
+      }
+    else:
+      raise RuntimeError('unknown method: {0}'.format(method))

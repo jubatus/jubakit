@@ -143,6 +143,21 @@ class TestGenericConfg(TestCase):
   def test_simple(self):
     config = StubGenericConfig()
     self.assertEqual('test', config['method'])
+    self.assertTrue('parameter' not in config)
+
+  def test_param(self):
+    config = StubGenericConfig(method='test2')
+    self.assertEqual('test2', config['method'])
+    self.assertEqual(1, config['parameter']['param1'])
+    self.assertEqual(2, config['parameter']['param2'])
+
+  def test_overwrite(self):
+    config = StubGenericConfig(method='test2', parameter={'param2': 1}, converter={'string_types': []})
+    self.assertEqual('test2', config['method'])
+    self.assertEqual(1, config['parameter']['param1'])
+    self.assertEqual(1, config['parameter']['param2'])
+    self.assertTrue('string_rules' in config['converter'])
+    self.assertEqual(0, len(config['converter']['string_types']))
 
   def test_clear_converter(self):
     config = StubGenericConfig()
@@ -153,6 +168,7 @@ class TestGenericConfg(TestCase):
   def test_add_mecab(self):
     config = StubGenericConfig()
     self.assertFalse('mecab2' in config['converter']['string_types'])
-    config.add_mecab(name='mecab2', ngram=2)
+    config.add_mecab(name='mecab2', ngram=2, base=True)
     self.assertTrue('mecab2' in config['converter']['string_types'])
     self.assertEqual('2', config['converter']['string_types']['mecab2']['ngram'])
+    self.assertEqual('true', config['converter']['string_types']['mecab2']['base'])

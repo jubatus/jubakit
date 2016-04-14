@@ -120,6 +120,15 @@ class ConfigTest(TestCase):
     config = Config()
     self.assertEqual('AROW', config['method'])
 
+  def test_methods(self):
+    config = Config()
+    self.assertIsInstance(config.methods(), list)
+
   def test_default(self):
     config = Config.default()
     self.assertEqual('AROW', config['method'])
+
+  def test_method_param(self):
+    self.assertTrue('parameter' not in Config(method='PA'))
+    self.assertTrue('regularization_weight' in Config(method='PA1')['parameter'])
+    self.assertTrue('nearest_neighbor_num' in Config(method='NN')['parameter'])

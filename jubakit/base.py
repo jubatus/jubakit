@@ -535,21 +535,38 @@ class GenericConfig(BaseConfig):
 
   def __init__(self, method=None, parameter=None, converter=None):
     super(GenericConfig, self).__init__(self)
-    if method    is not None: self['method'] = method
-    if parameter is not None: self['parameter'] = parameter
-    if converter is not None: self['converter'] = converter
+
+    if method is not None:
+      self['method'] = method
+      default_parameter = self._default_parameter(method)
+      if default_parameter is None:
+        if 'parameter' in self: del self['parameter']
+      elif default_parameter is not None:
+        self['parameter'] = default_parameter
+
+    if parameter is not None:
+      if 'parameter' in self:
+        self['parameter'].update(parameter)
+      else:
+        self['parameter'] = parameter
+
+    if converter is not None:
+      if 'converter' in self:
+        self['converter'].update(converter)
+      else:
+        self['converter'] = converter
 
   @classmethod
   def _default(cls, cfg):
     cfg.clear()
 
     method = cls._default_method()
-    parameter = cls._default_parameter()
+    parameter = cls._default_parameter(method)
     converter = cls._default_converter()
 
     if method    is not None: cfg['method'] = method
-    if parameter is not None: cfg['parameter'] = cls._default_parameter()
-    if converter is not None: cfg['converter'] = cls._default_converter()
+    if parameter is not None: cfg['parameter'] = parameter
+    if converter is not None: cfg['converter'] = converter
 
   @classmethod
   def _default_method(cls):
@@ -561,11 +578,11 @@ class GenericConfig(BaseConfig):
     raise NotImplementedError()
 
   @classmethod
-  def _default_parameter(cls):
+  def _default_parameter(cls, method):
     """
     Subclasses must override this method and return the preferred default
-    parameter set that match with the default method.  Return `None` if
-    the method does not require `parameter` block.
+    parameter set for the specified method.  Return `None` if  the method
+    does not require `parameter` block.
     """
     #return {'regularization_weight': 0.1}
     raise NotImplementedError()
@@ -589,6 +606,15 @@ class GenericConfig(BaseConfig):
     ]
 
     return cfg
+
+  @classmethod
+  def methods(cls):
+    """
+    Subclasses must override this method and return methods available for
+    this service.
+    """
+    #return ['perceptron', 'PA', 'AROW']
+    raise NotImplementedError()
 
   def clear_converter(self):
     """
