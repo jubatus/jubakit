@@ -56,10 +56,11 @@ See the `example` directory for working examples.
 
 | Example                   | Topics                                        | Requires scikit-learn |
 |---------------------------|-----------------------------------------------|-----------------------|
-| classifier_csv.py         | Simple usage of Classifier and CSV file       |                       |
-| classifier_libsvm.py      | Simple usage of Classifier and LIBSVM file    | ✓                     |
-| classifier_digits.py      | Simple usage of Classifier and digits dataset | ✓                     |
-| classifier_kfold.py       | K-fold validation and cross validation        | ✓                     |
+| classifier_csv.py         | Handling CSV file and numeric features        |                       |
+| classifier_shogun.py      | Handling CSV file and string features         |                       |
+| classifier_digits.py      | Handling toy dataset (digits)                 | ✓                     |
+| classifier_libsvm.py      | Handling LIBSVM file                          | ✓                     |
+| classifier_kfold.py       | K-fold cross validation and metrics           | ✓                     |
 | classifier_parameter.py   | Finding best hyper parameter                  | ✓                     |
 
 ## Concepts
