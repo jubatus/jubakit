@@ -27,7 +27,7 @@ class SupervisedDataChainLoader(BaseLoader):
       if len(target) != 1:
         raise RuntimeError('target loader must provide 1-key record')
 
-      (target_key, target_value) = target.items()[0]
+      (target_key, target_value) = list(target.items())[0]
       if self._target_map is not None:
         target_value = self._target_map[target_value]
 

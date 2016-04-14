@@ -21,7 +21,7 @@ class Schema(BaseSchema):
     if fallback == self.LABEL:
       raise RuntimeError('label key cannot be specified as fallback schema')
 
-    label_keys = filter(lambda k: mapping[k] == self.LABEL, mapping.keys())
+    label_keys = [k for k in mapping.keys() if mapping[k] == self.LABEL]
     if len(label_keys) == 0:
       raise RuntimeError('label key is not specified in schema')
     elif 1 < len(label_keys):

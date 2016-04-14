@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
-from StringIO import StringIO
+from io import StringIO
 from jubakit.loader.core import BasicLineBasedStreamLoader, BasicLineBasedFileLoader
 
 class BasicLineBasedStreamLoaderTest(TestCase):

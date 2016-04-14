@@ -24,7 +24,7 @@ class BasicLineBasedStreamLoader(BaseLoader):
       self._f.close()
 
   def preprocess(self, ent):
-    return {'line': ent.values()[0]}
+    return {'line': list(ent.values())[0]}
 
 class BasicLineBasedFileLoader(BasicLineBasedStreamLoader):
   """

@@ -18,12 +18,12 @@ class BaseSchemaTest(TestCase):
     d = schema.transform({
       'k1': '123',
       'k2': 456,
-      'k3': chr(0),
+      'k3': b'x',
     })
 
     self.assertEqual({'k1': '123'}, dict(d.string_values))
     self.assertEqual({'k2': 456}, dict(d.num_values))
-    self.assertEqual({'k3': chr(0)}, dict(d.binary_values))
+    self.assertEqual({'k3': b'x'}, dict(d.binary_values))
 
   def test_alias(self):
     schema = BaseSchema({
