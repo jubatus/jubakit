@@ -15,7 +15,7 @@ class Schema(BaseSchema):
   Schema for Classifier service.
   """
 
-  LABEL = 'label'
+  LABEL = 'l'
 
   def __init__(self, mapping, fallback=None):
     if fallback == self.LABEL:
