@@ -9,30 +9,33 @@ from ..compat import *
 Chain loaders loads records from other loader(s).
 """
 
-class SupervisedDataChainLoader(BaseLoader):
+class MergeChainLoader(BaseLoader):
   """
-  SupervisedDataChainLoader is a loader to read from two loaders that provides
-  feature vectors and its associated targets (ground truth).
-  This loader is expected to be used for supervised training (classifier,
-  regression etc.)
+  MergeChainLoader merges multiple loaders.
   """
 
-  def __init__(self, data_loader, target_loader, target_map=None):
-    self._data_loader = data_loader
-    self._target_loader = target_loader
-    self._target_map = target_map
+  def __init__(self, *loaders):
+    self._loaders = loaders
 
   def __iter__(self):
-    for (data, target) in zip_longest(self._data_loader, self._target_loader, fillvalue={}):
-      if len(target) != 1:
-        raise RuntimeError('target loader must provide 1-key record')
+    for ent in zip_longest(*self._loaders, fillvalue={}):
+      merged = {}
+      for d in ent:
+        merged.update(d)
+      yield self.preprocess(merged)
 
-      (target_key, target_value) = list(target.items())[0]
-      if self._target_map is not None:
-        target_value = self._target_map[target_value]
+class ValueMapChainLoader(BaseLoader):
+  """
+  ValueMapChainLoader is a loader to map value of the specified key in each
+  record loaded from another loader.
+  """
 
-      if target_key in data:
-        raise RuntimeError('target key feeded from data loader')
+  def __init__(self, loader, key, mapping):
+    self._loader = loader
+    self._key = key
+    self._mapping = mapping
 
-      data[target_key] = target_value
-      yield self.preprocess(data)
+  def __iter__(self):
+    for ent in self._loader:
+      ent[self._key] = self._mapping[ent[self._key]]
+      yield self.preprocess(ent)

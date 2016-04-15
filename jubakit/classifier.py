@@ -7,7 +7,7 @@ import jubatus
 from .base import BaseSchema, BaseDataset, BaseService, GenericConfig
 from .loader.array import ArrayLoader, ZipArrayLoader
 from .loader.sparse import SparseMatrixLoader
-from .loader.chain import SupervisedDataChainLoader
+from .loader.chain import ValueMapChainLoader, MergeChainLoader
 from .compat import *
 
 class Schema(BaseSchema):
@@ -45,8 +45,12 @@ class Dataset(BaseDataset):
   """
 
   @classmethod
-  def _from_loaders(cls, data_loader, label_loader, label_names, static):
-    loader = SupervisedDataChainLoader(data_loader, label_loader, label_names)
+  def _from_loader(cls, data_loader, labels, label_names, static):
+    # Label is feeded with '_label' key from Loader.
+    label_loader = ZipArrayLoader(_label=labels)
+    if label_names is not None:
+      label_loader = ValueMapChainLoader(label_loader, '_label', label_names)
+    loader = MergeChainLoader(data_loader, label_loader)
     schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
     return Dataset(loader, schema, static)
 
@@ -62,13 +66,8 @@ class Dataset(BaseDataset):
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """
-    # Label is feeded with '_label' key from Loader.
-    return cls._from_loaders(
-      ArrayLoader(data, feature_names),
-      ZipArrayLoader(_label=labels),
-      label_names,
-      static,
-    )
+    data_loader = ArrayLoader(data, feature_names)
+    return cls._from_loader(data_loader, labels, label_names, static)
 
   @classmethod
   def from_matrix(cls, data, labels, feature_names=None, label_names=None, static=True):
@@ -83,13 +82,8 @@ class Dataset(BaseDataset):
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """
-    # Label is feeded with '_label' key from Loader.
-    return cls._from_loaders(
-      SparseMatrixLoader(data, feature_names),
-      ZipArrayLoader(_label=labels),
-      label_names,
-      static,
-    )
+    data_loader = SparseMatrixLoader(data, feature_names)
+    return cls._from_loader(data_loader, labels, label_names, static)
 
   def get_labels(self):
     """
