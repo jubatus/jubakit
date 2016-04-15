@@ -159,6 +159,8 @@ class Classifier(BaseService):
         y_true.append(label)
         y_pred.append(result[0][0])
 
+    classifier.stop()
+
     return metric(y_true, y_pred)
 
 class Config(GenericConfig):
