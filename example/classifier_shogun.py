@@ -50,3 +50,6 @@ for (idx, label, result) in classifier.classify(test_dataset):
     first_name,
     'correct!' if pred_family_name == true_family_name else 'incorrect'
   ))
+
+# Stop the classifier.
+classifier.stop()

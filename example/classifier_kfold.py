@@ -64,5 +64,8 @@ for train_idx, test_idx in StratifiedKFold(list(dataset.get_labels()), n_folds=1
     true_labels.append(label)
     predicted_labels.append(pred_label)
 
+# Stop the classifier.
+classifier.stop()
+
 # Show a classification report.
 print(sklearn.metrics.classification_report(true_labels, predicted_labels))

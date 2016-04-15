@@ -49,5 +49,8 @@ for (idx, label, result) in classifier.classify(test_ds):
   if idx % 1000 == 0:
     print("Testing... ({0} %)".format(100 * idx / len(test_ds)))
 
+# Stop the classifier.
+classifier.stop()
+
 # Print the result.
 print(sklearn.metrics.classification_report(y_true, y_pred))

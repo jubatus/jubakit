@@ -55,3 +55,6 @@ classifier.save('example_snapshot')
 # Classify using the same dataset.
 for (idx, label, result) in classifier.classify(dataset):
   print("Classify: {0} (label: {1}, estimated: {2})".format(label == result[0][0], label, result[0][0]))
+
+# Stop the classifier.
+classifier.stop()

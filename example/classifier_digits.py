@@ -41,5 +41,8 @@ for (idx, label, result) in classifier.classify(dataset[n_train_samples:]):
   y_true.append(label)
   y_pred.append(result[0][0])
 
+# Stop the classifier.
+classifier.stop()
+
 # Print the result.
 print(sklearn.metrics.classification_report(y_true, y_pred))
