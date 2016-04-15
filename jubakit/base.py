@@ -379,7 +379,7 @@ class _ServiceBackend(object):
       self.port = self.get_next_free_port()
 
     with tempfile.NamedTemporaryFile() as config_file:
-      json.dump(config, config_file)
+      config_file.write(json.dumps(config).encode('utf-8'))
       config_file.flush()
 
       self._proc = subprocess.Popen([

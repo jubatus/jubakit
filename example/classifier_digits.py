@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 """
 Using Classifier and Digits dataset
 ===================================================
@@ -20,6 +22,7 @@ digits = sklearn.datasets.load_digits()
 # Create a Dataset.
 dataset = Dataset.from_array(digits.data, digits.target)
 n_samples = len(dataset)
+n_train_samples = int(n_samples / 2)
 
 # Create a Classifier Service
 cfg = Config(method='AROW', parameter={'regularization_weight': 0.1})
@@ -27,14 +30,14 @@ classifier = Classifier.run(cfg)
 
 # Train the classifier using the first half of the dataset.
 print("Training...")
-train_ds = dataset[:n_samples / 2]
+train_ds = dataset[:n_train_samples]
 for _ in classifier.train(train_ds): pass
 
 # Test the classifier using the last half of the dataset.
 print("Testing...")
 y_true = []
 y_pred = []
-for (idx, label, result) in classifier.classify(dataset[n_samples / 2:]):
+for (idx, label, result) in classifier.classify(dataset[n_train_samples:]):
   y_true.append(label)
   y_pred.append(result[0][0])
 

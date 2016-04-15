@@ -1,6 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+from __future__ import absolute_import, division, print_function, unicode_literals
+
 """
 Bulk Train-Test Classifier
 ========================================
@@ -24,6 +26,7 @@ schema = Schema({
 # Create a Dataset.
 dataset = Dataset(loader, schema).shuffle()
 n_samples = len(dataset)
+n_train_samples = int(n_samples / 2)
 
 # Create a Classifier configuration.
 cfg = Config()
@@ -31,9 +34,9 @@ cfg = Config()
 # Bulk train-test the classifier.
 result = Classifier.train_and_classify(
   Config(),
-  dataset[:n_samples/2],
-  dataset[n_samples/2:],
+  dataset[:n_train_samples],
+  dataset[n_train_samples:],
   sklearn.metrics.classification_report
 )
 
-print(result.encode('utf-8'))
+print(result)

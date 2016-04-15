@@ -4,8 +4,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 __all__ = ['requireSklearn']
 
-import unittest
-
 try:
   import numpy
   import scipy
@@ -14,5 +12,10 @@ try:
 except ImportError:
   sklearn_available = False
 
-def requireSklearn(target):
-  return unittest.skipUnless(sklearn_available, 'requires scikit-learn')(target)
+try:
+  from unittest import skipUnless
+  def requireSklearn(target):
+    return skipUnless(sklearn_available, 'requires scikit-learn')(target)
+except ImportError:
+  def requireSklearn(target):
+    return target if sklearn_available else None
