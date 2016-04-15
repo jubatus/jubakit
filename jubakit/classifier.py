@@ -36,6 +36,8 @@ class Schema(BaseSchema):
     Classifier schema transforms the row into Datum and its associated label.
     """
     label = row.get(self._label_key, None)
+    if label is not None:
+      label = unicode_t(label)
     d = self.transform_as_datum(row, None, [self._label_key])
     return (label, d)
 

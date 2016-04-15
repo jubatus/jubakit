@@ -11,6 +11,7 @@ except ImportError:
   pass
 
 from jubakit.classifier import Schema, Dataset, Classifier, Config
+from jubakit.compat import *
 
 from . import requireSklearn
 from .stub import *
@@ -49,11 +50,11 @@ class DatasetTest(TestCase):
     schema = Schema({'value': Schema.LABEL})
     ds = Dataset(loader, schema)
     for (idx, (label, d)) in ds:
-      self.assertEqual(idx+1, label)
+      self.assertEqual(unicode_t(idx+1), label)
       self.assertEqual(0, len(d.string_values))
       self.assertEqual(0, len(d.num_values))
       self.assertEqual(0, len(d.binary_values))
-    self.assertEqual([1,2,3], list(ds.get_labels()))
+    self.assertEqual(['1','2','3'], list(ds.get_labels()))
 
   def test_from_array(self):
     ds = Dataset.from_array(
@@ -122,7 +123,7 @@ class ConfigTest(TestCase):
 
   def test_methods(self):
     config = Config()
-    self.assertIsInstance(config.methods(), list)
+    self.assertTrue(isinstance(config.methods(), list))
 
   def test_default(self):
     config = Config.default()
