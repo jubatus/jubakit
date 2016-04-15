@@ -10,25 +10,25 @@ calculate metrics (`classification_report`) using scikit-learn.
 """
 
 import sklearn.datasets
+import sklearn.metrics
 from sklearn.cross_validation import StratifiedKFold
 
-from jubakit.classifier import Classifier, Config
-import jubakit.metrics
+from jubakit.classifier import Classifier, Dataset, Config
 
 # Load built-in `iris` dataset from scikit-learn.
 iris = sklearn.datasets.load_iris()
 
 # Convert it into jubakit Dataset.
-#dataset = jubakit.classifier.Dataset.from_array(iris.data, iris.target)
+#dataset = Dataset.from_array(iris.data, iris.target)
 # ... or, optionally you can assign feature/label names to improve human-readbility.
-dataset = jubakit.classifier.Dataset.from_array(iris.data, iris.target, iris.feature_names, iris.target_names)
+dataset = Dataset.from_array(iris.data, iris.target, iris.feature_names, iris.target_names)
 
 # Shuffle the dataset, as the dataset is sorted by label.
 dataset = dataset.shuffle()
 
 # Create a Classifier Service.
 # Classifier process starts using a default configuration.
-classifier = jubakit.classifier.Classifier.run(Config())
+classifier = Classifier.run(Config())
 
 # Prepare arrays to keep true/predicted labels to display a report later.
 true_labels = []
@@ -63,4 +63,4 @@ for train_idx, test_idx in StratifiedKFold(list(dataset.get_labels()), n_folds=1
     predicted_labels.append(pred_label)
 
 # Show a classification report.
-print(jubakit.metrics.classification_report(true_labels, predicted_labels))
+print(sklearn.metrics.classification_report(true_labels, predicted_labels))

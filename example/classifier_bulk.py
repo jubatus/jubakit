@@ -8,9 +8,10 @@ Bulk Train-Test Classifier
 This example uses bulk train-test method of Classifier.
 """
 
+import sklearn.metrics
+
 from jubakit.classifier import Classifier, Schema, Dataset, Config
 from jubakit.loader.csv import CSVLoader
-from jubakit.metrics import classification_report
 
 # Load a CSV file.
 loader = CSVLoader('iris.csv')
@@ -32,7 +33,7 @@ result = Classifier.train_and_classify(
   Config(),
   dataset[:n_samples/2],
   dataset[n_samples/2:],
-  classification_report
+  sklearn.metrics.classification_report
 )
 
 print(result.encode('utf-8'))

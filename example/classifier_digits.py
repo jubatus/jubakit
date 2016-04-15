@@ -8,14 +8,14 @@ Using Classifier and Digits dataset
 In this example we show classification using Digits dataset.
 """
 
+import sklearn.datasets
+import sklearn.metrics
+
 import jubakit
 from jubakit.classifier import Classifier, Dataset, Config
-import jubakit.metrics
-
-from sklearn import datasets
 
 # Load the digits dataset.
-digits = datasets.load_digits()
+digits = sklearn.datasets.load_digits()
 
 # Create a Dataset.
 dataset = Dataset.from_array(digits.data, digits.target)
@@ -39,4 +39,4 @@ for (idx, label, result) in classifier.classify(dataset[n_samples / 2:]):
   y_pred.append(result[0][0])
 
 # Print the result.
-print(jubakit.metrics.classification_report(y_true, y_pred))
+print(sklearn.metrics.classification_report(y_true, y_pred))

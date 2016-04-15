@@ -8,11 +8,11 @@ Using Classifier and LIBSVM file
 In this example we show how to handle LIBSVM file format.
 """
 
+from sklearn.datasets import load_svmlight_files
+import sklearn.metrics
+
 import jubakit
 from jubakit.classifier import Classifier, Dataset, Config
-import jubakit.metrics
-
-from sklearn.datasets import load_svmlight_files
 
 # Load LIBSVM files.
 # Note that these example files are not included in this repository.
@@ -48,4 +48,4 @@ for (idx, label, result) in classifier.classify(test_ds):
     print("Testing... ({0} %)".format(100 * idx / len(test_ds)))
 
 # Print the result.
-print(jubakit.metrics.classification_report(y_true, y_pred))
+print(sklearn.metrics.classification_report(y_true, y_pred))
