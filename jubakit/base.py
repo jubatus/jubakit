@@ -461,7 +461,15 @@ class _ServiceBackend(object):
         '--configpath', config_file.name
       ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
       self._assign_port(self.port, self._proc.pid)
+
+      # Wait until the RPC server start.
       started = self._wait_until_rpc_ready(self.port)
+      if started:
+        status = self.get_status()
+        pid = int(status['pid'])
+        if pid != self._proc.pid:
+          self._proc.kill()
+          raise RuntimeError('server cannot be started as port {0} conflicts with external Jubatus process (PID: {1})'.format(self.port, pid))
 
     if not started:
       self.stop()
@@ -488,6 +496,13 @@ class _ServiceBackend(object):
       if retval != 0:
         raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
       return stdout
+
+  def get_status(self):
+    cli = msgpackrpc.Client(msgpackrpc.Address('127.0.0.1', self.port), unpack_encoding='utf-8')
+    try:
+      return cli.call('get_status', '')['127.0.0.1_{0}'.format(self.port)]
+    finally:
+      cli.close()
 
   @classmethod
   def _get_free_port(cls, start=10000, end=30000):
