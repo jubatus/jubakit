@@ -28,6 +28,13 @@ class ArrayLoaderTest(TestCase):
       self.assertEqual('1', row['v0'])
       self.assertEqual('2', row['v1'])
 
+  def test_none(self):
+    loader = ArrayLoader([['1', None, '3']])
+    for row in loader:
+      self.assertEqual(set(['v0', 'v2']), set(row.keys()))
+      self.assertEqual('1', row['v0'])
+      self.assertEqual('3', row['v2'])
+
 class ZipArrayLoaderTest(TestCase):
   def test_simple(self):
     loader = ZipArrayLoader(
@@ -50,6 +57,21 @@ class ZipArrayLoaderTest(TestCase):
       k2=['x', 'y', 'z']
     )
     self._check_loader(loader)
+
+  def test_none(self):
+    loader = ZipArrayLoader(
+      k1=['1', None, '3'],
+      k2=[None, '2', None],
+    )
+    for row in loader:
+      if 'k1' in row:
+        self.assertTrue(row['k1'] in ('1', '3'))
+        self.assertTrue('k2' not in row)
+      elif 'k2' in row:
+        self.assertTrue(row['k2'] in ('2'))
+        self.assertTrue('k1' not in row)
+      else:
+        self.fail('error')
 
   def test_error(self):
     self.assertRaises(RuntimeError, ZipArrayLoader, [['1','2','3'], ['x', 'y', 'z']], ['k1'])
