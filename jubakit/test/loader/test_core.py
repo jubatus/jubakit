@@ -5,14 +5,14 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from unittest import TestCase
 
 from io import StringIO
-from jubakit.loader.core import BasicLineBasedStreamLoader, BasicLineBasedFileLoader
+from jubakit.loader.core import LineBasedStreamLoader, LineBasedFileLoader
 
-class BasicLineBasedStreamLoaderTest(TestCase):
+class LineBasedStreamLoaderTest(TestCase):
   def test_simple(self):
     data = 'hello\nworld'
 
     f = StringIO(data)
-    loader = BasicLineBasedStreamLoader(f, True)
+    loader = LineBasedStreamLoader(f, True)
     lines = []
     for line in loader:
       lines.append(line)

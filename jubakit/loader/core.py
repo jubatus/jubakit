@@ -5,7 +5,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 from ..base import BaseLoader
 from ..compat import *
 
-class BasicLineBasedStreamLoader(BaseLoader):
+class LineBasedStreamLoader(BaseLoader):
   """
   Loader to process line-oriented text stream.
   You can override `preprocess` method to separate the row into fields.
@@ -26,11 +26,11 @@ class BasicLineBasedStreamLoader(BaseLoader):
   def preprocess(self, ent):
     return {'line': list(ent.values())[0]}
 
-class BasicLineBasedFileLoader(BasicLineBasedStreamLoader):
+class LineBasedFileLoader(LineBasedStreamLoader):
   """
   Loader to process line-oriented text file.
   """
 
   def __init__(self, filename, *args, **kwargs):
     f = open(filename, *args, **kwargs)
-    super(BasicLineBasedFileLoader, self).__init__(f, True)
+    super(LineBasedFileLoader, self).__init__(f, True)
