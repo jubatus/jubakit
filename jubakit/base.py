@@ -526,7 +526,7 @@ class _ServiceBackend(object):
     Returns sorted list of ports currently used on localhost.
     """
     try:
-      return sorted(set(map(lambda x: x.laddr[1], psutil.net_connections(kind='inet4'))))
+      return sorted(set([x.laddr[1] for x in psutil.net_connections(kind='inet4')]))
     except psutil.AccessDenied:
       # On some platforms (such as OS X), root privilege is required to get used ports.
       # In that case we avoid port confliction to the best of our knowledge.

@@ -43,14 +43,14 @@ class CSVLoader(BaseLoader):
     self._kwargs = kwargs
 
   def __iter__(self):
-    def _encode_file(f):
-      for line in f: yield line.encode(self._encoding)
-    def _decode_row(r):
-      return dict(map(lambda k: (k.decode(self._encoding), r[k].decode(self._encoding)), r.keys()))
+    def _encode_file(f, enc):
+      for line in f: yield line.encode(enc)
+    def _decode_row(r, enc):
+      return dict([(k.decode(enc), r[k].decode(enc)) for k in r.keys()])
 
     with io.open(self._filename, encoding=self._encoding, newline='') as f:
-      f = f if PYTHON3 else _encode_file(f)
+      f = f if PYTHON3 else _encode_file(f, self._encoding)
       reader = csv.DictReader(f, fieldnames=self._fieldnames, *self._args, **self._kwargs)
       for row in reader:
-        ent = row if PYTHON3 else _decode_row(row)
+        ent = row if PYTHON3 else _decode_row(row, self._encoding)
         yield self.preprocess(ent)

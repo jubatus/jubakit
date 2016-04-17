@@ -29,7 +29,7 @@ class ArrayLoader(BaseLoader):
 
   def __iter__(self):
     for ent in self._array:
-      yield self.preprocess(dict(filter(lambda x: x[1] is not None, zip(self._feature_names, ent))))
+      yield self.preprocess(dict([x for x in zip(self._feature_names, ent) if x[1] is not None]))
 
 class ZipArrayLoader(BaseLoader):
   """
@@ -65,4 +65,4 @@ class ZipArrayLoader(BaseLoader):
 
   def __iter__(self):
     for ent in zip(*self._arrays):
-      yield self.preprocess(dict(filter(lambda x: x[1] is not None, zip(self._feature_names, ent))))
+      yield self.preprocess(dict([x for x in zip(self._feature_names, ent) if x[1] is not None]))

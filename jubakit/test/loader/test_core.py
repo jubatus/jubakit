@@ -17,4 +17,4 @@ class LineBasedStreamLoaderTest(TestCase):
     for line in loader:
       lines.append(line)
 
-    self.assertEqual([{'line': u'hello\n'}, {'line': u'world'}], lines)
+    self.assertEqual([{'line': 'hello\n'}, {'line': 'world'}], lines)
