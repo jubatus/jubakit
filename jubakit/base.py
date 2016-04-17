@@ -431,7 +431,8 @@ class _ServiceBackend(object):
   # Disable verbose tornado WARN logs on connect failure.
   logging.getLogger('tornado').setLevel(logging.ERROR)
 
-  assigned_ports = {}
+  # Global Port-to-PID mapping.
+  port2pid = {}
 
   def __init__(self, name, config, port=None):
     self.name = name
@@ -440,10 +441,13 @@ class _ServiceBackend(object):
     self.log = None
     self._proc = None
 
-    self.check_installed(name)
+    self._check_installed(name)
 
     if port is None:
-      self.port = self.get_next_free_port()
+      self.port = self._get_free_port()
+
+    if port in self.port2pid:
+      raise RuntimeError('port {0} currently in use by another service (PID {1})'.format(port, self.port2pid[port]))
 
     with tempfile.NamedTemporaryFile() as config_file:
       config_file.write(json.dumps(config).encode('utf-8'))
@@ -456,8 +460,8 @@ class _ServiceBackend(object):
         '--timeout', '0',
         '--configpath', config_file.name
       ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
-      self.lock_port(self._proc.pid, self.port)
-      started = self.wait_until_rpc_ready(self.port)
+      self._assign_port(self.port, self._proc.pid)
+      started = self._wait_until_rpc_ready(self.port)
 
     if not started:
       self.stop()
@@ -466,7 +470,7 @@ class _ServiceBackend(object):
     proc = self._proc
     if proc is not None and proc.poll() is None:  # still running
       proc.kill()
-      self.unlock_port(proc.pid, self.port)
+      self._unassign_port(self.port, proc.pid)
 
   def stop(self):
     """
@@ -480,20 +484,20 @@ class _ServiceBackend(object):
 
       (stdout, _) = proc.communicate()
       retval = proc.returncode
-      self.unlock_port(proc.pid, self.port)
+      self._unassign_port(self.port, proc.pid)
       if retval != 0:
         raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
       return stdout
 
   @classmethod
-  def get_next_free_port(cls, start=10000, end=30000):
-    try:
-      used_ports = set(map(lambda x: x.laddr[1], psutil.net_connections(kind='inet4')))
-    except psutil.AccessDenied:
-      # On some platforms (such as OS X), root privilege is required to get used ports.
-      # In that case we avoid port confliction to the best of our knowledge.
-      used_ports = cls.locked_ports().values()
+  def _get_free_port(cls, start=10000, end=30000):
+    """
+    Finds the free port available to listen.
 
+    The default range of [10000,30000] is chosen to avoid the default
+    ephemeral port range on most platforms.
+    """
+    used_ports = cls._get_ports_in_use()
     port = start
     while True:
       if port not in used_ports: return port
@@ -502,24 +506,37 @@ class _ServiceBackend(object):
         raise RuntimeError('no free port available in range [{0},{1}]'.format(start, end))
 
   @classmethod
-  def lock_port(cls, pid, port):
-    cls.locked_ports()[pid] = port
+  def _get_ports_in_use(cls):
+    """
+    Returns sorted list of ports currently used on localhost.
+    """
+    try:
+      return sorted(set(map(lambda x: x.laddr[1], psutil.net_connections(kind='inet4'))))
+    except psutil.AccessDenied:
+      # On some platforms (such as OS X), root privilege is required to get used ports.
+      # In that case we avoid port confliction to the best of our knowledge.
+      return sorted(cls.port2pid.keys())
 
   @classmethod
-  def unlock_port(cls, pid, port):
-    ports = cls.locked_ports()
-    if pid in ports:
-      del ports[pid]
+  def _assign_port(cls, port, pid):
+    m = cls.port2pid
+    if port in m:
+      raise RuntimeError('port {0} currently in use by PID {1}'.format(port, m[port]))
+    m[port] = pid
 
   @classmethod
-  def locked_ports(cls):
-    ports = cls.assigned_ports
-    if ports is not None:
-      return ports
-    return {}
+  def _unassign_port(cls, port, pid):
+    m = cls.port2pid
+    if m is None:
+      pass   # maybe destruction is running.
+    if port not in m:
+      raise RuntimeError('port {0} is not in use'.format(port))
+    if m[port] != pid:
+      raise RuntimeError('port {0} is used by PID {1}, not PID {2}'.format(port, m[port], pcid))
+    del m[port]
 
   @classmethod
-  def wait_until_rpc_ready(cls, port):
+  def _wait_until_rpc_ready(cls, port):
     sleep_time = 1000
     for i in range(10):
       time.sleep(sleep_time/1000000.0) # from usec to sec
@@ -545,7 +562,7 @@ class _ServiceBackend(object):
     return False
 
   @classmethod
-  def check_installed(cls, name):
+  def _check_installed(cls, name):
     procname = 'juba{0}'.format(name)
     try:
       proc = subprocess.Popen(
