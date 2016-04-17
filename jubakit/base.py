@@ -46,13 +46,20 @@ class BaseLoader(object):
 class BaseSchema(object):
   """
   Schema defines data types for each key of the data.
+
+  BaseSchema defines the fundamental 3 data types.
+
+  - IGNORE: ignores the key (mainly intended for fallback)
+  - AUTO: use the type of the key as its data type
+  - INFER: guess the type of the key from its value; note that this is
+           discouraged as it may result in unstable result.
   """
 
   # Data Types: single-character type names are reserved by jubakit.
   # External subclasses must use 2+ characters for type names.
-  STRING = 's'
-  NUMBER = 'n'
-  BINARY = 'b'
+  IGNORE = '_'
+  AUTO = '.'
+  INFER = '?'
 
   def __init__(self, mapping, fallback=None):
     """
@@ -76,11 +83,40 @@ class BaseSchema(object):
 
   def transform(self, row):
     """
+    Transform the row (dict-like) into data structures required by the
+    corresponding Service.
+    """
+    raise NotImplementedError()
+
+  @classmethod
+  def predict(cls, row, typed):
+    """
+    Predicts a Schema from dict-like row object.
+    """
+    raise NotImplementedError()
+
+class GenericSchema(BaseSchema):
+  """
+  GenericSchema is a base Schema class for all engines using Datum.
+
+  GenericSchema defines 3 data types:
+
+  - STRING: string features (string_values)
+  - NUMBER: numeric features (num_values)
+  - BINARY: binary features (binary_values)
+  """
+
+  STRING = 's'
+  NUMBER = 'n'
+  BINARY = 'b'
+
+  def transform(self, row):
+    """
     Transforms the row (represented in dict-like object) as Datum.
     Subclasses that define their own data types should override this method
     and handle them.
     """
-    return self.transform_as_datum(row)
+    return self._transform_as_datum(row)
 
   def _add_to_datum(self, d, t, k, v):
     """
@@ -92,10 +128,15 @@ class BaseSchema(object):
       d.add_number(k, float(v))
     elif t == self.BINARY:
       d.add_binary(k, v)
+    elif t == self.AUTO or t == self.INFER:
+      (pred_type, pred_v) = self._predict_type(v, (t == self.AUTO))
+      self._add_to_datum(d, pred_type, k, pred_v)
+    elif t == self.IGNORE:
+      pass
     else:
       raise RuntimeError('invalid type {0} for key {1}'.format(t, k))
 
-  def transform_as_datum(self, row, d=None, skip_keys=[]):
+  def _transform_as_datum(self, row, d=None, skip_keys=[]):
     """
     Transforms the row as Datum.  If the original Datum `d` is specified,
     feature vectors will be added to it.
@@ -116,19 +157,37 @@ class BaseSchema(object):
     return d
 
   @classmethod
-  def predict(cls, row):
+  def predict(cls, row, typed):
     """
     Predicts a schema from dict-like row object.
     """
     mapping = {}
     for (k, v) in row.items():
-      t = cls.NUMBER
-      try:
-        float(v)
-      except:
-        t = cls.STRING
-      mapping[k] = t
+      (mapping[k], _) = cls._predict_type(v, typed)
     return cls(mapping)
+
+  @classmethod
+  def _predict_type(cls, v, typed):
+    """
+    Predicts a data type for the given data.
+    if `typed` is True, no type conversion will be tried against `v`.
+    """
+    if isinstance(v, (int, long_t, float)):
+      return (cls.NUMBER, v)
+    elif isinstance(v, unicode_t):
+      if not typed:
+        try: return (cls.NUMBER, float(v))
+        except ValueError: pass
+      return (cls.STRING, v)
+    elif isinstance(v, bytes):
+      if not typed:
+        try: return (cls.NUMBER, float(v))
+        except ValueError: pass
+        try: return (cls.STRING, v.decode())
+        except UnicodeDecodeError: pass
+      return (cls.BINARY, v)
+    else:
+      raise ValueError('cannot detect data type of {0}'.format(v.__class__))
 
 class BaseDataset(object):
   """
@@ -176,11 +235,19 @@ class BaseDataset(object):
           continue
         # Predict schema.
         if self._schema is None:
-          self._schema = BaseSchema.predict(row)
+          self._schema = self._predict(row)
         self._data.append(row)
 
       # Don't hold a ref to the loader for static datasets.
       self._loader = None
+
+  @classmethod
+  def _predict(cls, row):
+    """
+    Predict the Schema for the given row using the corresponding Schema class.
+    """
+    # return GenericSchema.predict(row, False)
+    raise NotImplementedError()
 
   def is_static(self):
     """

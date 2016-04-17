@@ -12,8 +12,10 @@ if sys.version_info < (3, 0):
   zip = itertools.izip
   zip_longest = itertools.izip_longest
   unicode_t = unicode
+  long_t = long
 else:
   # Python 3.x
   PYTHON3 = True
   zip_longest = itertools.zip_longest
   unicode_t = str
+  long_t = int

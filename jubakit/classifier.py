@@ -4,13 +4,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import jubatus
 
-from .base import BaseSchema, BaseDataset, BaseService, GenericConfig
+from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
 from .loader.array import ArrayLoader, ZipArrayLoader
 from .loader.sparse import SparseMatrixLoader
 from .loader.chain import ValueMapChainLoader, MergeChainLoader
 from .compat import *
 
-class Schema(BaseSchema):
+class Schema(GenericSchema):
   """
   Schema for Classifier service.
   """
@@ -38,13 +38,21 @@ class Schema(BaseSchema):
     label = row.get(self._label_key, None)
     if label is not None:
       label = unicode_t(label)
-    d = self.transform_as_datum(row, None, [self._label_key])
+    d = self._transform_as_datum(row, None, [self._label_key])
     return (label, d)
+
+  @classmethod
+  def predict(cls, row, typed):
+    raise RuntimeError('Classifier schema cannot be auto predicted')
 
 class Dataset(BaseDataset):
   """
   Dataset for Classifier service.
   """
+
+  @classmethod
+  def _predict(cls, row):
+    raise RuntimeError('Classifier schema cannot be auto predicted')
 
   @classmethod
   def _from_loader(cls, data_loader, labels, label_names, static):

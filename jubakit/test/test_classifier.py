@@ -56,6 +56,10 @@ class DatasetTest(TestCase):
       self.assertEqual(0, len(d.binary_values))
     self.assertEqual(['1','2','3'], list(ds.get_labels()))
 
+  def test_predict(self):
+    loader = StubLoader()
+    self.assertRaises(RuntimeError, Dataset, loader, None)
+
   def test_from_array(self):
     ds = Dataset.from_array(
         [ [10,20,30], [20,10,50], [40,10,30] ], # data

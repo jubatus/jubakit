@@ -4,16 +4,24 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
-from jubakit.base import BaseLoader, BaseSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
+from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
 
 from .stub import *
 
+class BaseLoaderTest(TestCase):
+  def test_simple(self):
+    loader = BaseLoader()
+
 class BaseSchemaTest(TestCase):
   def test_simple(self):
-    schema = BaseSchema({
-      'k1': BaseSchema.STRING,
-      'k2': BaseSchema.NUMBER,
-      'k3': BaseSchema.BINARY,
+    schema = BaseSchema({})
+
+class GenericSchemaTest(TestCase):
+  def test_simple(self):
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+      'k2': GenericSchema.NUMBER,
+      'k3': GenericSchema.BINARY,
     })
     d = schema.transform({
       'k1': '123',
@@ -26,9 +34,9 @@ class BaseSchemaTest(TestCase):
     self.assertEqual({'k3': b'x'}, dict(d.binary_values))
 
   def test_alias(self):
-    schema = BaseSchema({
-      'k1': BaseSchema.NUMBER,
-      'k2': (BaseSchema.NUMBER, 'alias_name'),
+    schema = GenericSchema({
+      'k1': GenericSchema.NUMBER,
+      'k2': (GenericSchema.NUMBER, 'alias_name'),
     })
     d = schema.transform({
       'k1': '123',
@@ -38,9 +46,9 @@ class BaseSchemaTest(TestCase):
     self.assertEqual({'k1': 123, 'alias_name': 456}, dict(d.num_values))
 
   def test_fallback(self):
-    schema = BaseSchema({
-      'k1': BaseSchema.STRING,
-    }, BaseSchema.NUMBER)
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+    }, GenericSchema.NUMBER)
     d = schema.transform({
       'k1': '123',
       'k2': 456,
@@ -51,27 +59,51 @@ class BaseSchemaTest(TestCase):
     self.assertEqual({'k2': 456, 'k3': 789}, dict(d.num_values))
 
   def test_unknown_key_name(self):
-    schema = BaseSchema({
-      'k1': BaseSchema.STRING,
-      'k2': BaseSchema.NUMBER,
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+      'k2': GenericSchema.NUMBER,
     })
+
     self.assertRaises(RuntimeError, schema.transform, {
       'k1': '123',
       'k2': 456,
       'k3': 789,
     })
 
+  def test_auto_infer_ignore(self):
+    schema = GenericSchema({
+      'k1': GenericSchema.INFER,
+      'k2': GenericSchema.AUTO,
+    }, GenericSchema.IGNORE)
+    d = schema.transform({
+      'k1': '123',
+      'k2': 456,
+      'k3': 'test',
+    })
+
+    self.assertEqual({}, dict(d.string_values))
+    self.assertEqual({'k1': 123, 'k2': 456}, dict(d.num_values))
+
   def test_predict(self):
     row = {'num1': 10, 'num2': 10.0, 'num3': 'inf', 'str1': 'abc', 'str2': '0.0.1'}
-    schema = BaseSchema.predict(row)
+    schema = GenericSchema.predict(row, False)
     d = schema.transform(row)
 
     self.assertEqual({'str1': 'abc', 'str2': '0.0.1'}, dict(d.string_values))
     self.assertEqual({'num1': 10, 'num2': 10.0, 'num3': float('inf')}, dict(d.num_values))
 
+  def test_predict_typed(self):
+    row = {'num1': 10, 'num2': 10.0, 'num3': 'inf', 'str1': 'abc', 'str2': '0.0.1'}
+    schema = GenericSchema.predict(row, True)
+    d = schema.transform(row)
+
+    self.assertEqual({'str1': 'abc', 'str2': '0.0.1', 'num3': 'inf'}, dict(d.string_values))
+    self.assertEqual({'num1': 10, 'num2': 10.0}, dict(d.num_values))
+
+
 class BaseDatasetTest(TestCase):
-  SCHEMA = BaseSchema({
-    'value': BaseSchema.NUMBER,
+  SCHEMA = GenericSchema({
+    'value': GenericSchema.NUMBER,
   })
 
   def test_static(self):
