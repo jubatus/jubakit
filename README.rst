@@ -1,3 +1,14 @@
+|Travis|_ |Coveralls|_ |PyPi|_
+
+.. |Travis| image:: https://api.travis-ci.org/jubatus/jubakit.svg?branch=master
+.. _Travis: https://travis-ci.org/jubatus/jubakit
+
+.. |Coveralls| image:: https://coveralls.io/repos/jubatus/jubakit/badge.svg?branch=master&service=github
+.. _Coveralls: https://coveralls.io/r/jubatus/jubakit
+
+.. |PyPi| image:: https://badge.fury.io/py/jubakit.svg
+.. _PyPi: https://badge.fury.io/py/jubakit
+
 jubakit: Jubatus Toolkit
 ========================
 
