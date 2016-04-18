@@ -41,7 +41,19 @@ install:
     - python -V
     - pip --version
 
+    # Install Coveralls
+    - pip install coveralls
+
 script:
+    # Install test requirements
     - pip install -e.[test]
-    - python setup.py test
-    - python tools/run_examples.py
+
+    # Unit Test
+    - coverage run setup.py test
+
+    # Integration Test
+    - export PYTHONPATH="."
+    - coverage run --append tools/run_examples.py
+
+after_success:
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then coveralls; fi
