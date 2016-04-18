@@ -36,5 +36,8 @@ setup(name='jubakit',
           'jubatus>=0.8.0',
           'psutil',
       ],
+      extras_require={
+          'test': ['numpy', 'scipy', 'scikit-learn'],
+      },
       test_suite = 'jubakit.test',
 )
