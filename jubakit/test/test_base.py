@@ -148,7 +148,7 @@ class GenericSchemaTest(TestCase):
 
 class BaseDatasetTest(TestCase):
   SCHEMA = GenericSchema({
-    'value': GenericSchema.NUMBER,
+    'v': (GenericSchema.NUMBER, 'value'),
   })
 
   def test_static(self):
@@ -160,11 +160,16 @@ class BaseDatasetTest(TestCase):
     self.assertEqual({'value': 1}, dict(ds[0].num_values))
     self.assertEqual({'value': 2}, dict(ds[1].num_values))
     self.assertEqual({'value': 3}, dict(ds[2].num_values))
+    self.assertEqual({'v': 1}, dict(ds.get(0)))
+    self.assertEqual({'v': 2}, dict(ds.get(1)))
+    self.assertEqual({'v': 3}, dict(ds.get(2)))
 
     ds2 = ds[(1,2)]
     self.assertEqual(2, len(ds2))
     self.assertEqual({'value': 2}, dict(ds2[0].num_values))
     self.assertEqual({'value': 3}, dict(ds2[1].num_values))
+    self.assertEqual({'v': 2}, dict(ds2.get(0)))
+    self.assertEqual({'v': 3}, dict(ds2.get(1)))
 
     expected_idx = 0
     for (idx, row) in ds:
@@ -197,6 +202,8 @@ class BaseDatasetTest(TestCase):
     for (idx, row) in ds:
       self.assertEqual(expected_idx, idx)
       self.assertEqual({'value': idx+1}, dict(row.num_values))
+      self.assertEqual(row.num_values, ds[idx].num_values)
+      self.assertEqual({'v': idx+1}, ds.get(idx))
       expected_idx += 1
 
   def test_nonstatic_ops(self):
