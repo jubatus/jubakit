@@ -210,6 +210,8 @@ class BaseDataset(object):
     """
     self._loader = loader
     self._schema = schema
+    self._index = -1
+    self._buffer = None
 
     if static is None:
       # Non-infinite loaders are static by default.
@@ -290,8 +292,13 @@ class BaseDataset(object):
     """
     Returns the raw entry loaded by Loader.
     """
+    if idx == self._index:
+      # For convenience, even non-static datasets can access the raw record for
+      # the index that is currently being iterated.
+      return self._buffer
+
     if not self._static:
-      raise RuntimeError('non-static datasets does not allow raw entry access')
+      raise RuntimeError('non-static datasets cannot be random accessed by index')
     return self._data[idx]
 
   def __len__(self):
@@ -307,8 +314,13 @@ class BaseDataset(object):
     Returns row(s) at the position `index`.
     `index` can be an iterable (like numpy array) or just an int.
     """
+    if isinstance(index, int) and index == self._index:
+      # For convenience, even non-static datasets can access the record for the
+      # index that is currently being iterated.
+      return self._schema.transform(self._buffer)
+
     if not self._static:
-      raise RuntimeError('non-static datasets cannot be accessed by index')
+      raise RuntimeError('non-static datasets cannot be random accessed by index')
 
     if isinstance(index, slice):
       return self.__class__(self._loader, self._schema, True, self._data[index])
@@ -330,13 +342,19 @@ class BaseDataset(object):
     """
     Iteratively access each transformed rows.
     """
-    source = self._data if self._static else self._loader
-    idx = 0
-    for row in source:
-      if row is None:
-        continue
-      yield (idx, self._schema.transform(row))
-      idx += 1
+    try:
+      source = self._data if self._static else self._loader
+      self._index = 0
+      for row in source:
+        if row is None:
+          continue
+        self._buffer = row
+        yield (self._index, self._schema.transform(row))
+        self._index += 1
+    finally:
+      self._index = -1
+      self._buffer = None
+      self._loader = None
 
 class BaseService(object):
   """

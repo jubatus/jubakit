@@ -47,7 +47,7 @@ class SchemaTest(TestCase):
 class DatasetTest(TestCase):
   def test_simple(self):
     loader = StubLoader()
-    schema = Schema({'value': Schema.LABEL})
+    schema = Schema({'v': Schema.LABEL})
     ds = Dataset(loader, schema)
     for (idx, (label, d)) in ds:
       self.assertEqual(unicode_t(idx+1), label)

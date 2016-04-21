@@ -13,7 +13,7 @@ class StubLoader(BaseLoader):
 
   def __iter__(self):
     for d in self.DATA:
-      yield self.preprocess({'value': d})
+      yield self.preprocess({'v': d})
       yield None  # None should be ignored by Dataset
 
 class StubInfiniteLoader(BaseLoader):
@@ -23,7 +23,7 @@ class StubInfiniteLoader(BaseLoader):
   def __iter__(self):
     d = 1
     while True:
-      yield self.preprocess({'value': d})
+      yield self.preprocess({'v': d})
       d += 1
 
 class StubService(BaseService):

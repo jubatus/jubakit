@@ -38,7 +38,7 @@ setup(name='jubakit',
           'psutil',
       ],
       extras_require={
-          'test': ['numpy', 'scipy', 'scikit-learn'],
+          'test': ['numpy', 'scipy', 'scikit-learn', 'tweepy', 'jq'],
       },
       test_suite = 'jubakit.test',
 )
