@@ -15,7 +15,7 @@ class SparseMatrixLoader(BaseLoader):
     self._matrix = matrix.tocsr()
     self._feature_names = feature_names
 
-  def __iter__(self):
+  def rows(self):
     m = self._matrix
     for i in range(m.shape[0]):
       cols = m.indices[m.indptr[i]:m.indptr[i+1]]
@@ -26,4 +26,4 @@ class SparseMatrixLoader(BaseLoader):
         fv_names = [self._feature_names[col] for col in cols]
 
       data = dict(zip(fv_names, m.data[m.indptr[i]:m.indptr[i+1]]))
-      yield self.preprocess(data)
+      yield data

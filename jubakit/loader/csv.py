@@ -42,7 +42,7 @@ class CSVLoader(BaseLoader):
     self._args = args
     self._kwargs = kwargs
 
-  def __iter__(self):
+  def rows(self):
     def _encode_file(f, enc):
       for line in f: yield line.encode(enc)
     def _decode_row(r, enc):
@@ -53,4 +53,4 @@ class CSVLoader(BaseLoader):
       reader = csv.DictReader(f, fieldnames=self._fieldnames, *self._args, **self._kwargs)
       for row in reader:
         ent = row if PYTHON3 else _decode_row(row, self._encoding)
-        yield self.preprocess(ent)
+        yield ent

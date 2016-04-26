@@ -32,14 +32,24 @@ class BaseLoader(object):
     """
     Preprocesses the given dict-like object into another dict-like object.
     The default implementation does not alter the object.  Users can override
-    this method to perform custom process.
+    this method to perform custom process.  You can yield None to skip the
+    record.
     """
     return ent
 
   def __iter__(self):
     """
+    Loads each row from the data source.
+    """
+    for ent in self.rows():
+      processed = self.preprocess(ent)
+      if processed is not None:
+        yield processed
+
+  def rows(self):
+    """
     Subclasses must override this method and yield each row of data source
-    in dict-like object.  You can yield None to skip the record.
+    in flat dict-like object.  You can yield None to skip the record.
     """
     raise NotImplementedError()
 

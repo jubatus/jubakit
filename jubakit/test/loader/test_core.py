@@ -18,7 +18,7 @@ class LineBasedStreamLoaderTest(TestCase):
     for line in loader:
       lines.append(line)
 
-    self.assertEqual([{'line': 'hello\n'}, {'line': 'world'}], lines)
+    self.assertEqual([{'line': 'hello\n', 'number': 0}, {'line': 'world', 'number': 1}], lines)
 
 class LineBasedFileLoaderTest(TestCase):
   def test_simple(self):
@@ -33,4 +33,4 @@ class LineBasedFileLoaderTest(TestCase):
       for line in loader:
         lines.append(line)
 
-    self.assertEqual([{'line': 'hello\n'}, {'line': 'world'}], lines)
+    self.assertEqual([{'line': 'hello\n', 'number': 0}, {'line': 'world', 'number': 1}], lines)
