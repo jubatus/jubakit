@@ -34,7 +34,7 @@ Quick Start
 
 The following example shows how to perform train/classify using CSV dataset.
 
-::
+.. code:: python
 
   from jubakit.classifier import Classifier, Schema, Dataset, Config
   from jubakit.loader.csv import CSVLoader
