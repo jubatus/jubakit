@@ -271,7 +271,9 @@ class TestGenericConfg(TestCase):
   def test_add_mecab(self):
     config = StubGenericConfig()
     self.assertFalse('mecab2' in config['converter']['string_types'])
-    config.add_mecab(name='mecab2', ngram=2, base=True)
+    config.add_mecab(name='mecab2', ngram=2, base=True, include_features='名詞,*', exclude_features=['動詞,*', '形容詞,*'])
     self.assertTrue('mecab2' in config['converter']['string_types'])
     self.assertEqual('2', config['converter']['string_types']['mecab2']['ngram'])
     self.assertEqual('true', config['converter']['string_types']['mecab2']['base'])
+    self.assertEqual('名詞,*', config['converter']['string_types']['mecab2']['include_features'])
+    self.assertEqual('動詞,*|形容詞,*', config['converter']['string_types']['mecab2']['exclude_features'])
