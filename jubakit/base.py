@@ -441,6 +441,13 @@ class BaseService(object):
     self._client().load(name)
     # TODO copy source from `jubafetch` and make path option work.
 
+  def get_status(self):
+    """
+    Returns the status of this server.  In distributed mode, returns statuses
+    of all members.
+    """
+    return self._client().get_status()
+
 class _ServiceBackend(object):
   """
   Service backend handles messy process-related things.
