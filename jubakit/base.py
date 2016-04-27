@@ -263,7 +263,7 @@ class BaseDataset(object):
     """
     return self._schema
 
-  def shuffle(self):
+  def shuffle(self, seed=None):
     """
     Returns a new immutable Dataset whose records are shuffled.
     """
@@ -271,7 +271,7 @@ class BaseDataset(object):
       raise RuntimeError('non-static datasets cannot be shuffled')
 
     def _shuffle(data):
-      return random.sample(data, len(data))
+      return random.Random(seed).sample(data, len(data))
     return self.convert(_shuffle)
 
   def convert(self, func):

@@ -184,7 +184,7 @@ class BaseDatasetTest(TestCase):
 
   def test_shuffle(self):
     loader = StubLoader()
-    ds = BaseDataset(loader, self.SCHEMA).shuffle()
+    ds = BaseDataset(loader, self.SCHEMA).shuffle(0)
 
     rows = []
     for (_, row) in ds:
