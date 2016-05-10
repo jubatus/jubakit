@@ -756,6 +756,11 @@ class GenericConfig(BaseConfig):
     """
     Add MeCab feature extraction to string_types.
     """
+    if isinstance(include_features, list):
+      include_features = '|'.join(include_features)
+
+    if isinstance(exclude_features, list):
+      exclude_features = '|'.join(exclude_features)
 
     self['converter']['string_types'][name] = {
       'method': 'dynamic',
