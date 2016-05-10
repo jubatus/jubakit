@@ -27,9 +27,9 @@ class ArrayLoader(BaseLoader):
     self._array = array
     self._feature_names = feature_names
 
-  def __iter__(self):
+  def rows(self):
     for ent in self._array:
-      yield self.preprocess(dict([x for x in zip(self._feature_names, ent) if x[1] is not None]))
+      yield dict([x for x in zip(self._feature_names, ent) if x[1] is not None])
 
 class ZipArrayLoader(BaseLoader):
   """
@@ -63,6 +63,6 @@ class ZipArrayLoader(BaseLoader):
       self._feature_names.append(name)
       self._arrays.append(named_arrays[name])
 
-  def __iter__(self):
+  def rows(self):
     for ent in zip(*self._arrays):
-      yield self.preprocess(dict([x for x in zip(self._feature_names, ent) if x[1] is not None]))
+      yield dict([x for x in zip(self._feature_names, ent) if x[1] is not None])

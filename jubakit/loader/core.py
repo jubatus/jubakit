@@ -16,17 +16,14 @@ class LineBasedStreamLoader(BaseLoader):
     self._close = close
     self._lines = 0
 
-  def __iter__(self):
+  def rows(self):
     try:
       for line in self._f:
-        yield self.preprocess({str(self._lines): line})
+        yield {"number": self._lines, "line": line}
         self._lines += 1
     finally:
       if not self._f.closed and self._close:
         self._f.close()
-
-  def preprocess(self, ent):
-    return {'line': list(ent.values())[0]}
 
 class LineBasedFileLoader(LineBasedStreamLoader):
   """
