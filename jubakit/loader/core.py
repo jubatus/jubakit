@@ -17,11 +17,13 @@ class LineBasedStreamLoader(BaseLoader):
     self._lines = 0
 
   def __iter__(self):
-    for line in self._f:
-      yield self.preprocess({str(self._lines): line})
-      self._lines += 1
-    if self._close:
-      self._f.close()
+    try:
+      for line in self._f:
+        yield self.preprocess({str(self._lines): line})
+        self._lines += 1
+    finally:
+      if not self._f.closed and self._close:
+        self._f.close()
 
   def preprocess(self, ent):
     return {'line': list(ent.values())[0]}
