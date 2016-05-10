@@ -14,6 +14,11 @@ import sklearn.metrics
 
 from jubakit.classifier import Classifier, Schema, Dataset, Config
 from jubakit.loader.csv import CSVLoader
+import jubakit.logger
+
+# In this example, we enable logging mechanism to show you
+# what's going on in jubakit.
+jubakit.logger.setup_logger(jubakit.logger.INFO)
 
 # Load a CSV file.
 loader = CSVLoader('iris.csv')
@@ -22,6 +27,9 @@ loader = CSVLoader('iris.csv')
 schema = Schema({
   'Species': Schema.LABEL,
 }, Schema.NUMBER)
+
+# Display Schema
+print('Schema: {0}'.format(schema))
 
 # Create a Dataset.
 dataset = Dataset(loader, schema).shuffle()
@@ -39,4 +47,5 @@ result = Classifier.train_and_classify(
   sklearn.metrics.classification_report
 )
 
+print('---- Classification Report -----------------------------------')
 print(result)
