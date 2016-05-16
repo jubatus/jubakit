@@ -16,6 +16,9 @@ import msgpackrpc
 import psutil
 
 from .compat import *
+from .logger import get_logger
+
+_logger = get_logger()
 
 class BaseLoader(object):
   """
@@ -105,6 +108,9 @@ class BaseSchema(object):
     """
     raise NotImplementedError()
 
+  def __str__(self):
+    return str({'keys': self._key2name, 'types': self._key2type, 'fallback_type': self._fallback})
+
 class GenericSchema(BaseSchema):
   """
   GenericSchema is a base Schema class for all engines using Datum.
@@ -140,7 +146,12 @@ class GenericSchema(BaseSchema):
       d.add_binary(k, v)
     elif t == self.AUTO or t == self.INFER:
       (pred_type, pred_v) = self._predict_type(v, (t == self.AUTO))
-      self._add_to_datum(d, pred_type, k, pred_v)
+      _logger.debug('key %s predicted as type %s', k, pred_type)
+      try:
+        self._add_to_datum(d, pred_type, k, pred_v)
+      except:
+        _logger.debug('key %s with value %s cannot be added as %s', k, v, pred_type)
+        raise
     elif t == self.IGNORE:
       pass
     else:
@@ -174,6 +185,7 @@ class GenericSchema(BaseSchema):
     mapping = {}
     for (k, v) in row.items():
       (mapping[k], _) = cls._predict_type(v, typed)
+      _logger.info('key %s predicted as type %s', k, mapping[k])
     return cls(mapping)
 
   @classmethod
@@ -242,6 +254,7 @@ class BaseDataset(object):
         raise RuntimeError('infinite loaders cannot be staticized')
 
       # Load all data entries.
+      _logger.info('loading all records from loader %s', loader)
       for row in loader:
         if row is None:
           continue
@@ -249,6 +262,7 @@ class BaseDataset(object):
         if self._schema is None:
           self._schema = self._predict(row)
         self._data.append(row)
+      _logger.info('records loaded (%d entries)', len(self._data))
 
       # Don't hold a ref to the loader for static datasets.
       self._loader = None
@@ -413,6 +427,7 @@ class BaseService(object):
     the server.
     """
     backend = _ServiceBackend(cls.name(), config, port)
+    _logger.info('service %s started on port %d', cls.name(), backend.port)
 
     # Returns the Service instance.
     service = cls('127.0.0.1', backend.port)
@@ -433,7 +448,9 @@ class BaseService(object):
     """
     Clears the model.
     """
-    self._client().clear()
+    if not self._client().clear():
+      raise RuntimeError('failed to clear model')
+    _logger.info('model cleared')
 
   def save(self, name, path=None):
     """
@@ -441,6 +458,7 @@ class BaseService(object):
     model file to local `path`.
     """
     self._client().save(name)
+    _logger.info('model saved: %s', name)
     # TODO copy source from `jubafetch` and make path option work.
 
   def load(self, name, path=None):
@@ -448,7 +466,9 @@ class BaseService(object):
     Loads the model using `name`.  If `path` is specified, copy the model
     file from local `path` to remote location.
     """
-    self._client().load(name)
+    if not self._client().load(name):
+      raise RuntimeError('failed to load model: {0}'.format(name))
+    _logger.info('model loaded: %s', name)
     # TODO copy source from `jubafetch` and make path option work.
 
   def get_status(self):
@@ -488,13 +508,15 @@ class _ServiceBackend(object):
       config_file.write(json.dumps(config).encode('utf-8'))
       config_file.flush()
 
-      self._proc = subprocess.Popen([
+      args = [
         'juba{0}'.format(name),
         '--listen_addr', '127.0.0.1',
         '--rpc-port', str(self.port),
         '--timeout', '0',
         '--configpath', config_file.name
-      ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+      ]
+      _logger.info('starting service: %s', args)
+      self._proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
       self._assign_port(self.port, self._proc.pid)
 
       # Wait until the RPC server start.
@@ -507,7 +529,8 @@ class _ServiceBackend(object):
           raise RuntimeError('server cannot be started as port {0} conflicts with external Jubatus process (PID: {1})'.format(self.port, pid))
 
     if not started:
-      self.stop()
+      _logger.error('failed to start service')
+      log = self.stop()
 
   def __del__(self):
     proc = self._proc
@@ -523,10 +546,15 @@ class _ServiceBackend(object):
     self._proc = None
     if proc is not None:
       if proc.poll() is None:  # still running
+        _logger.debug('process is still running; will be terminated')
         proc.terminate()
+      else:
+        _logger.debug('process already terminated')
 
+      _logger.debug('waiting for process to exit')
       (stdout, _) = proc.communicate()
       retval = proc.returncode
+      _logger.debug('process exit with status %d', retval)
       self._unassign_port(self.port, proc.pid)
       if retval != 0:
         raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
@@ -565,6 +593,7 @@ class _ServiceBackend(object):
     except psutil.AccessDenied:
       # On some platforms (such as OS X), root privilege is required to get used ports.
       # In that case we avoid port confliction to the best of our knowledge.
+      _logger.info('ports in use cannot be obtained on this platform; ports will be assigned sequentially')
       return sorted(cls.port2pid.keys())
 
   @classmethod
@@ -593,6 +622,7 @@ class _ServiceBackend(object):
       if cls._ping_rpc(port):
         return True
       sleep_time *= 2
+    _logger.debug('service RPC ready in %d tries', i)
     return False
 
   @classmethod
@@ -614,6 +644,8 @@ class _ServiceBackend(object):
   @classmethod
   def _check_installed(cls, name):
     procname = 'juba{0}'.format(name)
+
+    _logger.debug('checking if service process %s is available', procname)
     try:
       proc = subprocess.Popen(
         [procname, '--version'],
