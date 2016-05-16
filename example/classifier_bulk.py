@@ -33,7 +33,7 @@ cfg = Config()
 
 # Bulk train-test the classifier.
 result = Classifier.train_and_classify(
-  Config(),
+  cfg,
   dataset[:n_train_samples],
   dataset[n_train_samples:],
   sklearn.metrics.classification_report
