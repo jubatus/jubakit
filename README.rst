@@ -84,6 +84,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +---------------------------+-----------------------------------------------+-----------------------+
 | classifier_twitter.py     | Handling Twitter Streams                      |                       |
 +---------------------------+-----------------------------------------------+-----------------------+
+| weight_shogun.py          | Tracing fv_converter behavior using Weight    |                       |
++---------------------------+-----------------------------------------------+-----------------------+
 
 Concepts
 --------
