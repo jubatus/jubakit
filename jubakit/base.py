@@ -252,8 +252,6 @@ class BaseDataset(object):
       # Load all data entries.
       _logger.info('loading all records from loader %s', loader)
       for row in loader:
-        if row is None:
-          continue
         # Predict schema.
         if self._schema is None:
           self._schema = self._predict(row)
@@ -367,6 +365,7 @@ class BaseDataset(object):
       self._index = 0
       for row in source:
         if row is None:
+          # May contain None in self._data if Dataset.convert is used.
           continue
         self._buffer = row
         yield (self._index, self._schema.transform(row))
