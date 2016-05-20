@@ -147,11 +147,7 @@ class GenericSchema(BaseSchema):
     elif t == self.AUTO or t == self.INFER:
       (pred_type, pred_v) = self._predict_type(v, (t == self.AUTO))
       _logger.debug('key %s predicted as type %s', k, pred_type)
-      try:
-        self._add_to_datum(d, pred_type, k, pred_v)
-      except:
-        _logger.debug('key %s with value %s cannot be added as %s', k, v, pred_type)
-        raise
+      self._add_to_datum(d, pred_type, k, pred_v)
     elif t == self.IGNORE:
       pass
     else:
