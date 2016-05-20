@@ -615,9 +615,9 @@ class _ServiceBackend(object):
     for i in range(10):
       time.sleep(sleep_time/1000000.0) # from usec to sec
       if cls._ping_rpc(port):
+        _logger.debug('service RPC ready after %d tries', i)
         return True
       sleep_time *= 2
-    _logger.debug('service RPC ready in %d tries', i)
     return False
 
   @classmethod
