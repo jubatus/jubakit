@@ -108,6 +108,23 @@ class BaseSchema(object):
     """
     raise NotImplementedError()
 
+  @staticmethod
+  def _get_unique_mapping(mapping, fallback, key_type, name, optional=False):
+    """
+    Validates the schema key uniqueness.
+    This is an utility method for subclasses.
+    """
+    if fallback == key_type:
+      raise RuntimeError('{0} key cannot be specified as fallback in schema'.format(name))
+
+    keys = [k for k in mapping.keys() if mapping[k] == key_type]
+    if len(keys) == 0:
+      if optional: return None
+      raise RuntimeError('{0} key must be specified in schema'.format(name))
+    elif 1 < len(keys):
+      raise RuntimeError('{0} key must be an unique key in schema'.format(name))
+    return keys[0]
+
   def __str__(self):
     return str({'keys': self._key2name, 'types': self._key2type, 'fallback_type': self._fallback})
 
