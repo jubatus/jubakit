@@ -708,7 +708,7 @@ class GenericConfig(BaseConfig):
       default_parameter = self._default_parameter(method)
       if default_parameter is None:
         if 'parameter' in self: del self['parameter']
-      elif default_parameter is not None:
+      else:
         self['parameter'] = default_parameter
 
     if parameter is not None:
