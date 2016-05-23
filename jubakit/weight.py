@@ -62,7 +62,7 @@ class Config(GenericConfig):
 
   @classmethod
   def methods(cls):
-    return []
+    return [None]
 
   @classmethod
   def _default_method(cls):
