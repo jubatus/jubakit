@@ -7,7 +7,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 Using Weight Service
 ====================
 
-This exampel illustrates how to use Weight engine to debug fv_converter
+This example illustrates how to use Weight engine to debug fv_converter
 behavior (i.e. `converter` section of the config file).
 """
 
