@@ -24,7 +24,8 @@ dataset = Dataset(loader)
 cfg = Config()
 weight = Weight.run(cfg)
 
-# Show extracted features (online TF-IDF).
+# Show extracted features.  As we use `update` method, weights are
+# updated incrementally.
 print('==== Features (online TF-IDF) ========================')
 for (idx, result) in weight.update(dataset):
   print('Datum:')
@@ -34,7 +35,9 @@ for (idx, result) in weight.update(dataset):
     print('\t{0}\t{1}'.format(f.key, f.value))
   print('---------------------------------------')
 
-# Show extracted features (batch TF-IDF)
+# Show extracted features.  This time we use `calc_weight`, so weights
+# for each feature is calculated by using weights updated by the above
+# code (`update`).
 print('==== Features (batch TF-IDF)  ========================')
 for (idx, result) in weight.calc_weight(dataset):
   print('Datum:')
