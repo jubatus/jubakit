@@ -65,6 +65,32 @@ class GenericSchemaTest(TestCase):
     self.assertEqual({'k1': '123'}, dict(d.string_values))
     self.assertEqual({'k2': 456, 'k3': 789}, dict(d.num_values))
 
+  def test_empty(self):
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+      'k2': GenericSchema.NUMBER,
+    })
+    d = schema.transform({
+      'k1': '',
+      'k2': '',
+    })
+
+    self.assertEqual({'k1': ''}, dict(d.string_values))
+    self.assertEqual({}, dict(d.num_values))
+
+  def test_null(self):
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+      'k2': GenericSchema.NUMBER,
+    })
+    d = schema.transform({
+      'k1': None,
+      'k2': None,
+    })
+
+    self.assertEqual({}, dict(d.string_values))
+    self.assertEqual({}, dict(d.num_values))
+
   def test_unknown_key_name(self):
     schema = GenericSchema({
       'k1': GenericSchema.STRING,
