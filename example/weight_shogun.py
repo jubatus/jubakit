@@ -28,6 +28,8 @@ weight = Weight.run(cfg)
 # updated incrementally.
 print('==== Features (online TF-IDF) ========================')
 for (idx, result) in weight.update(dataset):
+  print('\tfamily_name: {0}'.format(dataset.get(idx)['family_name']))
+  print('\tfirst_name: {0}'.format(dataset.get(idx)['first_name']))
   print('Datum:')
   print('\t{0}'.format(dataset[idx]))
   print('Features:')
@@ -40,6 +42,9 @@ for (idx, result) in weight.update(dataset):
 # code (`update`).
 print('==== Features (batch TF-IDF)  ========================')
 for (idx, result) in weight.calc_weight(dataset):
+  print('Raw Data:')
+  print('\tfamily_name: {0}'.format(dataset.get(idx)['family_name']))
+  print('\tfirst_name: {0}'.format(dataset.get(idx)['first_name']))
   print('Datum:')
   print('\t{0}'.format(dataset[idx]))
   print('Features:')
