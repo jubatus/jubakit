@@ -155,10 +155,13 @@ class GenericSchema(BaseSchema):
     """
     Add value `v` whose type and name are `t` and `k` resp. to Datum `d`.
     """
+    if v is None:
+      return
     if t == self.STRING:
       d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
-      d.add_number(k, float(v))
+      if v != '':
+        d.add_number(k, float(v))
     elif t == self.BINARY:
       d.add_binary(k, v)
     elif t == self.AUTO or t == self.INFER:
