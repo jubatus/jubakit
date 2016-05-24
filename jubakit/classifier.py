@@ -91,7 +91,7 @@ class Dataset(BaseDataset):
     """
 
     if not self._static:
-      raise RuntimeException('non-static datasets cannot fetch list of labels')
+      raise RuntimeError('non-static datasets cannot fetch list of labels')
 
     for (idx, (label, d)) in self:
       yield label

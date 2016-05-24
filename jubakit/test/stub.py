@@ -55,3 +55,8 @@ class StubGenericConfig(GenericConfig):
       return None
     elif method == 'test2':
       return {'param1': 1, 'param2': 2}
+
+class StubGenericConfigWithoutConverter(StubGenericConfig):
+  @classmethod
+  def _default_converter(cls):
+    return None

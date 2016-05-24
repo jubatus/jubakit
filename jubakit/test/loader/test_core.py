@@ -20,6 +20,15 @@ class LineBasedStreamLoaderTest(TestCase):
 
     self.assertEqual([{'line': 'hello\n', 'number': 0}, {'line': 'world', 'number': 1}], lines)
 
+  def test_close(self):
+    data = 'hello\nworld'
+
+    f = StringIO(data)
+    loader = LineBasedStreamLoader(f, False)  # do not close
+    for _ in loader: pass
+
+    self.assertFalse(f.closed)
+
 class LineBasedFileLoaderTest(TestCase):
   def test_simple(self):
     data = 'hello\nworld'

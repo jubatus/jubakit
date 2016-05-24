@@ -3,18 +3,25 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from unittest import TestCase
+from jubatus.common import Datum
 
 from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
 
 from .stub import *
 
 class BaseLoaderTest(TestCase):
-  def test_simple(self):
+  def test_base(self):
     loader = BaseLoader()
     self.assertFalse(loader.is_infinite())
+    self.assertRaises(NotImplementedError, loader.rows)
+
+  def test_simple(self):
+    loader = StubLoader()
+    # None should not appear.
+    self.assertEqual([{'v': 1}, {'v': 2}, {'v': 3}], list(loader))
 
 class BaseSchemaTest(TestCase):
-  def test_simple(self):
+  def test_base(self):
     schema = BaseSchema({
       'k1': BaseSchema.IGNORE,
       'k2': BaseSchema.AUTO,
@@ -104,40 +111,48 @@ class GenericSchemaTest(TestCase):
     })
 
   def test_auto(self):
+    binary_data = 'テスト'.encode('cp932')
+
     schema = GenericSchema({
       'k1': GenericSchema.AUTO,
       'k2': GenericSchema.AUTO,
       'k3': GenericSchema.AUTO,
       'k4': GenericSchema.AUTO,
+      'k5': GenericSchema.AUTO,
     })
     d = schema.transform({
       'k1': '123',
       'k2': 456,
       'k3': '789'.encode(),
       'k4': 'xxx'.encode(),
+      'k5': binary_data,
     })
 
     self.assertEqual({'k1': '123'}, dict(d.string_values))
     self.assertEqual({'k2': 456}, dict(d.num_values))
-    self.assertEqual({'k3': '789'.encode(), 'k4': 'xxx'.encode()}, dict(d.binary_values))
+    self.assertEqual({'k3': '789'.encode(), 'k4': 'xxx'.encode(), 'k5': binary_data}, dict(d.binary_values))
 
   def test_infer(self):
+    binary_data = 'テスト'.encode('cp932')
+
     schema = GenericSchema({
       'k1': GenericSchema.INFER,
       'k2': GenericSchema.INFER,
       'k3': GenericSchema.INFER,
       'k4': GenericSchema.INFER,
+      'k5': GenericSchema.INFER,
     })
     d = schema.transform({
       'k1': '123',
       'k2': 456,
       'k3': '789'.encode(),
       'k4': 'xxx'.encode(),
+      'k5': binary_data,
     })
 
     self.assertEqual({'k4': 'xxx'}, dict(d.string_values))
     self.assertEqual({'k1': 123, 'k2': 456, 'k3': 789}, dict(d.num_values))
-    self.assertEqual({}, dict(d.binary_values))
+    self.assertEqual({'k5': binary_data}, dict(d.binary_values))
 
   def test_ignore(self):
     schema = GenericSchema({
@@ -151,6 +166,20 @@ class GenericSchemaTest(TestCase):
     self.assertEqual({}, dict(d.string_values))
     self.assertEqual({'k1': 123}, dict(d.num_values))
     self.assertEqual({}, dict(d.binary_values))
+
+  def test_transform_as_datum(self):
+    d = Datum()
+
+    schema = GenericSchema({
+      'k1': GenericSchema.NUMBER,
+    }, GenericSchema.IGNORE)
+    d2 = schema._transform_as_datum({
+      'k1': '123',
+      'k2': 456,
+    }, d)
+
+    self.assertEqual(d2, d)
+    self.assertEqual({'k1': 123}, dict(d.num_values))
 
   def test_predict(self):
     row = {'num1': 10, 'num2': 10.0, 'num3': 'inf', 'str1': 'abc', 'str2': '0.0.1'}
@@ -168,7 +197,11 @@ class GenericSchemaTest(TestCase):
     self.assertEqual({'str1': 'abc', 'str2': '0.0.1', 'num3': 'inf'}, dict(d.string_values))
     self.assertEqual({'num1': 10, 'num2': 10.0}, dict(d.num_values))
 
-  def test_invalid(self):
+  def test_invalid_predict(self):
+    schema = GenericSchema({'k1': GenericSchema.STRING})
+    self.assertRaises(ValueError, schema.predict, {'k1': object()}, True)
+
+  def test_invalid_transform(self):
     schema = GenericSchema({'k1': 'unknown'})
     self.assertRaises(RuntimeError, schema.transform, {'k1': '123'})
 
@@ -203,6 +236,15 @@ class BaseDatasetTest(TestCase):
       self.assertEqual({'value': idx+1}, dict(row.num_values))
       expected_idx += 1
 
+  def test_invalid_infinite_static(self):
+    loader = StubInfiniteLoader()  # infinite loader
+    self.assertRaises(RuntimeError, BaseDataset, loader, None, True)  # cannot be static
+
+  def test_predict(self):
+    loader = StubLoader()
+    ds = BaseDataset(loader, self.SCHEMA)
+    self.assertRaises(NotImplementedError, ds._predict, {})
+
   def test_get_schema(self):
     loader = StubLoader()
     ds = BaseDataset(loader, self.SCHEMA)
@@ -218,6 +260,30 @@ class BaseDatasetTest(TestCase):
 
     row_values = [x.num_values[0][1] for x in rows]
     self.assertEqual([1,2,3], sorted(row_values))
+
+  def test_convert(self):
+    loader = StubLoader()
+    ds1 = BaseDataset(loader, self.SCHEMA)
+    def f(d):
+      new_d = {}
+      for (k, v) in d.items():
+        new_d[k] = d[k] + 1
+      return new_d
+    ds2 = ds1.convert(lambda data: [f(d) for d in data])
+    self.assertEqual(1, ds1[0].num_values[0][1])
+    self.assertEqual(2, ds2[0].num_values[0][1])
+
+  def test_convert_empty(self):
+    loader = StubLoader()
+    ds1 = BaseDataset(loader, self.SCHEMA)
+    ds2 = ds1.convert(lambda data: [None for d in data])  # ds2 should be empty
+    for d in ds2:
+      self.fail()
+
+  def test_invalid_convert(self):
+    loader = StubLoader()
+    ds1 = BaseDataset(loader, self.SCHEMA)
+    self.assertRaises(RuntimeError, ds1.convert, lambda x: None)
 
   def test_nonstatic(self):
     loader = StubLoader()
@@ -236,6 +302,7 @@ class BaseDatasetTest(TestCase):
     loader = StubLoader()
     ds = BaseDataset(loader, self.SCHEMA, False)
 
+    self.assertRaises(RuntimeError, ds.shuffle, 0)
     self.assertRaises(RuntimeError, ds.convert, lambda x:x)
     self.assertRaises(RuntimeError, ds.get, 0)
     self.assertRaises(RuntimeError, len, ds)
@@ -254,16 +321,40 @@ class BaseDatasetTest(TestCase):
       if 10 < expected_idx:
         break
 
+  def test_index_access(self):
+    loader = StubLoader()
+    ds = BaseDataset(loader, self.SCHEMA)
+    self.assertTrue(isinstance(ds[0], jubatus.common.Datum))
+    self.assertTrue(isinstance(ds[0:1], BaseDataset))
+
 class TestBaseService(TestCase):
   def test_simple(self):
+    service = BaseService()
+    self.assertRaises(NotImplementedError, service.name)
+    self.assertRaises(NotImplementedError, service._client)
+    self.assertRaises(NotImplementedError, service._client_class)
+
+  def test_stub(self):
     service = StubService()
+    self.assertRaises(RuntimeError, service.run, StubConfig())  # juba_stub does not exist
+    service.stop()
 
 class TestBaseConfig(TestCase):
+  def test_base(self):
+    self.assertRaises(NotImplementedError, BaseConfig)
+
   def test_simple(self):
     config = StubConfig()
     self.assertEqual({'test': 1.0}, config)
 
 class TestGenericConfg(TestCase):
+  def test_base(self):
+    self.assertRaises(NotImplementedError, GenericConfig)
+    self.assertRaises(NotImplementedError, GenericConfig.methods)
+    self.assertRaises(NotImplementedError, GenericConfig._default_method)
+    self.assertRaises(NotImplementedError, GenericConfig._default_parameter, None)
+    self.assertTrue(isinstance(GenericConfig._default_converter(), dict))
+
   def test_simple(self):
     config = StubGenericConfig()
     self.assertEqual('test', config['method'])
@@ -288,6 +379,12 @@ class TestGenericConfg(TestCase):
     self.assertTrue('string_rules' in config['converter'])
     self.assertEqual(0, len(config['converter']['string_types']))
 
+  def test_without_converter(self):
+    config = StubGenericConfigWithoutConverter(converter={})
+    self.assertEqual('test', config['method'])
+    self.assertTrue('parameter' not in config)
+    self.assertEqual({}, config['converter'])
+
   def test_clear_converter(self):
     config = StubGenericConfig()
     self.assertTrue('unigram' in config['converter']['string_types'])
@@ -303,3 +400,11 @@ class TestGenericConfg(TestCase):
     self.assertEqual('true', config['converter']['string_types']['mecab2']['base'])
     self.assertEqual('名詞,*', config['converter']['string_types']['mecab2']['include_features'])
     self.assertEqual('動詞,*|形容詞,*', config['converter']['string_types']['mecab2']['exclude_features'])
+
+    self.assertFalse('mecab3' in config['converter']['string_types'])
+    config.add_mecab(name='mecab3', ngram="3", base=False, include_features=['名詞,*','動詞,*'], exclude_features='動詞,*|名詞,固有名詞,*')
+    self.assertTrue('mecab3' in config['converter']['string_types'])
+    self.assertEqual('3', config['converter']['string_types']['mecab3']['ngram'])
+    self.assertEqual('false', config['converter']['string_types']['mecab3']['base'])
+    self.assertEqual('名詞,*|動詞,*', config['converter']['string_types']['mecab3']['include_features'])
+    self.assertEqual('動詞,*|名詞,固有名詞,*', config['converter']['string_types']['mecab3']['exclude_features'])

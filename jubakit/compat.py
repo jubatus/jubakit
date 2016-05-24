@@ -5,17 +5,13 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import sys
 import itertools
 
-if sys.version_info < (3, 0):
+PYTHON3 = sys.version_info >= (3, 0)
+
+zip_longest = itertools.zip_longest if PYTHON3 else itertools.izip_longest
+unicode_t = str if PYTHON3 else unicode
+long_t = int if PYTHON3 else long
+
+if not PYTHON3:
   # Python 2.x
-  PYTHON3 = False
   range = xrange
   zip = itertools.izip
-  zip_longest = itertools.izip_longest
-  unicode_t = unicode
-  long_t = long
-else:
-  # Python 3.x
-  PYTHON3 = True
-  zip_longest = itertools.zip_longest
-  unicode_t = str
-  long_t = int

@@ -24,6 +24,13 @@ class CSVLoaderTest(TestCase):
         else:
           self.fail('unexpected row')
 
+  def test_guess_header(self):
+    with TempFile() as f:
+      f.write("k1,k2,k3\n1,2,3".encode())
+      f.flush()
+      loader = CSVLoader(f.name, fieldnames=True)
+      self.assertEqual([{'k1': '1', 'k2': '2', 'k3': '3'}], list(loader))
+
   def test_noheader(self):
     with TempFile() as f:
       f.write("1,\"2\",3\n\"4\",5,\"6\"".encode('utf-8'))

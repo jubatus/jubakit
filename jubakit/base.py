@@ -167,11 +167,7 @@ class GenericSchema(BaseSchema):
     elif t == self.AUTO or t == self.INFER:
       (pred_type, pred_v) = self._predict_type(v, (t == self.AUTO))
       _logger.debug('key %s predicted as type %s', k, pred_type)
-      try:
-        self._add_to_datum(d, pred_type, k, pred_v)
-      except:
-        _logger.debug('key %s with value %s cannot be added as %s', k, v, pred_type)
-        raise
+      self._add_to_datum(d, pred_type, k, pred_v)
     elif t == self.IGNORE:
       pass
     else:
@@ -276,8 +272,6 @@ class BaseDataset(object):
       # Load all data entries.
       _logger.info('loading all records from loader %s', loader)
       for row in loader:
-        if row is None:
-          continue
         # Predict schema.
         if self._schema is None:
           self._schema = self._predict(row)
@@ -391,6 +385,7 @@ class BaseDataset(object):
       self._index = 0
       for row in source:
         if row is None:
+          # May contain None in self._data if Dataset.convert is used.
           continue
         self._buffer = row
         yield (self._index, self._schema.transform(row))
@@ -640,9 +635,9 @@ class _ServiceBackend(object):
     for i in range(10):
       time.sleep(sleep_time/1000000.0) # from usec to sec
       if cls._ping_rpc(port):
+        _logger.debug('service RPC ready after %d tries', i)
         return True
       sleep_time *= 2
-    _logger.debug('service RPC ready in %d tries', i)
     return False
 
   @classmethod
@@ -733,7 +728,7 @@ class GenericConfig(BaseConfig):
       default_parameter = self._default_parameter(method)
       if default_parameter is None:
         if 'parameter' in self: del self['parameter']
-      elif default_parameter is not None:
+      else:
         self['parameter'] = default_parameter
 
     if parameter is not None:

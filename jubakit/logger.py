@@ -11,12 +11,15 @@ from logging import DEBUG, INFO, WARNING, ERROR, CRITICAL
 # Define the default logging format.
 _DEFAULT_FORMAT = '[%(name)s] %(asctime)s: (%(levelname)s) %(message)s'
 
+# jubakit root logger name.
+_LOGGER_NAME = 'jubakit'
+
 # Define the defualt logger which does nothing.
 class _NullHandler(logging.Handler):
   def emit(self, record):
     pass
 
-_logger = logging.getLogger('jubakit')
+_logger = logging.getLogger(_LOGGER_NAME)
 _logger.addHandler(_NullHandler())
 _logger.setLevel(logging.CRITICAL)
 
@@ -42,4 +45,7 @@ def get_logger(name=None):
   """
   if name is None:
     return _logger
-  return _logger.getChild(name)
+  elif hasattr(_logger, 'getChild'):
+    return _logger.getChild(name)
+  else:
+    return logging.getLogger('{0}.{1}'.format(_LOGGER_NAME, name))

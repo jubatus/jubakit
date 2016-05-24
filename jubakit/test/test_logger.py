@@ -14,3 +14,15 @@ class LoggerTest(TestCase):
     buf = StringIO()
     setup_logger(level=INFO, f=buf)
     get_logger().info(self.MESSAGE)
+    buf.seek(0)
+    msg = buf.read()
+    self.assertTrue(self.MESSAGE in msg)
+
+  def test_child(self):
+    buf = StringIO()
+    setup_logger(level=INFO, f=buf)
+    get_logger('child').info(self.MESSAGE)
+    buf.seek(0)
+    msg = buf.read()
+    self.assertTrue(self.MESSAGE in msg)
+    self.assertTrue('jubakit.child' in msg)
