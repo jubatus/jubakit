@@ -18,17 +18,7 @@ class Schema(GenericSchema):
   LABEL = 'l'
 
   def __init__(self, mapping, fallback=None):
-    if fallback == self.LABEL:
-      raise RuntimeError('label key cannot be specified as fallback schema')
-
-    label_keys = [k for k in mapping.keys() if mapping[k] == self.LABEL]
-    if len(label_keys) == 0:
-      raise RuntimeError('label key is not specified in schema')
-    elif 1 < len(label_keys):
-      raise RuntimeError('label key must be unique in schema')
-
-    self._label_key = label_keys[0]
-
+    self._label_key = self._get_unique_mapping(mapping, fallback, self.LABEL, 'LABEL')
     super(Schema, self).__init__(mapping, fallback)
 
   def transform(self, row):
