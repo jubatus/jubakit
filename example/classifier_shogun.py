@@ -49,7 +49,7 @@ for (idx, label, result) in classifier.classify(test_dataset):
     pred_family_name,
     first_name,
     'correct!' if pred_family_name == true_family_name else 'incorrect'
-  ))
+  ).encode('utf-8'))
 
 # Stop the classifier.
 classifier.stop()
