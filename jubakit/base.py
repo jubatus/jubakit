@@ -16,6 +16,9 @@ import msgpackrpc
 import psutil
 
 from .compat import *
+from .logger import get_logger
+
+_logger = get_logger()
 
 class BaseLoader(object):
   """
@@ -32,14 +35,24 @@ class BaseLoader(object):
     """
     Preprocesses the given dict-like object into another dict-like object.
     The default implementation does not alter the object.  Users can override
-    this method to perform custom process.
+    this method to perform custom process.  You can yield None to skip the
+    record.
     """
     return ent
 
   def __iter__(self):
     """
+    Loads each row from the data source.
+    """
+    for ent in self.rows():
+      processed = self.preprocess(ent)
+      if processed is not None:
+        yield processed
+
+  def rows(self):
+    """
     Subclasses must override this method and yield each row of data source
-    in dict-like object.  You can yield None to skip the record.
+    in flat dict-like object.  You can yield None to skip the record.
     """
     raise NotImplementedError()
 
@@ -95,6 +108,26 @@ class BaseSchema(object):
     """
     raise NotImplementedError()
 
+  @staticmethod
+  def _get_unique_mapping(mapping, fallback, key_type, name, optional=False):
+    """
+    Validates the schema key uniqueness.
+    This is an utility method for subclasses.
+    """
+    if fallback == key_type:
+      raise RuntimeError('{0} key cannot be specified as fallback in schema'.format(name))
+
+    keys = [k for k in mapping.keys() if mapping[k] == key_type]
+    if len(keys) == 0:
+      if optional: return None
+      raise RuntimeError('{0} key must be specified in schema'.format(name))
+    elif 1 < len(keys):
+      raise RuntimeError('{0} key must be an unique key in schema'.format(name))
+    return keys[0]
+
+  def __str__(self):
+    return str({'keys': self._key2name, 'types': self._key2type, 'fallback_type': self._fallback})
+
 class GenericSchema(BaseSchema):
   """
   GenericSchema is a base Schema class for all engines using Datum.
@@ -122,14 +155,18 @@ class GenericSchema(BaseSchema):
     """
     Add value `v` whose type and name are `t` and `k` resp. to Datum `d`.
     """
+    if v is None:
+      return
     if t == self.STRING:
       d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
-      d.add_number(k, float(v))
+      if v != '':
+        d.add_number(k, float(v))
     elif t == self.BINARY:
       d.add_binary(k, v)
     elif t == self.AUTO or t == self.INFER:
       (pred_type, pred_v) = self._predict_type(v, (t == self.AUTO))
+      _logger.debug('key %s predicted as type %s', k, pred_type)
       self._add_to_datum(d, pred_type, k, pred_v)
     elif t == self.IGNORE:
       pass
@@ -164,6 +201,7 @@ class GenericSchema(BaseSchema):
     mapping = {}
     for (k, v) in row.items():
       (mapping[k], _) = cls._predict_type(v, typed)
+      _logger.info('key %s predicted as type %s', k, mapping[k])
     return cls(mapping)
 
   @classmethod
@@ -232,13 +270,13 @@ class BaseDataset(object):
         raise RuntimeError('infinite loaders cannot be staticized')
 
       # Load all data entries.
+      _logger.info('loading all records from loader %s', loader)
       for row in loader:
-        if row is None:
-          continue
         # Predict schema.
         if self._schema is None:
           self._schema = self._predict(row)
         self._data.append(row)
+      _logger.info('records loaded (%d entries)', len(self._data))
 
       # Don't hold a ref to the loader for static datasets.
       self._loader = None
@@ -263,7 +301,7 @@ class BaseDataset(object):
     """
     return self._schema
 
-  def shuffle(self):
+  def shuffle(self, seed=None):
     """
     Returns a new immutable Dataset whose records are shuffled.
     """
@@ -271,7 +309,7 @@ class BaseDataset(object):
       raise RuntimeError('non-static datasets cannot be shuffled')
 
     def _shuffle(data):
-      return random.sample(data, len(data))
+      return random.Random(seed).sample(data, len(data))
     return self.convert(_shuffle)
 
   def convert(self, func):
@@ -347,6 +385,7 @@ class BaseDataset(object):
       self._index = 0
       for row in source:
         if row is None:
+          # May contain None in self._data if Dataset.convert is used.
           continue
         self._buffer = row
         yield (self._index, self._schema.transform(row))
@@ -403,6 +442,7 @@ class BaseService(object):
     the server.
     """
     backend = _ServiceBackend(cls.name(), config, port)
+    _logger.info('service %s started on port %d', cls.name(), backend.port)
 
     # Returns the Service instance.
     service = cls('127.0.0.1', backend.port)
@@ -423,7 +463,9 @@ class BaseService(object):
     """
     Clears the model.
     """
-    self._client().clear()
+    if not self._client().clear():
+      raise RuntimeError('failed to clear model')
+    _logger.info('model cleared')
 
   def save(self, name, path=None):
     """
@@ -431,6 +473,7 @@ class BaseService(object):
     model file to local `path`.
     """
     self._client().save(name)
+    _logger.info('model saved: %s', name)
     # TODO copy source from `jubafetch` and make path option work.
 
   def load(self, name, path=None):
@@ -438,8 +481,17 @@ class BaseService(object):
     Loads the model using `name`.  If `path` is specified, copy the model
     file from local `path` to remote location.
     """
-    self._client().load(name)
+    if not self._client().load(name):
+      raise RuntimeError('failed to load model: {0}'.format(name))
+    _logger.info('model loaded: %s', name)
     # TODO copy source from `jubafetch` and make path option work.
+
+  def get_status(self):
+    """
+    Returns the status of this server.  In distributed mode, returns statuses
+    of all members.
+    """
+    return self._client().get_status()
 
 class _ServiceBackend(object):
   """
@@ -471,13 +523,15 @@ class _ServiceBackend(object):
       config_file.write(json.dumps(config).encode('utf-8'))
       config_file.flush()
 
-      self._proc = subprocess.Popen([
+      args = [
         'juba{0}'.format(name),
         '--listen_addr', '127.0.0.1',
         '--rpc-port', str(self.port),
         '--timeout', '0',
         '--configpath', config_file.name
-      ], stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+      ]
+      _logger.info('starting service: %s', args)
+      self._proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
       self._assign_port(self.port, self._proc.pid)
 
       # Wait until the RPC server start.
@@ -490,7 +544,8 @@ class _ServiceBackend(object):
           raise RuntimeError('server cannot be started as port {0} conflicts with external Jubatus process (PID: {1})'.format(self.port, pid))
 
     if not started:
-      self.stop()
+      _logger.error('failed to start service')
+      log = self.stop()
 
   def __del__(self):
     proc = self._proc
@@ -506,10 +561,15 @@ class _ServiceBackend(object):
     self._proc = None
     if proc is not None:
       if proc.poll() is None:  # still running
+        _logger.debug('process is still running; will be terminated')
         proc.terminate()
+      else:
+        _logger.debug('process already terminated')
 
+      _logger.debug('waiting for process to exit')
       (stdout, _) = proc.communicate()
       retval = proc.returncode
+      _logger.debug('process exit with status %d', retval)
       self._unassign_port(self.port, proc.pid)
       if retval != 0:
         raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
@@ -548,6 +608,7 @@ class _ServiceBackend(object):
     except psutil.AccessDenied:
       # On some platforms (such as OS X), root privilege is required to get used ports.
       # In that case we avoid port confliction to the best of our knowledge.
+      _logger.info('ports in use cannot be obtained on this platform; ports will be assigned sequentially')
       return sorted(cls.port2pid.keys())
 
   @classmethod
@@ -574,6 +635,7 @@ class _ServiceBackend(object):
     for i in range(10):
       time.sleep(sleep_time/1000000.0) # from usec to sec
       if cls._ping_rpc(port):
+        _logger.debug('service RPC ready after %d tries', i)
         return True
       sleep_time *= 2
     return False
@@ -597,6 +659,8 @@ class _ServiceBackend(object):
   @classmethod
   def _check_installed(cls, name):
     procname = 'juba{0}'.format(name)
+
+    _logger.debug('checking if service process %s is available', procname)
     try:
       proc = subprocess.Popen(
         [procname, '--version'],
@@ -664,7 +728,7 @@ class GenericConfig(BaseConfig):
       default_parameter = self._default_parameter(method)
       if default_parameter is None:
         if 'parameter' in self: del self['parameter']
-      elif default_parameter is not None:
+      else:
         self['parameter'] = default_parameter
 
     if parameter is not None:
@@ -749,6 +813,11 @@ class GenericConfig(BaseConfig):
     """
     Add MeCab feature extraction to string_types.
     """
+    if isinstance(include_features, list):
+      include_features = '|'.join(include_features)
+
+    if isinstance(exclude_features, list):
+      exclude_features = '|'.join(exclude_features)
 
     self['converter']['string_types'][name] = {
       'method': 'dynamic',

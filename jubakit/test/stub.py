@@ -11,19 +11,19 @@ from jubakit.base import BaseLoader, BaseSchema, BaseDataset, BaseService, BaseC
 class StubLoader(BaseLoader):
   DATA = [1,2,3]
 
-  def __iter__(self):
+  def rows(self):
     for d in self.DATA:
-      yield self.preprocess({'v': d})
+      yield {'v': d}
       yield None  # None should be ignored by Dataset
 
 class StubInfiniteLoader(BaseLoader):
   def is_infinite(self):
     return True
 
-  def __iter__(self):
+  def rows(self):
     d = 1
     while True:
-      yield self.preprocess({'v': d})
+      yield {'v': d}
       d += 1
 
 class StubService(BaseService):
@@ -55,3 +55,8 @@ class StubGenericConfig(GenericConfig):
       return None
     elif method == 'test2':
       return {'param1': 1, 'param2': 2}
+
+class StubGenericConfigWithoutConverter(StubGenericConfig):
+  @classmethod
+  def _default_converter(cls):
+    return None

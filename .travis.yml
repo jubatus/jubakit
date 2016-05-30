@@ -49,11 +49,11 @@ script:
     - pip install -e.[test]
 
     # Unit Test
-    - coverage run setup.py test
+    - coverage run -p setup.py test
 
     # Integration Test
-    - export PYTHONPATH="."
-    - coverage run --append tools/run_examples.py
+    - coverage run -p tools/run_examples.py
 
 after_success:
-    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then coveralls; fi
+    - coverage combine
+    - coveralls

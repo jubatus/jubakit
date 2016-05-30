@@ -17,12 +17,12 @@ class MergeChainLoader(BaseLoader):
   def __init__(self, *loaders):
     self._loaders = loaders
 
-  def __iter__(self):
+  def rows(self):
     for ent in zip_longest(*self._loaders, fillvalue={}):
       merged = {}
       for d in ent:
         merged.update(d)
-      yield self.preprocess(merged)
+      yield merged
 
 class ValueMapChainLoader(BaseLoader):
   """
@@ -35,7 +35,7 @@ class ValueMapChainLoader(BaseLoader):
     self._key = key
     self._mapping = mapping
 
-  def __iter__(self):
+  def rows(self):
     for ent in self._loader:
       ent[self._key] = self._mapping[ent[self._key]]
-      yield self.preprocess(ent)
+      yield ent

@@ -22,10 +22,21 @@ class SchemaTest(TestCase):
       'k1': Schema.STRING,
       'k2': Schema.LABEL,
     })
-    (label, d) = schema.transform({'k1': 'abc', 'k2': 'def'})
 
+    (label, d) = schema.transform({'k1': 'abc', 'k2': 'def'})
     self.assertEqual(label, 'def')
     self.assertEqual({'k1': 'abc'}, dict(d.string_values))
+
+    (label, d) = schema.transform({'k1': 'foo', 'k2': None})  # unlabeled data
+    self.assertEqual(label, None)
+    self.assertEqual({'k1': 'foo'}, dict(d.string_values))
+
+  def test_predict(self):
+    schema = Schema({
+      'k1': Schema.STRING,
+      'k2': Schema.LABEL,
+    })
+    self.assertRaises(RuntimeError, schema.predict, {}, True)
 
   def test_illegal_label(self):
     # schema without label
@@ -59,6 +70,21 @@ class DatasetTest(TestCase):
   def test_predict(self):
     loader = StubLoader()
     self.assertRaises(RuntimeError, Dataset, loader, None)
+
+  def test_get_labels(self):
+    loader = StubLoader()
+    schema = Schema({'v': Schema.LABEL})
+    ds = Dataset(loader, schema)
+    self.assertEqual(['1', '2', '3'], list(ds.get_labels()))
+
+  def test_invalid_get_labels(self):
+    loader = StubLoader()
+    schema = Schema({'v': Schema.LABEL})
+    ds = Dataset(loader, schema, static=False)
+
+    # get_labels returns generator; as generator will be evaluated
+    # when actually iterating over it, pass it to list().
+    self.assertRaises(RuntimeError, list, ds.get_labels())
 
   def test_from_array(self):
     ds = Dataset.from_array(
@@ -137,3 +163,6 @@ class ConfigTest(TestCase):
     self.assertTrue('parameter' not in Config(method='PA'))
     self.assertTrue('regularization_weight' in Config(method='PA1')['parameter'])
     self.assertTrue('nearest_neighbor_num' in Config(method='NN')['parameter'])
+
+  def test_invalid_method(self):
+    self.assertRaises(RuntimeError, Config._default_parameter, 'invalid_method')

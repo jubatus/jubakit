@@ -90,7 +90,7 @@ class TwitterStreamLoader(BaseLoader):
   def _on_event(self, event):
     self._queue.put(event)
 
-  def __iter__(self):
+  def rows(self):
     self._thread.start()
     exception = None
     try:
