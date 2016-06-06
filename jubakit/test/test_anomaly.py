@@ -66,5 +66,5 @@ class ConfigTest(TestCase):
 
   def test_method_param(self):
     self.assertTrue(Config(method='lof')['parameter']['ignore_kth_same_point'])
-    self.assertEquals('inverted_index_euclid', Config(method='lof')['parameter']['method'])
-    self.assertEquals('euclid_lsh', Config(method='light_lof')['parameter']['method'])
+    self.assertEqual('inverted_index_euclid', Config(method='lof')['parameter']['method'])
+    self.assertEqual('euclid_lsh', Config(method='light_lof')['parameter']['method'])
