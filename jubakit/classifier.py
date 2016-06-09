@@ -193,7 +193,10 @@ class Config(GenericConfig):
     elif method in ('NN', 'nearest_neighbor'):
       return {
         'method': 'euclid_lsh',
-        'parameter': {'hash_num': 64},
+        'parameter': {
+          'threads': -1,  # use number of logical CPU cores
+          'hash_num': 64,
+        },
         'nearest_neighbor_num': 128,
         'local_sensitivity': 1.0
       }
