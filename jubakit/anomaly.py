@@ -130,4 +130,6 @@ class Config(GenericConfig):
         'threads': -1,  # use number of logical CPU cores
         'hash_num': 64,
       }
+    else:
+      raise RuntimeError('unknown method: {0}'.format(method))
     return params

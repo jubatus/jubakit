@@ -68,3 +68,6 @@ class ConfigTest(TestCase):
     self.assertTrue(Config(method='lof')['parameter']['ignore_kth_same_point'])
     self.assertEqual('inverted_index_euclid', Config(method='lof')['parameter']['method'])
     self.assertEqual('euclid_lsh', Config(method='light_lof')['parameter']['method'])
+
+  def test_invalid_method(self):
+    self.assertRaises(RuntimeError, Config._default_parameter, 'invalid_method')
