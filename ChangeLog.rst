@@ -1,6 +1,15 @@
 ChangeLog
 ====================================================
 
+Release 0.2.1 (2016-06-27)
+---------------------------------------
+
+* Improvements
+    * Add support for `cosine` and `euclidean` method of Classifier (#27)
+    * Improve default configuration of `NN` method of Classifier to use multiple CPU cores (#26)
+    * Improve Anomaly service to validate invalid method name (#25)
+    * Fix deprecated test warning in Python 3.5 (#24)
+
 Release 0.2.0 (2016-05-30)
 ---------------------------------------
 

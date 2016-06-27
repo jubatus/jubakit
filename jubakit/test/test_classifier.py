@@ -163,6 +163,8 @@ class ConfigTest(TestCase):
     self.assertTrue('parameter' not in Config(method='PA'))
     self.assertTrue('regularization_weight' in Config(method='PA1')['parameter'])
     self.assertTrue('nearest_neighbor_num' in Config(method='NN')['parameter'])
+    self.assertTrue('nearest_neighbor_num' in Config(method='cosine')['parameter'])
+    self.assertTrue('nearest_neighbor_num' in Config(method='euclidean')['parameter'])
 
   def test_invalid_method(self):
     self.assertRaises(RuntimeError, Config._default_parameter, 'invalid_method')
