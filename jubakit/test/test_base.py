@@ -3,10 +3,17 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 from unittest import TestCase
+
+try:
+  import numpy as np
+except ImportError:
+  pass
+
 from jubatus.common import Datum
 
 from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
 
+from . import requireSklearn
 from .stub import *
 
 class BaseLoaderTest(TestCase):
@@ -76,14 +83,30 @@ class GenericSchemaTest(TestCase):
     schema = GenericSchema({
       'k1': GenericSchema.STRING,
       'k2': GenericSchema.NUMBER,
+      'k3': GenericSchema.NUMBER,
     })
     d = schema.transform({
       'k1': '',
       'k2': '',
+      'k3': b'',
     })
 
     self.assertEqual({'k1': ''}, dict(d.string_values))
     self.assertEqual({}, dict(d.num_values))
+
+  @requireSklearn
+  def test_numpy(self):
+    schema = GenericSchema({
+      'k1': GenericSchema.STRING,
+      'k2': GenericSchema.NUMBER,
+    })
+    d = schema.transform({
+      'k1': np.float64(1.0),
+      'k2': np.float64(1.0),
+    })
+
+    self.assertEqual({'k1': '1.0'}, dict(d.string_values))
+    self.assertEqual({'k2': 1.0}, dict(d.num_values))
 
   def test_null(self):
     schema = GenericSchema({
