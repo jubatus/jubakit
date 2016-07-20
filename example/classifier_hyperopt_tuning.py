@@ -16,7 +16,7 @@ To run this example, ``hyperopt``, ``pymongo`` and ``networkx`` is required.
     
     $ pip install pymongo networkx hyperopt
 
-* for python3 users, install them using `python setup.py install` commands.
+* for python3 users, install them from GitHub repository.
 
     $ pip install git+https://github.com/hyperopt/hyperopt.git
 
@@ -148,7 +148,7 @@ def print_log(score, params):
   Print tuning processes.
   """  
   if params['classifier_type'] == 'LinearClassifier':
-    msg = ' {0:.4f}: {1:<5} (reguralization_weight:{0:.4f})'.format(
+    msg = ' {0:.4f}: {1:<5} (reguralization_weight:{2:.4f})'.format(
               score, params['linear_method'], params['regularization_weight'])
   elif params['classifier_type'] == 'NearestNeighbor':
     msg = ' {0:.4f}: {1:<5} (method:{2}, nearest_neighbor_num:{3}, local_sensitivity:{4:.4f}, hash_num:{5})'.format(
