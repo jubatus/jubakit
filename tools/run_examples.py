@@ -21,7 +21,7 @@ except ImportError:
   from urllib.request import urlopen
 
 # Accept exceptions in following examples.
-BLACK_LIST = ['classifier_twitter.py']
+BLACK_LIST = ['classifier_twitter.py', 'classifier_hyperopt_tuning.py']
 
 def download_bzip2(path, url):
   if os.path.exists(path): return
