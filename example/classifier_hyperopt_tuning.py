@@ -10,9 +10,15 @@ Hyperparameter Optimization with Hyperopt
 In this example, we show how to tune hyperparameters with
 Hyperopt bayesian optimization library.
 
-If you don't have Hyperopt, please install using following command.
-	
-	pip install hyperopt 
+To run this example, ``hyperopt``, ``pymongo`` and ``networkx`` is required.
+
+* for python2 users, install them using `pip` commands.
+    
+    $ pip install pymongo networkx hyperopt
+
+* for python3 users, install them using `python setup.py install` commands.
+
+    $ pip install git+https://github.com/hyperopt/hyperopt.git
 
 """
 
@@ -26,6 +32,16 @@ from hyperopt import fmin, tpe, hp, rand
 
 from jubakit.classifier import Classifier, Dataset, Config
 
+# hyperparameter domains 
+classifier_types = ['LinearClassifier', 'NearestNeighbor']
+# linear classifier hyperparameters
+linear_methods = ['AROW', 'CW']
+regularization_weight = [0.0001, 1000.0] 
+# nearest neighbor classifier hyperparameters
+nn_methods = ['lsh', 'euclid_lsh', 'minhash']
+nearest_neighbor_num = [2, 100]
+local_sensitivity = [0.01, 10]
+hash_num = [512, 512] 
 
 def search_space():
   """
@@ -34,17 +50,21 @@ def search_space():
   """
   space = hp.choice('classifier_type', [
       {
-         'type': 'NearestNeighbor',
-         'method': hp.choice('nn_method', ['lsh', 'euclid_lsh', 'minhash']),
-         'nearest_neighbor_num': hp.uniform('nearest_neighbor_num', 2, 100),
-         'local_sensitivity': hp.loguniform('local_sensitivity', np.log(0.01), np.log(10)),
-         'hash_num': 512,
-      },
-      {
-         'type': 'LinearClassifier',
-         'method': hp.choice('linear_method', ['AROW', 'CW']),
+         'classifier_type': 'LinearClassifier',
+         'linear_method': hp.choice('linear_method', linear_methods),
          'regularization_weight': hp.loguniform('regularization_weight',
-                                            np.log(0.0001), np.log(1000.0))
+                                            np.log(regularization_weight[0]), 
+                                            np.log(regularization_weight[1]))
+      }, {
+         'classifier_type': 'NearestNeighbor',
+         'nn_method': hp.choice('nn_method', nn_methods),
+         'nearest_neighbor_num': hp.uniform('nearest_neighbor_num', 
+                                            nearest_neighbor_num[0], 
+                                            nearest_neighbor_num[1]),
+         'local_sensitivity': hp.loguniform('local_sensitivity', 
+                                            np.log(local_sensitivity[0]), 
+                                            np.log(local_sensitivity[1])),
+         'hash_num': hp.loguniform('hash_num', np.log(hash_num[0]), np.log(hash_num[1]))
       }
   ])
   
@@ -55,16 +75,16 @@ def jubatus_config(params):
   """
   convert hyperopt config to jubatus config
   """
-  if params['type'] == 'NearestNeighbor':
+  if params['classifier_type'] == 'LinearClassifier':
+    config = Config(method=params['linear_method'], 
+    	            parameter={'regularization_weight': params['regularization_weight']})
+
+  elif params['classifier_type'] == 'NearestNeighbor':
     config = Config(method='NN',
-                    parameter={'method': params['method'],
+                    parameter={'method': params['nn_method'],
                                'nearest_neighbor_num': int(params['nearest_neighbor_num']),
                                'local_sensitivity': params['local_sensitivity'],
                                'parameter': {'hash_num': int(params['hash_num'])}})
-
-  elif params['type'] == 'LinearClassifier':
-    config = Config(method=params['method'], 
-    	            parameter={'regularization_weight': params['regularization_weight']})
 
   else:
   	raise NotImplementedError()
@@ -117,12 +137,41 @@ def function(params):
   score = cv_score(classifier, dataset, metric=metric)
   # stop the classifier
   classifier.stop()
-  # print result
-  # print('{0:<10}\t{1:.3f}\t\t{2:.3f}'.format(method, rw, score))
-  print('score: {}'.format(score))
-  print('\tparams:{}'.format(params))
+  # print score and hyperparameters
+  print_log(score, params)
   # hyperopt only minimize target function and we convert the accuracy score to be minimized.
   return -1.0 * score
+
+
+def print_log(score, params): 
+  """
+  Print tuning processes.
+  """  
+  if params['classifier_type'] == 'LinearClassifier':
+    msg = ' {0:.4f}: {1:<5} (reguralization_weight:{0:.4f})'.format(
+              score, params['linear_method'], params['regularization_weight'])
+  elif params['classifier_type'] == 'NearestNeighbor':
+    msg = ' {0:.4f}: {1:<5} (method:{2}, nearest_neighbor_num:{3}, local_sensitivity:{4:.4f}, hash_num:{5})'.format(
+              score, 'NN', params['nn_method'], int(params['nearest_neighbor_num']), 
+              params['local_sensitivity'], int(params['hash_num']))
+  else:
+    raise NotImplementedError()
+  print(msg)
+
+
+def print_result(params): 
+  """
+  Print best score and its hyperparameters.
+  """  
+  params['classifier_type'] = classifier_types[params['classifier_type']]
+  if params['classifier_type'] == 'LinearClassifier':
+    params['linear_method'] = linear_methods[params['linear_method']]
+  elif params['classifier_type'] == 'NearestNeighbor':
+    params['nn_method'] = nn_methods[params['nn_method']]
+  else:
+    raise NotImplementedError()
+  print(' {}\n {}\n {}'.format('-'*60, 'best score and hyperparameters', '-'*60))
+  function(params)
 
 
 if __name__ == '__main__':
@@ -140,8 +189,9 @@ if __name__ == '__main__':
   # set the evaluation count.
   # in this example, cross-validation function `cv_score` runs `max_evals` times.
   max_evals = 10
+  # print tuning process header
+  print(' {0:<6}: {1:<5} ({2})'.format('score', 'algo', 'hyperparameters'))
   # minimize the target function to be minimized
   best = fmin(function, space, algo=algo, max_evals=max_evals)
   # print result
-  print('best estimated parameters')
-  print('\t{}'.format(best))
+  print_result(best)
