@@ -558,7 +558,7 @@ class _ServiceBackend(object):
       self._unassign_port(self.port, proc.pid)
     logbuf = self._logbuf
     if logbuf is not None and not logbuf.closed:  # log buffer is still open
-      self._logbuf.close()
+      logbuf.close()
 
   def stop(self):
     """
