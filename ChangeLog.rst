@@ -1,6 +1,16 @@
 ChangeLog
 ====================================================
 
+Release 0.2.2 (2016-07-25)
+---------------------------------------
+
+* Improvements
+    * Add hyper-parameter tuning example using hyperopt library (#28)
+    * Fix warnings when using ``numpy`` record (#29)
+
+* Bug Fixes
+    * Fix log output from server not captured correctly (#30, #31)
+
 Release 0.2.1 (2016-06-27)
 ---------------------------------------
 
