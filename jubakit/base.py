@@ -160,8 +160,10 @@ class GenericSchema(BaseSchema):
     if t == self.STRING:
       d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
-      if v != '':
-        d.add_number(k, float(v))
+      # Empty unicode/bytes values cannot be cast to float; treat them as NA.
+      if isinstance(v, (unicode_t, bytes)) and len(v) == 0:
+        return
+      d.add_number(k, float(v))
     elif t == self.BINARY:
       d.add_binary(k, v)
     elif t == self.AUTO or t == self.INFER:
@@ -509,6 +511,7 @@ class _ServiceBackend(object):
     self.config = config
     self.port = port
     self.log = None
+    self._logbuf = None
     self._proc = None
 
     self._check_installed(name)
@@ -519,7 +522,7 @@ class _ServiceBackend(object):
     if port in self.port2pid:
       raise RuntimeError('port {0} currently in use by another service (PID {1})'.format(port, self.port2pid[port]))
 
-    with tempfile.NamedTemporaryFile() as config_file:
+    with tempfile.NamedTemporaryFile(prefix='jubakit-config-') as config_file:
       config_file.write(json.dumps(config).encode('utf-8'))
       config_file.flush()
 
@@ -531,7 +534,8 @@ class _ServiceBackend(object):
         '--configpath', config_file.name
       ]
       _logger.info('starting service: %s', args)
-      self._proc = subprocess.Popen(args, stdout=subprocess.PIPE, stderr=subprocess.STDOUT)
+      self._logbuf = tempfile.NamedTemporaryFile(prefix='jubakit-log-')
+      self._proc = subprocess.Popen(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
       self._assign_port(self.port, self._proc.pid)
 
       # Wait until the RPC server start.
@@ -552,6 +556,9 @@ class _ServiceBackend(object):
     if proc is not None and proc.poll() is None:  # still running
       proc.kill()
       self._unassign_port(self.port, proc.pid)
+    logbuf = self._logbuf
+    if logbuf is not None and not logbuf.closed:  # log buffer is still open
+      logbuf.close()
 
   def stop(self):
     """
@@ -567,7 +574,11 @@ class _ServiceBackend(object):
         _logger.debug('process already terminated')
 
       _logger.debug('waiting for process to exit')
-      (stdout, _) = proc.communicate()
+      proc.communicate()
+      self._logbuf.seek(0)
+      stdout = self._logbuf.read()
+      self._logbuf.close()
+
       retval = proc.returncode
       _logger.debug('process exit with status %d', retval)
       self._unassign_port(self.port, proc.pid)
