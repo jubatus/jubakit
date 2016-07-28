@@ -23,6 +23,11 @@ class CSVLoader(BaseLoader):
     specified as False, sequential column names are automatically generated
     like ['c0', 'c1', ...].  If `fieldnames` is a list, it is used as column
     names.
+
+    Any other optional or keyword arguments are passed to the underlying
+    `csv.DictReader`.
+
+    >>> loader = CSVLoader('dataset.tsv', fieldnames=False, encoding='cp932', delimiter='\t')
     """
 
     if fieldnames == True:
@@ -32,9 +37,10 @@ class CSVLoader(BaseLoader):
       # Generate field names by peeking number of columns in the first row
       # of the CSV.
       with io.open(filename, encoding=encoding, newline='') as f:
-        for ent in csv.reader(f):
-          fieldnames = ['c{0}'.format(i) for i in range(len(ent))]
-          break
+        # Use fieldnames from DictReader to count number of columns in the first row.
+        # We use csv.DictReader instead of plain csv.reader for compatibility of *args and **kwargs.
+        r = csv.DictReader(f, fieldnames=None, *args, **kwargs)
+        fieldnames = ['c{0}'.format(i) for i in range(len(r.fieldnames))]
 
     self._filename = filename
     self._fieldnames = fieldnames
