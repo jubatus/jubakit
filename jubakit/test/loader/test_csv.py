@@ -7,6 +7,8 @@ from tempfile import NamedTemporaryFile as TempFile
 
 from jubakit.loader.csv import CSVLoader
 
+from .. import requirePython3
+
 class CSVLoaderTest(TestCase):
   def test_simple(self):
     with TempFile() as f:
@@ -63,4 +65,17 @@ class CSVLoaderTest(TestCase):
         lines += 1
         self.assertEqual('テスト1', row['v1'])
         self.assertEqual('テスト2', row['v2'])
+      self.assertEqual(1, lines)
+
+  @requirePython3
+  def test_unicode_separator(self):
+    with TempFile() as f:
+      f.write("v1★v2\ns1★s2\n".encode('utf-8'))
+      f.flush()
+      loader = CSVLoader(f.name, delimiter='★')
+      lines = 0
+      for row in loader:
+        lines += 1
+        self.assertEqual('s1', row['v1'])
+        self.assertEqual('s2', row['v2'])
       self.assertEqual(1, lines)
