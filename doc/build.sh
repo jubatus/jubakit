@@ -1,5 +1,7 @@
 #!/bin/sh
 
+cd "$(dirname ${0})"
+
 sphinx-apidoc -f -M -H "API Reference" -o source ../jubakit ../jubakit/test
 
 # A dirty workaround to remove unnecessary "Subpackages" / "Submodules" header...
