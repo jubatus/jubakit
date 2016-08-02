@@ -30,6 +30,18 @@ class CSVLoader(BaseLoader):
     >>> loader = CSVLoader('dataset.tsv', fieldnames=False, encoding='cp932', delimiter='\t')
     """
 
+    # Some dialect parameters must be encoded in unicode on Py3, whereas
+    # bytes on Py2.  We conceal such differences.
+    for cp in ['delimiter', 'escapechar', 'quotechar']:
+      if cp not in kwargs: break
+
+      v = kwargs[cp]
+      if PYTHON3 and isinstance(v, bytes):
+        v = v.decode(encoding)
+      elif not PYTHON3 and isinstance(v, unicode_t):
+        v = v.encode(encoding)
+      kwargs[cp] = v
+
     if fieldnames == True:
       # Automatically estimate field names later.
       fieldnames = None
