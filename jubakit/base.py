@@ -9,6 +9,9 @@ import random
 import time
 import logging
 import subprocess
+import os
+import platform
+import distutils.spawn
 import tempfile
 
 import jubatus
@@ -535,7 +538,7 @@ class _ServiceBackend(object):
       ]
       _logger.info('starting service: %s', args)
       self._logbuf = tempfile.NamedTemporaryFile(prefix='jubakit-log-')
-      self._proc = subprocess.Popen(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
+      self._proc = self._get_process(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
       self._assign_port(self.port, self._proc.pid)
 
       # Wait until the RPC server start.
@@ -673,7 +676,7 @@ class _ServiceBackend(object):
 
     _logger.debug('checking if service process %s is available', procname)
     try:
-      proc = subprocess.Popen(
+      proc = cls._get_process(
         [procname, '--version'],
         stdout=subprocess.PIPE, stderr=subprocess.STDOUT
       )
@@ -683,6 +686,26 @@ class _ServiceBackend(object):
       raise RuntimeError('{0} exit with status {1}; confirm that (DY)LD_LIBRARY_PATH is properly set: {2}'.format(procname, proc.returncode, stdout))
     except OSError as e:
       raise RuntimeError('{0} could not be started; confirm that PATH is properly set: {1}'.format(procname, e))
+
+  @classmethod
+  def _get_process(cls, cmdline, *args, **kwargs):
+    """
+    Returns subprocess.Popen instance.
+    """
+    envvars = dict(os.environ)
+    if platform.system() == 'Darwin' and 'DYLD_LIBRARY_PATH' not in envvars:
+      """
+      Due to homebrew-jubatus issue #15, Jubatus processes built on OS X cannot
+      be run without DYLD_LIBRARY_PATH.  However, on El Capitan or later,
+      DYLD_LIBRARY_PATH are not propagated from parent process.  We workaround
+      the problem by automatically estimating DYLD_LIBRARY_PATH based on PATH.
+      """
+      cmdpath = distutils.spawn.find_executable(cmdline[0])
+      libpath = os.sep.join(cmdpath.split(os.sep)[:-2] + ['lib'])
+      if os.path.isfile(os.sep.join([libpath, 'libjubatus_core.dylib'])):
+        envvars['DYLD_LIBRARY_PATH'] = libpath
+        _logger.info('setting DYLD_LIBRARY_PATH to %s', libpath)
+    return subprocess.Popen(cmdline, env=envvars, *args, **kwargs)
 
 class BaseConfig(dict):
   """
