@@ -3,4 +3,7 @@ Table of Contents
 
 .. toctree::
    introduction
-   modules
+   overview
+   architecture/index
+   guide/index
+   api/index
