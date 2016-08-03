@@ -7,7 +7,7 @@ Data Structure
 --------------
 
 Config classes inherits ``dict`` class.
-Here is an default Config contents for Classifier Service.
+Here is a default Config contents for Classifier Service.
 
 .. code-block:: python
 
@@ -22,7 +22,7 @@ See the `Jubatus API Reference <http://jubat.us/en/api.html>`_ for details.
 Machine Learning Parameters
 ---------------------------
 
-Machine learning parameters are consist of Methods and Hyper Parameters.
+Machine learning parameters consist of Methods and Hyper Parameters.
 Parameters that works well in most cases are set to Config class by default, so you can start using machine learning features without configuring them.
 
 You can create Config instance using these parameters specified.

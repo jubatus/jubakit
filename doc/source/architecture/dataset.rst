@@ -30,7 +30,7 @@ If you want to load records one by one from Loader, instead of loading everythin
 
 Note that some features like index-based record access cannot be used over non-static Datasets.
 
-Datasets constructed from infinite Loaders are Non-static by default.
+Datasets constructed from infinite Loaders are non-static by default.
 You cannot specify ``static=True`` when using infinite Loaders.
 
 Schema Prediction
@@ -64,7 +64,6 @@ You don't need this in most cases, though.
 
   >>> dataset[1]
   (None, None, <jubatus.common.datum.Datum object at 0xdeadbeef>)
-
   >>> print(dataset[1][2])
   datum{string_values: [['k1', 'hello world'], num_values: [['k2', 5.0]], binary_values: []}
 

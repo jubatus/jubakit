@@ -40,7 +40,7 @@ Alias Names
 -----------
 
 By default, the column key names passed from Loader is used as a Datum key name.
-However you can manually assign the Datum key name by giving alias names.
+However, you can manually assign the Datum key name by giving alias names.
 In the following example, ``user_name`` and ``user_profile`` columns will become ``name`` and ``profile`` in Datum respectively.
 
 .. code-block:: python
