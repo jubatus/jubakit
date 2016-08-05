@@ -15,6 +15,7 @@ import jubatus
 import msgpackrpc
 import psutil
 
+from .shell import JubaShell
 from .compat import *
 from .logger import get_logger
 
@@ -454,6 +455,17 @@ class BaseService(object):
   def _client(self):
     return self._client_class()(self._host, self._port, self._cluster, self._timeout)
 
+  def _shell(self, **kwargs):
+    return JubaShell(
+      host=self._host,
+      port=self._port,
+      cluster=self._cluster,
+      service=self.name(),
+      timeout=self._timeout,
+      keepalive=True,
+      **kwargs
+    )
+
   def stop(self):
     """
     Stops the backend process if exists.
@@ -494,6 +506,12 @@ class BaseService(object):
     of all members.
     """
     return self._client().get_status()
+
+  def shell(self, **kwargs):
+    """
+    Starts an interactive shell session for this service.
+    """
+    self._shell(**kwargs).interact()
 
 class _ServiceBackend(object):
   """
@@ -592,6 +610,7 @@ class _ServiceBackend(object):
       return cli.call('get_status', '')['127.0.0.1_{0}'.format(self.port)]
     finally:
       cli.close()
+      cli._loop._ioloop.close()
 
   @classmethod
   def _get_free_port(cls, start=10000, end=30000):
@@ -664,6 +683,7 @@ class _ServiceBackend(object):
       return False
     finally:
       cli.close()
+      cli._loop._ioloop.close()
 
     return False
 
