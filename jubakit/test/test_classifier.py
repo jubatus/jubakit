@@ -86,6 +86,7 @@ class DatasetTest(TestCase):
     # when actually iterating over it, pass it to list().
     self.assertRaises(RuntimeError, list, ds.get_labels())
 
+  @requireSklearn
   def test_from_data(self):
     # load from array format 
     ds = Dataset.from_data(
