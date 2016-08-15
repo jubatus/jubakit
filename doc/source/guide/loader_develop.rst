@@ -22,7 +22,7 @@ Although not mandatory, the output of ``preprocess`` method should be a flat dic
 Transformation
 ~~~~~~~~~~~~~~
 
-For example, if you want to process JSONL files (files that contain one JSON record per line), you can create a class that inherits from :py:class:`LineBasedFileLoader <jubakit.loader.core.LineBasedFileLoader>` which loads a single text file and emits record for each line, and implement ``preproces`` method as follows:
+For example, if you want to process JSONL files (files that contain one JSON record per line), you can create a class that inherits from :py:class:`LineBasedFileLoader <jubakit.loader.core.LineBasedFileLoader>` which loads a single text file and emits record for each line, and implement ``preprocess`` method as follows:
 
 .. code-block:: python
 
