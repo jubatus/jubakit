@@ -61,7 +61,7 @@ class Dataset(BaseDataset):
 
     Parameters
     ----------
-    data : array or scipy 2-D sparse matrix of shape [n_samples, n_features] ]
+    data : array or scipy 2-D sparse matrix of shape [n_samples, n_features]
     labels : array of shape [n_samples]
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
