@@ -86,6 +86,50 @@ class DatasetTest(TestCase):
     # when actually iterating over it, pass it to list().
     self.assertRaises(RuntimeError, list, ds.get_labels())
 
+  @requireSklearn
+  def test_from_data(self):
+    # load from array format 
+    ds = Dataset.from_data(
+        [ [10,20,30], [20,10,50], [40,10,30] ], # data
+        [ 0,          1,          0          ], # labels
+        ['k1', 'k2', 'k3'],                     # feature_names
+        ['pos', 'neg'],                         # label_names
+    )
+
+    expected_labels = ['pos', 'neg', 'pos']
+    expected_k1s = [10, 20, 40]
+    actual_labels = []
+    actual_k1s = []
+    for (idx, (label, d)) in ds:
+      actual_labels.append(label)
+      actual_k1s.append(dict(d.num_values)['k1'])
+
+    self.assertEqual(expected_labels, actual_labels)
+    self.assertEqual(expected_k1s, actual_k1s)
+
+    # load from scipy.sparse format
+    ds = Dataset.from_data(
+      self._create_matrix(),    # data
+      [ 0, 1, 0 ],              # labels
+      [ 'k1', 'k2', 'k3'],      # feature_names
+      [ 'pos', 'neg'],          # label_names
+    )
+
+    expected_labels = ['pos', 'neg', 'pos']
+    expected_k1s = [1, None, 4]
+    expected_k3s = [2, 3, 6]
+    actual_labels = []
+    actual_k1s = []
+    actual_k3s = []
+    for (idx, (label, d)) in ds:
+      actual_labels.append(label)
+      actual_k1s.append(dict(d.num_values).get('k1', None))
+      actual_k3s.append(dict(d.num_values).get('k3', None))
+
+    self.assertEqual(expected_labels, actual_labels)
+    self.assertEqual(expected_k1s, actual_k1s)
+    self.assertEqual(expected_k3s, actual_k3s)
+
   def test_from_array(self):
     ds = Dataset.from_array(
         [ [10,20,30], [20,10,50], [40,10,30] ], # data
