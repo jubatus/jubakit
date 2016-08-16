@@ -15,7 +15,7 @@ jubakit: Jubatus Toolkit
 jubakit is a Python module to access Jubatus features easily.
 jubakit can be used in conjunction with `scikit-learn <http://scikit-learn.org/>`_ so that you can use powerful features like cross validation and model evaluation.
 
-Currently jubakit supports `Classifier <http://jubat.us/en/api_classifier.html>`_, `Anomaly <http://jubat.us/en/api_anomaly.html>`_ and `Weight <http://jubat.us/en/api_weight.html>`_ engines.
+Currently jubakit supports `Classifier <http://jubat.us/en/api_classifier.html>`_, `Anomaly <http://jubat.us/en/api_anomaly.html>`_, `Recommender <http://jubat.us/en/api_recommender.html>`_ and `Weight <http://jubat.us/en/api_weight.html>`_ engines.
 
 Install
 -------
@@ -89,6 +89,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | classifier_twitter.py             | Handling Twitter Streams                      |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | anomaly_auc.py                    | Anomaly detection and metrics                 |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| recommender_npb.py                | Recommend similar items                       |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
