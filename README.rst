@@ -93,14 +93,6 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 
-Concepts
---------
-
-* *Loader* fetches data from various data sources (e.g., CSV file, RDBMS, MQ, Twitter stream, etc.) in key-value format.
-* *Schema* defines the data type (string feature, numeric feature, ground truth (label), etc.) for each keys of data loaded by Loader.
-* *Dataset* is an abstract representation of a sequence of data that binds Loader and Schema.
-* *Service* receives Dataset and make update/analyze RPC call to Jubatus servers.
-
 License
 -------
 
