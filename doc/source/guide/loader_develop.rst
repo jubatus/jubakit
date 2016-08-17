@@ -86,7 +86,7 @@ Here is an example of Loader that calculates moving average over ``x``.
 Implementing New Loader
 -----------------------
 
-If none of the existing Loaders didn't work for you, create your own Loader from scratch.
+If none of the existing Loaders work for you, create your own Loader from scratch.
 It is quite simple -- the minimum requirements for Loader classes are:
 
 * Loaders must inherit from :py:class:`jubakit.base.BaseLoader` class.
