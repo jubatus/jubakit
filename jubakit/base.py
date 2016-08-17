@@ -637,7 +637,7 @@ class _ServiceBackend(object):
     if port not in m:
       raise RuntimeError('port {0} is not in use'.format(port))
     if m[port] != pid:
-      raise RuntimeError('port {0} is used by PID {1}, not PID {2}'.format(port, m[port], pcid))
+      raise RuntimeError('port {0} is used by PID {1}, not PID {2}'.format(port, m[port], pid))
     del m[port]
 
   @classmethod
