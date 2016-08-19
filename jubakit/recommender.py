@@ -59,6 +59,8 @@ class Recommender(BaseService):
     """
     cli = self._client()
     for (idx, (row_id, d)) in dataset:
+      if row_id is None:
+        raise RuntimeError('datasets must have `id`')
       result = cli.update_row(row_id, d)
       yield (idx, row_id, result)
 
@@ -81,8 +83,6 @@ class Recommender(BaseService):
     """
     cli = self._client()
     for (idx, (row_id, d)) in dataset:
-      if d is None:
-        raise RuntimeError('Non Datum-based datasets must use `complete_row_from_id`')
       result = cli.complete_row_from_datum(d)
       yield (idx, row_id, result)
 
@@ -103,8 +103,6 @@ class Recommender(BaseService):
     """
     cli = self._client()
     for (idx, (row_id, d)) in dataset:
-      if d is None:
-        raise RuntimeError('Non Datum-based datasets must use `similar_row_from_datum`')
       result = cli.similar_row_from_datum(d, size)
       yield (idx, row_id, result)
        
