@@ -2,13 +2,19 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-from unittest import TestCase
+import sys
 import warnings
+
+from unittest import TestCase
 
 from jubakit.recommender import Schema, Dataset, Recommender, Config
 from jubakit.compat import *
 
 from .stub import *
+
+def filter_warning():
+  if sys.version_info > (3, 0):
+    warnings.simplefilter("ignore", ResourceWarning)
 
 class SchemaTest(TestCase):
   def test_simple(self):
@@ -41,7 +47,6 @@ class RecommenderTest(TestCase):
     recommender = Recommender()
 
   def test_update_row(self):
-    warnings.simplefilter("ignore", ResourceWarning)
     recommender = Recommender.run(Config())
     loader = StubLoader()
    
@@ -59,7 +64,7 @@ class RecommenderTest(TestCase):
     recommender.stop()
 
   def test_complete_row_from_id(self):
-    warnings.simplefilter("ignore", ResourceWarning)
+    filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
     
@@ -80,7 +85,7 @@ class RecommenderTest(TestCase):
     recommender.stop()
 
   def test_complete_row_from_datum(self):
-    warnings.simplefilter("ignore", ResourceWarning)
+    filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
 
@@ -102,7 +107,7 @@ class RecommenderTest(TestCase):
     recommender.stop()
 
   def test_similar_row_from_id(self):
-    warnings.simplefilter("ignore", ResourceWarning)
+    filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
     
@@ -123,7 +128,7 @@ class RecommenderTest(TestCase):
     recommender.stop()
 
   def test_similar_row_from_datum(self):
-    warnings.simplefilter("ignore", ResourceWarning)
+    filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
     schema = Schema({'v': Schema.ID})
@@ -140,7 +145,7 @@ class RecommenderTest(TestCase):
     recommender.stop()
 
   def test_decode_row(self):
-    warnings.simplefilter("ignore", ResourceWarning)
+    filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
 
