@@ -57,15 +57,42 @@ class CSVLoaderTest(TestCase):
 
   def test_cp932(self):
     with TempFile() as f:
-      f.write("v1,v2\nテスト1,テスト2\n".encode('cp932'))
+      f.write("列1,列2\nテスト1,テスト2\n".encode('cp932'))
       f.flush()
+      # predict field names from 1st row
       loader = CSVLoader(f.name, None, 'cp932', delimiter=',')
       lines = 0
       for row in loader:
         lines += 1
-        self.assertEqual('テスト1', row['v1'])
-        self.assertEqual('テスト2', row['v2'])
+        self.assertEqual('テスト1', row['列1'])
+        self.assertEqual('テスト2', row['列2'])
       self.assertEqual(1, lines)
+
+  def test_cp932_seq_fieldnames(self):
+    with TempFile() as f:
+      f.write("テスト1,テスト2\nテスト1,テスト2".encode('cp932'))
+      f.flush()
+      # assign sequential field names
+      loader = CSVLoader(f.name, False, 'cp932', delimiter=',')
+      lines = 0
+      for row in loader:
+        lines += 1
+        self.assertEqual('テスト1', row['c0'])
+        self.assertEqual('テスト2', row['c1'])
+      self.assertEqual(2, lines)
+
+  def test_cp932_manual_fieldnames(self):
+    with TempFile() as f:
+      f.write("テスト1,テスト2\nテスト1,テスト2".encode('cp932'))
+      f.flush()
+      # assign field names statically
+      loader = CSVLoader(f.name, ['列1', '列2'], 'cp932', delimiter=',')
+      lines = 0
+      for row in loader:
+        lines += 1
+        self.assertEqual('テスト1', row['列1'])
+        self.assertEqual('テスト2', row['列2'])
+      self.assertEqual(2, lines)
 
   @requirePython3
   def test_unicode_separator(self):
