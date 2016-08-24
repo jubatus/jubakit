@@ -704,8 +704,11 @@ class _ServiceBackend(object):
       cmdpath = distutils.spawn.find_executable(cmdline[0])
       libpath = os.sep.join(cmdpath.split(os.sep)[:-2] + ['lib'])
       if os.path.isfile(os.sep.join([libpath, 'libjubatus_core.dylib'])):
-        envvars['DYLD_FALLBACK_LIBRARY_PATH'] = libpath
-        _logger.info('setting DYLD_FALLBACK_LIBRARY_PATH to %s', libpath)
+        # If the estimated libpath is already in the default DYLD_FALLBACK_LIBRARY_PATH,
+        # we don't have to add it.  See ``man 1 dyld`` for the list of default search paths.
+        if libpath not in [os.path.expanduser('~/lib'), '/usr/local/lib', '/lib', '/usr/lib']:
+          envvars['DYLD_FALLBACK_LIBRARY_PATH'] = libpath
+          _logger.info('setting DYLD_FALLBACK_LIBRARY_PATH to %s', libpath)
     return subprocess.Popen(cmdline, env=envvars, *args, **kwargs)
 
 class BaseConfig(dict):
