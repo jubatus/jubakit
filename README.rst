@@ -14,6 +14,7 @@ jubakit: Jubatus Toolkit
 
 jubakit is a Python module to access Jubatus features easily.
 jubakit can be used in conjunction with `scikit-learn <http://scikit-learn.org/>`_ so that you can use powerful features like cross validation and model evaluation.
+See the `Jubakit Documentation <http://jubat.us/en/jubakit>`_ for the detailed description.
 
 Currently jubakit supports `Classifier <http://jubat.us/en/api_classifier.html>`_, `Anomaly <http://jubat.us/en/api_anomaly.html>`_ and `Weight <http://jubat.us/en/api_weight.html>`_ engines.
 
@@ -92,14 +93,6 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
-
-Concepts
---------
-
-* *Loader* fetches data from various data sources (e.g., CSV file, RDBMS, MQ, Twitter stream, etc.) in key-value format.
-* *Schema* defines the data type (string feature, numeric feature, ground truth (label), etc.) for each keys of data loaded by Loader.
-* *Dataset* is an abstract representation of a sequence of data that binds Loader and Schema.
-* *Service* receives Dataset and make update/analyze RPC call to Jubatus servers.
 
 License
 -------
