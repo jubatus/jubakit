@@ -683,7 +683,7 @@ class _ServiceBackend(object):
       (stdout, _) = proc.communicate()
       if proc.returncode == 0:
         return
-      raise RuntimeError('{0} exit with status {1}; confirm that (DY)LD_LIBRARY_PATH is properly set: {2}'.format(procname, proc.returncode, stdout))
+      raise RuntimeError('{0} exit with status {1}; confirm that LD_LIBRARY_PATH is properly set: {2}'.format(procname, proc.returncode, stdout))
     except OSError as e:
       raise RuntimeError('{0} could not be started; confirm that PATH is properly set: {1}'.format(procname, e))
 
