@@ -695,7 +695,8 @@ class _ServiceBackend(object):
     envvars = dict(os.environ)
     if platform.system() == 'Darwin' and 'DYLD_FALLBACK_LIBRARY_PATH' not in envvars:
       """
-      Due to homebrew-jubatus issue #15, Jubatus processes built on OS X cannot
+      Due to homebrew-jubatus issue #15, when using Homebrew with locations other than
+      the standard installation path (/usr/local), Jubatus processes built on OS X cannot
       be run without DYLD_FALLBACK_LIBRARY_PATH.  However, on El Capitan or later,
       DYLD_FALLBACK_LIBRARY_PATH are not propagated from parent process.  We workaround
       the problem by automatically estimating DYLD_FALLBACK_LIBRARY_PATH based on PATH.
