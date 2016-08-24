@@ -693,18 +693,18 @@ class _ServiceBackend(object):
     Returns subprocess.Popen instance.
     """
     envvars = dict(os.environ)
-    if platform.system() == 'Darwin' and 'DYLD_LIBRARY_PATH' not in envvars:
+    if platform.system() == 'Darwin' and 'DYLD_FALLBACK_LIBRARY_PATH' not in envvars:
       """
       Due to homebrew-jubatus issue #15, Jubatus processes built on OS X cannot
-      be run without DYLD_LIBRARY_PATH.  However, on El Capitan or later,
-      DYLD_LIBRARY_PATH are not propagated from parent process.  We workaround
-      the problem by automatically estimating DYLD_LIBRARY_PATH based on PATH.
+      be run without DYLD_FALLBACK_LIBRARY_PATH.  However, on El Capitan or later,
+      DYLD_FALLBACK_LIBRARY_PATH are not propagated from parent process.  We workaround
+      the problem by automatically estimating DYLD_FALLBACK_LIBRARY_PATH based on PATH.
       """
       cmdpath = distutils.spawn.find_executable(cmdline[0])
       libpath = os.sep.join(cmdpath.split(os.sep)[:-2] + ['lib'])
       if os.path.isfile(os.sep.join([libpath, 'libjubatus_core.dylib'])):
-        envvars['DYLD_LIBRARY_PATH'] = libpath
-        _logger.info('setting DYLD_LIBRARY_PATH to %s', libpath)
+        envvars['DYLD_FALLBACK_LIBRARY_PATH'] = libpath
+        _logger.info('setting DYLD_FALLBACK_LIBRARY_PATH to %s', libpath)
     return subprocess.Popen(cmdline, env=envvars, *args, **kwargs)
 
 class BaseConfig(dict):
