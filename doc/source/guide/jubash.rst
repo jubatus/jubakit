@@ -75,7 +75,7 @@ Options
 .. option:: -v, --verbose
 
    Enable verbose mode.
-   In verbose mode, the contents of Datum is displayed when making RPC call.
+   In verbose mode, the contents of Datum are displayed when making RPC call.
 
 .. option:: -d, --debug
 

@@ -20,8 +20,8 @@ The jubakit script stops until you exit the shell.
 
 See the next section for the usage of the interactive shell.
 
-Using REPL from Commnand Line
------------------------------
+Using REPL from Command Line
+----------------------------
 
 Jubakit also provides ``jubash`` command, which is a standalone version of the Shell feature.
 It can be used as a handy tool to briefly tasting Jubatus without writing code.
