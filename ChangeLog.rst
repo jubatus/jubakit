@@ -1,6 +1,20 @@
 ChangeLog
 ====================================================
 
+Release 0.3.0 (2016-08-29)
+---------------------------------------
+
+* New Features
+    * Add Shell feature and ``jubash`` command (#38, #45, #51)
+
+* Improvements
+    * Add API reference and design documents (#33, #36, #43, #53)
+    * Add ``from_data`` method to Classifier service (#46)
+
+* Bug Fixes
+    * Fix CSVLoader parameter handling (#34)
+    * Fix typo in error message format (#49, #50)
+
 Release 0.2.2 (2016-07-25)
 ---------------------------------------
 
@@ -15,8 +29,8 @@ Release 0.2.1 (2016-06-27)
 ---------------------------------------
 
 * Improvements
-    * Add support for `cosine` and `euclidean` method of Classifier (#27)
-    * Improve default configuration of `NN` method of Classifier to use multiple CPU cores (#26)
+    * Add support for ``cosine`` and ``euclidean`` method of Classifier (#27)
+    * Improve default configuration of ``NN`` method of Classifier to use multiple CPU cores (#26)
     * Improve Anomaly service to validate invalid method name (#25)
     * Fix deprecated test warning in Python 3.5 (#24)
 
@@ -29,18 +43,18 @@ Release 0.2.0 (2016-05-30)
 
 * Improvements
     * Add logging system (#12, #17)
-    * Add `get_status` API to Service (#15)
-    * Add seed option to `shuffle` API to Dataset (#14)
-    * Revise `Loader` API (#13)
-    * `Config.add_mecab` API now accepts feature filters as list (#16)
+    * Add ``get_status`` API to Service (#15)
+    * Add seed option to ``shuffle`` API to Dataset (#14)
+    * Revise ``Loader`` API (#13)
+    * ``Config.add_mecab`` API now accepts feature filters as list (#16)
     * Improve documentation (#11)
     * Add tests (#21)
 
 * Bug Fixes
     * Fix missing records not ignored as expected (#22)
-    * Fix `get_label` of Classifier service raise unexpected error when the dataset is not static (#21)
-    * Fix `LineBasedStreamLoader` not closing file when iteration is terminated (#10)
-    * Fix `classifer_bulk.py` example not using config object (#18)
+    * Fix ``get_label`` of Classifier service raise unexpected error when the dataset is not static (#21)
+    * Fix ``LineBasedStreamLoader`` not closing file when iteration is terminated (#10)
+    * Fix ``classifer_bulk.py`` example not using config object (#18)
 
 Release 0.1.0 (2016-04-25)
 ---------------------------------------

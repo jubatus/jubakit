@@ -55,6 +55,23 @@ class Dataset(BaseDataset):
     return Dataset(loader, schema, static)
 
   @classmethod
+  def from_data(cls, data, labels, feature_names=None, label_names=None, static=True):
+    """ 
+    Converts two arrays or a sparse matrix data and its associated label array to Dataset.
+
+    Parameters
+    ----------
+    data : array or scipy 2-D sparse matrix of shape [n_samples, n_features]
+    labels : array of shape [n_samples]
+    feature_names : array of shape [n_features], optional
+    label_names : array of shape [n_labels], optional
+    """
+    if hasattr(data, 'todense'):
+        return cls.from_matrix(data, labels, feature_names, label_names, static)
+    else:
+        return cls.from_array(data, labels, feature_names, label_names, static)
+  
+  @classmethod
   def from_array(cls, data, labels, feature_names=None, label_names=None, static=True):
     """
     Converts two arrays (data and its associated labels) to Dataset.
