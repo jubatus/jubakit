@@ -1,6 +1,20 @@
 ChangeLog
 ====================================================
 
+Release 0.3.0 (2016-08-29)
+---------------------------------------
+
+* New Features
+    * Add Shell feature and ``jubash`` command (#38, #45, #51)
+
+* Improvements
+    * Add API reference and design documents (#33, #36, #43, #53)
+    * Add ``from_data`` method to Classifier service (#46)
+
+* Bug Fixes
+    * Fix CSVLoader parameter handling (#34)
+    * Fix typo in error message format (#49, #50)
+
 Release 0.2.2 (2016-07-25)
 ---------------------------------------
 
