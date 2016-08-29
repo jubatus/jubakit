@@ -10,4 +10,4 @@ for FILE in source/api/jubakit*.rst; do
   perl -pi -e 'BEGIN {undef $/;} s/Sub(packages|modules)\n\-+\n//g' "${FILE}"
 done
 
-PYTHONPATH=.. make clean html
+PYTHONPATH="..:${PYTHONPATH}" make clean html
