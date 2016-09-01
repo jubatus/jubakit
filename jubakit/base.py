@@ -581,7 +581,7 @@ class _ServiceBackend(object):
 
         _logger.debug('trying to start service on port %d: %s', self.port, args)
         self._logbuf = tempfile.NamedTemporaryFile(prefix='jubakit-log-')
-        self._proc = subprocess.Popen(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
+        self._proc = self._get_process(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
         pid = self._proc.pid
 
         # Wait until the RPC server start.
