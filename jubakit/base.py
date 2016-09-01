@@ -754,6 +754,8 @@ class _ServiceBackend(object):
       the problem by automatically estimating DYLD_FALLBACK_LIBRARY_PATH based on PATH.
       """
       cmdpath = distutils.spawn.find_executable(cmdline[0])
+      if cmdpath is None:
+        raise RuntimeError('{0} command not found; confirm that PATH is properly set'.format(cmdline[0]))
       libpath = os.sep.join(cmdpath.split(os.sep)[:-2] + ['lib'])
       if os.path.isfile(os.sep.join([libpath, 'libjubatus_core.dylib'])):
         # If the estimated libpath is already in the default DYLD_FALLBACK_LIBRARY_PATH,
