@@ -22,11 +22,11 @@ _logger = get_logger()
 
 class JubaProcess(object):
   @classmethod
-  def get_process(cls, cmdline, *args, **kwargs):
+  def get_process(cls, cmdline, env=None, *args, **kwargs):
     """
     Returns subprocess.Popen instance.
     """
-    envvars = dict(os.environ)
+    envvars = env if env else dict(os.environ)
     if platform.system() == 'Darwin' and 'DYLD_FALLBACK_LIBRARY_PATH' not in envvars:
       """
       Due to homebrew-jubatus issue #15, when using Homebrew with locations other than
