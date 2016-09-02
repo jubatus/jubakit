@@ -7,6 +7,7 @@ from jubatus.graph.types import *
 from .generic import GenericCLI
 from ..args import Arguments, Optional, TProperty
 from ..util import *
+from ..._stdio import print
 
 class GraphCLI(GenericCLI):
   @classmethod

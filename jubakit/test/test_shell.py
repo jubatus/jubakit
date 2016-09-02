@@ -2,16 +2,15 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import os
 from unittest import TestCase
 
 import jubatus
 
 from jubakit.shell import JubaShell, JubashCommand
-from jubakit._cli.util import set_cli_output
+from jubakit._stdio import set_stdio, devnull
 
 # Ignore output from CLI classes
-set_cli_output(open(os.devnull, 'w'))
+set_stdio(None, devnull(), devnull())
 
 class JubaShellTest(TestCase):
   def test_get_client_classes(self):

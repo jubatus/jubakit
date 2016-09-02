@@ -1,34 +1,26 @@
 # -*- coding: utf-8 -*-
 
+"""
+Utilities for CLI classes.
+"""
+
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-import sys
 import shlex
 
-from ..compat import builtins, shell_split
+from ..compat import *
 
 __all__ = [
-  'print',
-  'set_cli_output',
-  'get_cli_output',
+  'shell_split',
   'comp_position',
   'filter_candidates',
 ]
 
-class _CLIOutput(object):
-  _f = sys.stdout
-
-def print(*args, **kwargs):
-  """
-  ``print`` method for CLI output.
-  """
-  builtins.print(file=_CLIOutput._f, *args, **kwargs)
-
-def set_cli_output(f):
-  _CLIOutput._f = f
-
-def get_cli_output():
-  return _CLIOutput._f
+def shell_split(s):
+  if isinstance(s, unicode_t) and PYTHON2_6:
+    # shlex does not support Unicode on Python 2.6
+    return map(lambda x: x.decode(), shlex.split(s.encode()))
+  return shlex.split(s)
 
 def comp_position(text, line, begidx, endidx):
   """

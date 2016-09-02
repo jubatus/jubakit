@@ -7,6 +7,7 @@ from jubatus.recommender.types import *
 from .generic import GenericCLI
 from ..args import Arguments, Optional, TDatum, TMultiDatum
 from ..util import *
+from ..._stdio import print
 
 class RecommenderCLI(GenericCLI):
   @classmethod

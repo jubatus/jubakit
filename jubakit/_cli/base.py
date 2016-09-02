@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import subprocess
 
-from .util import print
+from .._stdio import print
 from .cmd import ExtendedCmd
 from .args import Arguments, Optional
 

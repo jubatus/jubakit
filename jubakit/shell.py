@@ -10,8 +10,8 @@ import msgpackrpc
 import jubatus
 
 from .compat import *
+from ._stdio import print, get_stdio
 from ._cli.base import BaseCLI, CLIInvalidatedException, CLIUnknownCommandException
-from ._cli.util import print, get_cli_output
 
 class JubaShell(object):
   """
@@ -56,7 +56,7 @@ class JubaShell(object):
     self._verbose = kwargs.get('verbose', False)
     self._prompt_format = kwargs.get('prompt', self._PS)
     self._input = kwargs.get('input', None)
-    self._output = kwargs.get('output', get_cli_output())
+    self._output = kwargs.get('output', get_stdio()[1])  # stdout
 
     self.set_remote(host, port, cluster, service)
 
@@ -392,7 +392,7 @@ class JubashCommand(object):
     def print_usage():
       print('Jubash - Jubatus Shell')
       print()
-      parser.print_help(get_cli_output())
+      parser.print_help(get_stdio()[1])  # stdout
       print()
       print('Available Services:')
       print('  {0}'.format(', '.join(services)))
