@@ -34,7 +34,7 @@ setup(name='jubakit',
       ],
       packages=find_packages(exclude=['jubakit.test']),
       entry_points={
-          'console_scripts': ['jubash=jubakit.shell:main'],
+          'console_scripts': ['jubash=jubakit.shell:_main'],
       },
       install_requires=[
           'jubatus>=0.8.0',

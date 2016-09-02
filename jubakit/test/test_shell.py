@@ -6,7 +6,7 @@ from unittest import TestCase
 
 import jubatus
 
-from jubakit.shell import JubaShell, JubashCommand
+from jubakit.shell import JubaShell, _JubashCommand
 from jubakit._stdio import set_stdio, devnull
 
 # Ignore output from CLI classes
@@ -27,7 +27,7 @@ class JubaShellTest(TestCase):
 
 class JubashCommandTest(TestCase):
   def _assert_exit(self, args, status):
-    self.assertEqual(JubashCommand.start(args), status)
+    self.assertEqual(_JubashCommand.start(args), status)
 
   def test_help(self):
     args = ['--help']

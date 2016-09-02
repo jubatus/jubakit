@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from io import StringIO
 
-from jubakit.shell import JubaShell, JubashCommand
+from jubakit.shell import JubaShell, _JubashCommand
 from jubakit.classifier import Classifier, Config
 
 class JubaShellTest(TestCase):
@@ -54,7 +54,7 @@ class JubashCommandTest(TestCase):
     self._service.stop()
 
   def _assert_exit(self, args, status):
-    self.assertEqual(JubashCommand.start(args), status)
+    self.assertEqual(_JubashCommand.start(args), status)
 
   def test_simple(self):
     args = [
