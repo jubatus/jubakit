@@ -31,19 +31,13 @@ class SchemaTest(TestCase):
     self.assertEqual(label, None)
     self.assertEqual({'k1': 'foo'}, dict(d.string_values))
 
-  def test_predict(self):
-    schema = Schema({
+  def test_without_label(self):
+    # schema without label can be defined
+    Schema({
       'k1': Schema.STRING,
-      'k2': Schema.LABEL,
     })
-    self.assertRaises(RuntimeError, schema.predict, {}, True)
 
   def test_illegal_label(self):
-    # schema without label
-    self.assertRaises(RuntimeError, Schema, {
-      'k1': Schema.STRING,
-    })
-
     # schema with multiple labels
     self.assertRaises(RuntimeError, Schema, {
       'k1': Schema.LABEL,
@@ -69,7 +63,8 @@ class DatasetTest(TestCase):
 
   def test_predict(self):
     loader = StubLoader()
-    self.assertRaises(RuntimeError, Dataset, loader, None)
+    dataset = Dataset(loader)  # predict
+    self.assertEqual(['v', 1.0], dataset[0][1].num_values[0])
 
   def test_get_labels(self):
     loader = StubLoader()

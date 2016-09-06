@@ -18,7 +18,7 @@ class Schema(GenericSchema):
   LABEL = 'l'
 
   def __init__(self, mapping, fallback=None):
-    self._label_key = self._get_unique_mapping(mapping, fallback, self.LABEL, 'LABEL')
+    self._label_key = self._get_unique_mapping(mapping, fallback, self.LABEL, 'LABEL', True)
     super(Schema, self).__init__(mapping, fallback)
 
   def transform(self, row):
@@ -31,10 +31,6 @@ class Schema(GenericSchema):
     d = self._transform_as_datum(row, None, [self._label_key])
     return (label, d)
 
-  @classmethod
-  def predict(cls, row, typed):
-    raise RuntimeError('Classifier schema cannot be auto predicted')
-
 class Dataset(BaseDataset):
   """
   Dataset for Classifier service.
@@ -42,7 +38,7 @@ class Dataset(BaseDataset):
 
   @classmethod
   def _predict(cls, row):
-    raise RuntimeError('Classifier schema cannot be auto predicted')
+    return Schema.predict(row, False)
 
   @classmethod
   def _from_loader(cls, data_loader, labels, label_names, static):
@@ -133,7 +129,8 @@ class Classifier(BaseService):
 
     cli = self._client()
     for (idx, (label, d)) in dataset:
-      assert label is not None
+      if label is None:
+        raise RuntimeError('Dataset without label column cannot be used for training')
       result = cli.train([jubatus.classifier.types.LabeledDatum(unicode_t(label), d)])
       assert result == 1
       yield (idx, label)
