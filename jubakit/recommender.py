@@ -5,9 +5,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import jubatus
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
-from .loader.array import ArrayLoader, ZipArrayLoader
-from .loader.sparse import SparseMatrixLoader
-from .loader.chain import ValueMapChainLoader, MergeChainLoader
 from .compat import *
 
 class Schema(GenericSchema):
