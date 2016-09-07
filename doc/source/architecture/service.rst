@@ -57,6 +57,7 @@ Currently the following Services are available in Jubakit.
 
 * `Classifier <http://jubat.us/en/api_classifier.html>`_ -- :py:class:`jubakit.classifier.Classifier`
 * `Anomaly <http://jubat.us/en/api_anomaly.html>`_ -- :py:class:`jubakit.anomaly.Anomaly`
+* `Recommender <http://jubat.us/en/api_recommender.html>`_ -- :py:class:`jubakit.recommender.Recommender`
 * `Weight <http://jubat.us/en/api_weight.html>`_ -- :py:class:`jubakit.weight.Weight`
 
 Support of other Services is ongoing.
