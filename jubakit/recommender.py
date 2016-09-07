@@ -122,7 +122,7 @@ class Config(GenericConfig):
   @classmethod
   def methods(cls):
     return ['lsh', 'euclid_lsh', 'minhash', 'inverted_index', 
-            'inverted_index_euclid', 'nearest_neighbor_recommend']
+            'inverted_index_euclid', 'nearest_neighbor_recommender']
 
   @classmethod
   def _default_method(cls):
