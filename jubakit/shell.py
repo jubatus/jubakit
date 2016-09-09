@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import sys
+import socket
 import optparse
 
 import msgpackrpc
@@ -69,13 +70,15 @@ class JubaShell(object):
         self.connect()
         cli.cmdloop()
         return True
+      except CLIInvalidatedException:
+        cli = self._new_cli()
       except CLIUnknownCommandException as e:
         print('Unknown command: {0}'.format(e))
         print('Type `help` for commands available.')
-      except CLIInvalidatedException:
-        cli = self._new_cli()
       except ValueError as e:
         print('Invalid argument: {0}; use `help` command for details'.format(e))
+      except socket.gaierror as e:
+        print('Socket Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
       except msgpackrpc.error.RPCError as e:
         print('RPC Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
       except JubaShellException as e:
@@ -86,8 +89,6 @@ class JubaShell(object):
         print('RPC Interface Mismatch ({0}:{1}): {2}'.format(self._host, self._port, e))
         print(self._INTERFACE_MISMATCH_ERROR)
         break  # abort interactive shell
-      except:
-        break;  # abort interactive shell
       finally:
         self.disconnect()
     return False
@@ -107,9 +108,10 @@ class JubaShell(object):
       return True
     except CLIUnknownCommandException as e:
       print('Unknown command: {0}'.format(e))
-      print('Type `help` for commands available.')
     except ValueError as e:
       print('Invalid argument: {0}'.format(e))
+    except socket.gaierror as e:
+      print('Socket Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
     except msgpackrpc.error.RPCError as e:
       print('RPC Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
     except JubaShellException as e:
@@ -452,7 +454,7 @@ class JubashCommand(object):
       else:
         # Interactive shell mode.
         success = shell.interact()
-    except JubaShellException as e:
+    except Exception as e:
       if args.debug: raise
       print('{0}: {1}'.format(type(e).__name__, e))
 

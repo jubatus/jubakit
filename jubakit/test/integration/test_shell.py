@@ -42,6 +42,8 @@ class JubaShellTest(TestCase):
     self.assertTrue(self._shell().run('classify x 1'))
     self.assertFalse(self._shell().run('error'))
     self.assertFalse(self._shell().run('connect 127.0.0.1 0'))
+    self.assertFalse(self._shell().run('connect 127.0.0.1 -1'))
+    self.assertFalse(self._shell().run('connect this_must_be_unknown_host 9199'))
     self.assertFalse(self._shell('', 'anomaly').run('calc_score x 1'))
 
 class JubashCommandTest(TestCase):
