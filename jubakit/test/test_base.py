@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
+import math
+
 try:
   import numpy as np
 except ImportError:
@@ -11,7 +13,7 @@ except ImportError:
 
 from jubatus.common import Datum
 
-from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
+from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig, Utils
 
 from . import requireSklearn
 from .stub import *
@@ -431,3 +433,18 @@ class TestGenericConfg(TestCase):
     self.assertEqual('false', config['converter']['string_types']['mecab3']['base'])
     self.assertEqual('名詞,*|動詞,*', config['converter']['string_types']['mecab3']['include_features'])
     self.assertEqual('動詞,*|名詞,固有名詞,*', config['converter']['string_types']['mecab3']['exclude_features'])
+
+class UtilsTest(TestCase):
+  def test_softmax(self):
+    res = Utils.softmax([0])
+    self.assertEqual(res, [1.0])
+
+    res = Utils.softmax([0,1])
+    self.assertEqual(res, [(1 / (1 + math.e)), (math.e / (1 + math.e))])
+
+    res = Utils.softmax([-5, 0, 5])
+    self.assertEqual(sum(res), 1.0)
+
+    # should not overflow for large numbers
+    res = Utils.softmax([-100000000, 100000000])
+    self.assertEqual(sum(res), 1.0)

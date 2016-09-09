@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import jubatus
 
-from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
+from .base import GenericSchema, BaseDataset, BaseService, GenericConfig, Utils
 from .loader.array import ArrayLoader, ZipArrayLoader
 from .loader.sparse import SparseMatrixLoader
 from .loader.chain import ValueMapChainLoader, MergeChainLoader
@@ -138,9 +138,10 @@ class Classifier(BaseService):
       assert result == 1
       yield (idx, label)
 
-  def classify(self, dataset):
+  def classify(self, dataset, softmax=False):
     """
     Classify the given dataset using this classifier.
+    When ``softmax`` is set to True, softmax is applied to the resulting scores.
     """
 
     cli = self._client()
@@ -151,6 +152,11 @@ class Classifier(BaseService):
 
       # Create the list of (label, score) desc sorted by score.
       label_score_sorted = [(ent.label, ent.score) for ent in sorted(result[0], key=lambda x: x.score, reverse=True)]
+
+      if softmax:
+        labels = [x[0] for x in label_score_sorted]
+        scores = [x[1] for x in label_score_sorted]
+        label_score_sorted = list(zip(labels, Utils.softmax(scores)))
 
       # Note: label may become None.
       yield (idx, label, label_score_sorted)

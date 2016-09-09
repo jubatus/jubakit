@@ -53,8 +53,11 @@ print("Saving model file...")
 classifier.save('example_snapshot')
 
 # Classify using the same dataset.
-for (idx, label, result) in classifier.classify(dataset):
+use_softmax = True
+for (idx, label, result) in classifier.classify(dataset, use_softmax):
   print("Classify: {0} (label: {1}, estimated: {2})".format(label == result[0][0], label, result[0][0]))
+  for (est_label, est_score) in result:
+    print("    Estimated Label: {0} ({1})".format(est_label, est_score))
 
 # Stop the classifier.
 classifier.stop()
