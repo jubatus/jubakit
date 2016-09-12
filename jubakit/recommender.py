@@ -5,9 +5,6 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 import jubatus
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
-from .loader.array import ArrayLoader, ZipArrayLoader
-from .loader.sparse import SparseMatrixLoader
-from .loader.chain import ValueMapChainLoader, MergeChainLoader
 from .compat import *
 
 class Schema(GenericSchema):
@@ -125,7 +122,7 @@ class Config(GenericConfig):
   @classmethod
   def methods(cls):
     return ['lsh', 'euclid_lsh', 'minhash', 'inverted_index', 
-            'inverted_index_euclid', 'nearest_neighbor_recommend']
+            'inverted_index_euclid', 'nearest_neighbor_recommender']
 
   @classmethod
   def _default_method(cls):
