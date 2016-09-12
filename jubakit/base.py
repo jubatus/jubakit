@@ -6,6 +6,7 @@ import collections
 import copy
 import json
 import random
+import math
 import time
 import logging
 import subprocess
@@ -921,3 +922,11 @@ class GenericConfig(BaseConfig):
       'include_features': include_features,
       'exclude_features': exclude_features,
     }
+
+class Utils(object):
+  @staticmethod
+  def softmax(x):
+    max_x = max(x)
+    e_x = [math.exp(x_i - max_x) for x_i in x]
+    sum_e_x = sum(e_x)
+    return [e_x_i / sum_e_x for e_x_i in e_x]
