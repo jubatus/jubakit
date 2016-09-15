@@ -42,40 +42,44 @@ class Dataset(BaseDataset):
 
   @classmethod
   def _from_loader(cls, data_loader, labels, label_names, static):
-    # Label is feeded with '_label' key from Loader.
-    label_loader = ZipArrayLoader(_label=labels)
-    if label_names is not None:
-      label_loader = ValueMapChainLoader(label_loader, '_label', label_names)
-    loader = MergeChainLoader(data_loader, label_loader)
-    schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
+    if labels is None:
+      loader = data_loader
+      schema = Schema({}, Schema.NUMBER)
+    else:
+      # Label is feeded with '_label' key from Loader.
+      label_loader = ZipArrayLoader(_label=labels)
+      if label_names is not None:
+        label_loader = ValueMapChainLoader(label_loader, '_label', label_names)
+      loader = MergeChainLoader(data_loader, label_loader)
+      schema = Schema({'_label': Schema.LABEL}, Schema.NUMBER)
     return Dataset(loader, schema, static)
 
   @classmethod
-  def from_data(cls, data, labels, feature_names=None, label_names=None, static=True):
-    """ 
+  def from_data(cls, data, labels=None, feature_names=None, label_names=None, static=True):
+    """
     Converts two arrays or a sparse matrix data and its associated label array to Dataset.
 
     Parameters
     ----------
     data : array or scipy 2-D sparse matrix of shape [n_samples, n_features]
-    labels : array of shape [n_samples]
+    labels : array of shape [n_samples], optional
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """
     if hasattr(data, 'todense'):
-        return cls.from_matrix(data, labels, feature_names, label_names, static)
+      return cls.from_matrix(data, labels, feature_names, label_names, static)
     else:
-        return cls.from_array(data, labels, feature_names, label_names, static)
-  
+      return cls.from_array(data, labels, feature_names, label_names, static)
+
   @classmethod
-  def from_array(cls, data, labels, feature_names=None, label_names=None, static=True):
+  def from_array(cls, data, labels=None, feature_names=None, label_names=None, static=True):
     """
     Converts two arrays (data and its associated labels) to Dataset.
 
     Parameters
     ----------
     data : array of shape [n_samples, n_features]
-    labels : array of shape [n_samples]
+    labels : array of shape [n_samples], optional
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """
@@ -83,7 +87,7 @@ class Dataset(BaseDataset):
     return cls._from_loader(data_loader, labels, label_names, static)
 
   @classmethod
-  def from_matrix(cls, data, labels, feature_names=None, label_names=None, static=True):
+  def from_matrix(cls, data, labels=None, feature_names=None, label_names=None, static=True):
     """
     Converts a sparse matrix data and its associated label array to Dataset.
 
@@ -91,7 +95,7 @@ class Dataset(BaseDataset):
     ----------
 
     data : scipy 2-D sparse matrix of shape [n_samples, n_features]
-    labels : array of shape [n_samples]
+    labels : array of shape [n_samples], optional
     feature_names : array of shape [n_features], optional
     label_names : array of shape [n_labels], optional
     """

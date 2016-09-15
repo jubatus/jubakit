@@ -144,6 +144,25 @@ class DatasetTest(TestCase):
     self.assertEqual(expected_labels, actual_labels)
     self.assertEqual(expected_k1s, actual_k1s)
 
+  def test_from_array_without_label(self):
+    ds = Dataset.from_array(
+        [ [10,20,30], [20,10,50], [40,10,30] ], # data
+        None,                                   # labels
+        ['k1', 'k2', 'k3'],                     # feature_names
+        ['pos', 'neg'],                         # label_names
+    )
+
+    expected_labels = [None, None, None]
+    expected_k1s = [10, 20, 40]
+    actual_labels = []
+    actual_k1s = []
+    for (idx, (label, d)) in ds:
+      actual_labels.append(label)
+      actual_k1s.append(dict(d.num_values)['k1'])
+
+    self.assertEqual(expected_labels, actual_labels)
+    self.assertEqual(expected_k1s, actual_k1s)
+
   @requireSklearn
   def test_from_matrix(self):
     ds = Dataset.from_matrix(
