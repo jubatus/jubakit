@@ -39,3 +39,15 @@ class ValueMapChainLoader(BaseLoader):
     for ent in self._loader:
       ent[self._key] = self._mapping[ent[self._key]]
       yield ent
+
+class ConcatLoader(BaseLoader):
+  """
+  ConcatLoader is a loader to concat multiple loaders.
+  """
+  def __init__(self, *loaders):
+    self._loaders = loaders
+
+  def rows(self):
+    for loader in self._loaders:
+      for row in loader.rows():
+        yield row
