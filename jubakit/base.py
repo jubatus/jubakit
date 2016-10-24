@@ -163,6 +163,14 @@ class GenericSchema(BaseSchema):
     if v is None:
       return
     if t == self.STRING:
+      if isinstance(v, bytes):
+        v = v.decode()
+      if isinstance(v, bool):
+        """
+        We avoid unicode_t(v), which results in string constant "True" / "False",
+        as the default configuration of STRING features is set to unigram.
+        """
+        v = '1' if v else '0'
       d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
       # Empty unicode/bytes values cannot be cast to float; treat them as NA.
@@ -217,7 +225,10 @@ class GenericSchema(BaseSchema):
     Predicts a data type for the given data.
     if `typed` is True, no type conversion will be tried against `v`.
     """
-    if isinstance(v, (int, long_t, float)):
+    if isinstance(v, bool):
+      # isintance(True, int) returns True; so it should be checked first.
+      return (cls.STRING, '1' if v else '0')
+    elif isinstance(v, (int, long_t, float)):
       return (cls.NUMBER, v)
     elif isinstance(v, unicode_t):
       if not typed:
@@ -231,8 +242,7 @@ class GenericSchema(BaseSchema):
         try: return (cls.STRING, v.decode())
         except UnicodeDecodeError: pass
       return (cls.BINARY, v)
-    else:
-      raise ValueError('cannot detect data type of {0}'.format(v.__class__))
+    raise ValueError('cannot detect data type of {0}: {1}'.format(type(v), v))
 
 class BaseDataset(object):
   """
