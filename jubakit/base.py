@@ -265,6 +265,10 @@ class BaseDataset(object):
     """
     self._loader = loader
     self._schema = schema
+
+    # ``_index`` and ``_buffer` hold the current cursor position and the
+    # current "raw" (i.e. value loaded from Loader) row content currently
+    # being iterated.
     self._index = -1
     self._buffer = None
 
@@ -404,6 +408,9 @@ class BaseDataset(object):
         if row is None:
           # May contain None in self._data if Dataset.convert is used.
           continue
+        # Predict schema (for non-static Datasets)
+        if self._schema is None:
+          self._schema = self._predict(row)
         self._buffer = row
         yield (self._index, self._schema.transform(row))
         self._index += 1
