@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import sys
+import os
 import logging
 
 # Import log levels.
@@ -14,25 +15,46 @@ _DEFAULT_FORMAT = '[%(name)s] %(asctime)s: (%(levelname)s) %(message)s'
 # jubakit root logger name.
 _LOGGER_NAME = 'jubakit'
 
-# Define the defualt logger which does nothing.
-class _NullHandler(logging.Handler):
-  def emit(self, record):
-    pass
+class _Logger(object):
+  # Logger instance.
+  logger = None
 
-_logger = logging.getLogger(_LOGGER_NAME)
-_logger.addHandler(_NullHandler())
-_logger.setLevel(logging.CRITICAL)
+  # Define the defualt log handler which does nothing.
+  class _NullHandler(logging.Handler):
+    def emit(self, record):
+      pass
 
-def setup_logger(level=logging.WARNING, f=sys.stderr, log_format=_DEFAULT_FORMAT):
+  @classmethod
+  def init(cls):
+    cls.logger = logging.getLogger(_LOGGER_NAME)
+    logger = cls.logger
+    levelname = os.environ.get('JUBAKIT_LOG_LEVEL', None)
+    if not levelname:
+      # Surpress printing logs by default.
+      logger.addHandler(cls._NullHandler())
+      logger.setLevel(CRITICAL)
+      return
+
+    # Setup logger from environment variable.
+    for lvl in (DEBUG, INFO, WARNING, ERROR, CRITICAL):
+      if logging.getLevelName(lvl) == levelname:
+        setup_logger(lvl)
+        break
+    else:
+      setup_logger(INFO)
+      logger.warning('invalid JUBAKIT_LOG_LEVEL (%s) specified; continue with INFO', levelname)
+
+def setup_logger(level=WARNING, f=sys.stderr, log_format=_DEFAULT_FORMAT):
   """
   Convenient method to setup the logger.
   """
   handler = logging.StreamHandler(f)
   handler.setFormatter(logging.Formatter(log_format))
 
-  _logger.propagate = False
-  _logger.addHandler(handler)
-  _logger.setLevel(level)
+  logger = _Logger.logger
+  logger.propagate = False
+  logger.addHandler(handler)
+  logger.setLevel(level)
 
 def get_logger(name=None):
   """
@@ -43,9 +65,10 @@ def get_logger(name=None):
   This is mainly expected for internal uses but users can get logger
   to print their own logs.
   """
+  logger = _Logger.logger
   if name is None:
-    return _logger
-  elif hasattr(_logger, 'getChild'):
-    return _logger.getChild(name)
+    return logger
+  elif hasattr(logger, 'getChild'):  # Python 2.7+
+    return logger.getChild(name)
   else:
     return logging.getLogger('{0}.{1}'.format(_LOGGER_NAME, name))
