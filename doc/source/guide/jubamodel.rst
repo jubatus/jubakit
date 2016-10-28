@@ -57,7 +57,7 @@ Options
 .. option:: -f, --no-validate
 
    When loading model files in ``binary`` format, ``jubamodel`` validates the model data structure (including CRC32 checksum).
-   When this option is specified, these validation will be disabled.
+   When this option is specified, the validation will be disabled.
 
 .. option:: -F, --fix-header
 
