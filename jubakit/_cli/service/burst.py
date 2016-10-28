@@ -9,6 +9,7 @@ from jubatus.burst.types import *
 from .generic import GenericCLI
 from ..args import Arguments, Optional
 from ..util import *
+from ..._stdio import print
 
 class BurstCLI(GenericCLI):
   @classmethod

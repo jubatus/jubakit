@@ -10,7 +10,7 @@ import inspect
 
 from jubatus.common import Datum
 
-from ..compat import shell_split
+from .util import shell_split
 
 class Rule(object):
   def convert(self, args):

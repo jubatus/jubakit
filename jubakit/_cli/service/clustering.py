@@ -7,6 +7,7 @@ from jubatus.clustering.types import *
 from .generic import GenericCLI
 from ..args import Arguments, TDatum
 from ..util import *
+from ..._stdio import print
 
 class ClusteringCLI(GenericCLI):
   @classmethod

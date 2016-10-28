@@ -7,6 +7,7 @@ import json
 from ..base import BaseRpcCLI
 from ..args import Arguments
 from ..util import *
+from ..._stdio import print
 
 class GenericCLI(BaseRpcCLI):
   """

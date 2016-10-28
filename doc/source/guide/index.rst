@@ -5,4 +5,5 @@ User's Guide
 
    loader_develop
    jubash
+   jubamodel
    faq
