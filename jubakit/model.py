@@ -147,7 +147,12 @@ class JubaModel(object):
       if 'user' in record:
         printe('Notice: using "user_raw" record from JSON; "user" record is ignored')
       raw = base64.b64decode(record['user_raw'])
-      m.user = cls.UserContainer.loads(raw)
+      try:
+        m.user = cls.UserContainer.loads(raw)
+      except UnicodeDecodeError:
+        printe('Warning: model contains non UTF-8 strings; cannot be loaded')
+        m.user = cls.UserContainer()
+        m.user.user_data = None
       m._user_raw = raw
     elif 'user' in record:
       m.user.set(record['user'])
@@ -327,7 +332,12 @@ class JubaModel(object):
   class Container(ModelPart):
     @classmethod
     def load(cls, f):
-      values = msgpack.load(f)
+      # Assumes everything is encoded in UTF-8.
+      # This means that if some records (e.g., config files, feature vector
+      # keys) are not encoded in UTF-8, the model cannot be loaded.  However,
+      # such models cannot be written out to text or JSON, so we don't really
+      # care.  Callers are responsible for handling UnicodeDecodeError.
+      values = msgpack.load(f, encoding='utf-8', unicode_errors='strict')
       field_names = map(lambda x: x[0], cls.fields())
       c = cls()
       c.set(dict(zip(field_names, values)))
