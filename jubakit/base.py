@@ -4,20 +4,15 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import collections
 import copy
-import json
 import random
-import time
-import logging
-import subprocess
-import tempfile
+import math
 
 import jubatus
-import msgpackrpc
-import psutil
 
 from .shell import JubaShell
 from .compat import *
 from .logger import get_logger
+from ._process import _ServiceBackend
 
 _logger = get_logger()
 
@@ -159,6 +154,14 @@ class GenericSchema(BaseSchema):
     if v is None:
       return
     if t == self.STRING:
+      if isinstance(v, bytes):
+        v = v.decode()
+      if isinstance(v, bool):
+        """
+        We avoid unicode_t(v), which results in string constant "True" / "False",
+        as the default configuration of STRING features is set to unigram.
+        """
+        v = '1' if v else '0'
       d.add_string(k, unicode_t(v))
     elif t == self.NUMBER:
       # Empty unicode/bytes values cannot be cast to float; treat them as NA.
@@ -213,7 +216,10 @@ class GenericSchema(BaseSchema):
     Predicts a data type for the given data.
     if `typed` is True, no type conversion will be tried against `v`.
     """
-    if isinstance(v, (int, long_t, float)):
+    if isinstance(v, bool):
+      # isintance(True, int) returns True; so it should be checked first.
+      return (cls.STRING, '1' if v else '0')
+    elif isinstance(v, (int, long_t, float)):
       return (cls.NUMBER, v)
     elif isinstance(v, unicode_t):
       if not typed:
@@ -227,8 +233,7 @@ class GenericSchema(BaseSchema):
         try: return (cls.STRING, v.decode())
         except UnicodeDecodeError: pass
       return (cls.BINARY, v)
-    else:
-      raise ValueError('cannot detect data type of {0}'.format(v.__class__))
+    raise ValueError('cannot detect data type of {0}: {1}'.format(type(v), v))
 
 class BaseDataset(object):
   """
@@ -251,6 +256,10 @@ class BaseDataset(object):
     """
     self._loader = loader
     self._schema = schema
+
+    # ``_index`` and ``_buffer` hold the current cursor position and the
+    # current "raw" (i.e. value loaded from Loader) row content currently
+    # being iterated.
     self._index = -1
     self._buffer = None
 
@@ -390,6 +399,9 @@ class BaseDataset(object):
         if row is None:
           # May contain None in self._data if Dataset.convert is used.
           continue
+        # Predict schema (for non-static Datasets)
+        if self._schema is None:
+          self._schema = self._predict(row)
         self._buffer = row
         yield (self._index, self._schema.transform(row))
         self._index += 1
@@ -414,12 +426,8 @@ class BaseService(object):
     self._backend = None
 
   def __del__(self):
-    """
-    Destroys the backend process if exists.
-    """
-    backend = self._backend
-    if backend is not None:
-      backend.stop()
+    # Invoke the backend destructor as fast as possible.
+    self._backend = None
 
   @classmethod
   def name(cls):
@@ -512,197 +520,6 @@ class BaseService(object):
     Starts an interactive shell session for this service.
     """
     self._shell(**kwargs).interact()
-
-class _ServiceBackend(object):
-  """
-  Service backend handles messy process-related things.
-  """
-
-  # Disable verbose tornado WARN logs on connect failure.
-  logging.getLogger('tornado').setLevel(logging.ERROR)
-
-  # Global Port-to-PID mapping.
-  port2pid = {}
-
-  def __init__(self, name, config, port=None):
-    self.name = name
-    self.config = config
-    self.port = port
-    self.log = None
-    self._logbuf = None
-    self._proc = None
-
-    self._check_installed(name)
-
-    if port is None:
-      self.port = self._get_free_port()
-
-    if port in self.port2pid:
-      raise RuntimeError('port {0} currently in use by another service (PID {1})'.format(port, self.port2pid[port]))
-
-    with tempfile.NamedTemporaryFile(prefix='jubakit-config-') as config_file:
-      config_file.write(json.dumps(config).encode('utf-8'))
-      config_file.flush()
-
-      args = [
-        'juba{0}'.format(name),
-        '--listen_addr', '127.0.0.1',
-        '--rpc-port', str(self.port),
-        '--timeout', '0',
-        '--configpath', config_file.name
-      ]
-      _logger.info('starting service: %s', args)
-      self._logbuf = tempfile.NamedTemporaryFile(prefix='jubakit-log-')
-      self._proc = subprocess.Popen(args, stdout=self._logbuf, stderr=subprocess.STDOUT)
-      self._assign_port(self.port, self._proc.pid)
-
-      # Wait until the RPC server start.
-      started = self._wait_until_rpc_ready(self.port)
-      if started:
-        status = self.get_status()
-        pid = int(status['pid'])
-        if pid != self._proc.pid:
-          self._proc.kill()
-          raise RuntimeError('server cannot be started as port {0} conflicts with external Jubatus process (PID: {1})'.format(self.port, pid))
-
-    if not started:
-      _logger.error('failed to start service')
-      log = self.stop()
-
-  def __del__(self):
-    proc = self._proc
-    if proc is not None and proc.poll() is None:  # still running
-      proc.kill()
-      self._unassign_port(self.port, proc.pid)
-    logbuf = self._logbuf
-    if logbuf is not None and not logbuf.closed:  # log buffer is still open
-      logbuf.close()
-
-  def stop(self):
-    """
-    Stops the server instance and return the server log.
-    """
-    proc = self._proc
-    self._proc = None
-    if proc is not None:
-      if proc.poll() is None:  # still running
-        _logger.debug('process is still running; will be terminated')
-        proc.terminate()
-      else:
-        _logger.debug('process already terminated')
-
-      _logger.debug('waiting for process to exit')
-      proc.communicate()
-      self._logbuf.seek(0)
-      stdout = self._logbuf.read()
-      self._logbuf.close()
-
-      retval = proc.returncode
-      _logger.debug('process exit with status %d', retval)
-      self._unassign_port(self.port, proc.pid)
-      if retval != 0:
-        raise RuntimeError('server exit with status {0}; confirm that the config is valid: {1}'.format(retval, stdout))
-      return stdout
-
-  def get_status(self):
-    cli = msgpackrpc.Client(msgpackrpc.Address('127.0.0.1', self.port), unpack_encoding='utf-8')
-    try:
-      return cli.call('get_status', '')['127.0.0.1_{0}'.format(self.port)]
-    finally:
-      cli.close()
-      cli._loop._ioloop.close()
-
-  @classmethod
-  def _get_free_port(cls, start=10000, end=30000):
-    """
-    Finds the free port available to listen.
-
-    The default range of [10000,30000] is chosen to avoid the default
-    ephemeral port range on most platforms.
-    """
-    used_ports = cls._get_ports_in_use()
-    port = start
-    while True:
-      if port not in used_ports: return port
-      port += 1
-      if end < port:
-        raise RuntimeError('no free port available in range [{0},{1}]'.format(start, end))
-
-  @classmethod
-  def _get_ports_in_use(cls):
-    """
-    Returns sorted list of ports currently used on localhost.
-    """
-    try:
-      return sorted(set([x.laddr[1] for x in psutil.net_connections(kind='inet4')]))
-    except psutil.AccessDenied:
-      # On some platforms (such as OS X), root privilege is required to get used ports.
-      # In that case we avoid port confliction to the best of our knowledge.
-      _logger.info('ports in use cannot be obtained on this platform; ports will be assigned sequentially')
-      return sorted(cls.port2pid.keys())
-
-  @classmethod
-  def _assign_port(cls, port, pid):
-    m = cls.port2pid
-    if port in m:
-      raise RuntimeError('port {0} currently in use by PID {1}'.format(port, m[port]))
-    m[port] = pid
-
-  @classmethod
-  def _unassign_port(cls, port, pid):
-    m = cls.port2pid
-    if m is None:
-      pass   # maybe destruction is running.
-    if port not in m:
-      raise RuntimeError('port {0} is not in use'.format(port))
-    if m[port] != pid:
-      raise RuntimeError('port {0} is used by PID {1}, not PID {2}'.format(port, m[port], pid))
-    del m[port]
-
-  @classmethod
-  def _wait_until_rpc_ready(cls, port):
-    sleep_time = 1000
-    for i in range(10):
-      time.sleep(sleep_time/1000000.0) # from usec to sec
-      if cls._ping_rpc(port):
-        _logger.debug('service RPC ready after %d tries', i)
-        return True
-      sleep_time *= 2
-    return False
-
-  @classmethod
-  def _ping_rpc(cls, port):
-    cli = msgpackrpc.Client(msgpackrpc.Address("127.0.0.1", port))
-    try:
-      cli.call('__ping__')
-      raise AssertionError('dummy RPC succeeded')
-    except msgpackrpc.error.RPCError as e:
-      if e.args[0] == 1:  # "no such method"
-        return True
-    except:
-      return False
-    finally:
-      cli.close()
-      cli._loop._ioloop.close()
-
-    return False
-
-  @classmethod
-  def _check_installed(cls, name):
-    procname = 'juba{0}'.format(name)
-
-    _logger.debug('checking if service process %s is available', procname)
-    try:
-      proc = subprocess.Popen(
-        [procname, '--version'],
-        stdout=subprocess.PIPE, stderr=subprocess.STDOUT
-      )
-      (stdout, _) = proc.communicate()
-      if proc.returncode == 0:
-        return
-      raise RuntimeError('{0} exit with status {1}; confirm that (DY)LD_LIBRARY_PATH is properly set: {2}'.format(procname, proc.returncode, stdout))
-    except OSError as e:
-      raise RuntimeError('{0} could not be started; confirm that PATH is properly set: {1}'.format(procname, e))
 
 class BaseConfig(dict):
   """
@@ -860,3 +677,11 @@ class GenericConfig(BaseConfig):
       'include_features': include_features,
       'exclude_features': exclude_features,
     }
+
+class Utils(object):
+  @staticmethod
+  def softmax(x):
+    max_x = max(x)
+    e_x = [math.exp(x_i - max_x) for x_i in x]
+    sum_e_x = sum(e_x)
+    return [e_x_i / sum_e_x for e_x_i in e_x]

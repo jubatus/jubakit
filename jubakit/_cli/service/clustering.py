@@ -7,19 +7,20 @@ from jubatus.clustering.types import *
 from .generic import GenericCLI
 from ..args import Arguments, TDatum
 from ..util import *
+from ..._stdio import print
 
 class ClusteringCLI(GenericCLI):
   @classmethod
   def _name(cls):
     return 'clustering'
 
-  @Arguments(TDatum)
-  def do_push(self, d):
-    """Syntax: push datum_key datum_value [...]
+  @Arguments(str, TDatum)
+  def do_push(self, point_id, d):
+    """Syntax: push point_id, datum_key datum_value [...]
     Add a point. Bulk request is not supported.
     """
     self._verbose("datum = {0}".format(d))
-    if not self.client.push([d]):
+    if not self.client.push([IndexedPoint(point_id, d)]):
       print("Failed")
 
   @Arguments()
@@ -40,6 +41,17 @@ class ClusteringCLI(GenericCLI):
       for member in cluster:
         print("  Datum: {0}".format(member.point))
         print("  (weight: {0})".format(member.weight))
+
+  @Arguments()
+  def do_get_core_members_light(self):
+    """Syntax: get_core_members_light
+    Return IDs of the coreset of the cluster.
+    """
+    result = self.client.get_core_members_light()
+    for cluster in result:
+      print("[Cluster]")
+      for member in cluster:
+        print("  {0} ({1})".format(member.id, member.weight))
 
   @Arguments()
   def do_get_k_center(self):
@@ -70,3 +82,13 @@ class ClusteringCLI(GenericCLI):
     for member in result:
       print("Datum: {0}".format(member.point))
       print("(weight: {0})".format(member.weight))
+
+  @Arguments(TDatum)
+  def do_get_nearest_members_light(self, d):
+    """Syntax: get_nearest_members_light datum_key datum_value [...]
+    Returns IDs of nearest summary of cluster(coreset) from point.
+    """
+    self._verbose("datum = {0}".format(d))
+    result = self.client.get_nearest_members_light(d)
+    for member in result:
+      print("{0} ({1})".format(member.id, member.weight))

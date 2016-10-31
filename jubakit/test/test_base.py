@@ -4,6 +4,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 from unittest import TestCase
 
+import math
+
 try:
   import numpy as np
 except ImportError:
@@ -11,7 +13,7 @@ except ImportError:
 
 from jubatus.common import Datum
 
-from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig
+from jubakit.base import BaseLoader, BaseSchema, GenericSchema, BaseDataset, BaseService, BaseConfig, GenericConfig, Utils
 
 from . import requireSklearn
 from .stub import *
@@ -133,47 +135,82 @@ class GenericSchemaTest(TestCase):
       'k3': 789,
     })
 
+  def test_string(self):
+    schema = GenericSchema({}, GenericSchema.STRING)
+    d = schema.transform({
+      'k1': '123'.encode(),  # bytes
+      'k2': '456',  # unicode
+      'k3': 789,  # int
+      'k4': 789.0,  # float
+      'k5': True,  # bool
+      'k6': False,  # bool
+    })
+    self.assertEqual({
+      'k1': '123',
+      'k2': '456',
+      'k3': '789',
+      'k4': '789.0',
+      'k5': '1',
+      'k6': '0',
+    }, dict(d.string_values))
+    self.assertEqual({}, dict(d.num_values))
+    self.assertEqual({}, dict(d.binary_values))
+
+  def test_number(self):
+    schema = GenericSchema({}, GenericSchema.NUMBER)
+    d = schema.transform({
+      'k1': '123'.encode(),  # bytes
+      'k2': '456',  # unicode
+      'k3': 789,  # int
+      'k4': 789.0,  # float
+      'k5': True,  # bool
+      'k6': False,  # bool
+    })
+    self.assertEqual({
+      'k1': 123.0,
+      'k2': 456.0,
+      'k3': 789.0,
+      'k4': 789.0,
+      'k5': 1.0,
+      'k6': 0.0,
+    }, dict(d.num_values))
+    self.assertEqual({}, dict(d.string_values))
+    self.assertEqual({}, dict(d.binary_values))
+
+
   def test_auto(self):
     binary_data = 'テスト'.encode('cp932')
 
-    schema = GenericSchema({
-      'k1': GenericSchema.AUTO,
-      'k2': GenericSchema.AUTO,
-      'k3': GenericSchema.AUTO,
-      'k4': GenericSchema.AUTO,
-      'k5': GenericSchema.AUTO,
-    })
+    schema = GenericSchema({}, GenericSchema.AUTO)
     d = schema.transform({
       'k1': '123',
       'k2': 456,
       'k3': '789'.encode(),
       'k4': 'xxx'.encode(),
       'k5': binary_data,
+      'k6': True,
+      'k7': False,
     })
 
-    self.assertEqual({'k1': '123'}, dict(d.string_values))
+    self.assertEqual({'k1': '123', 'k6': '1', 'k7': '0'}, dict(d.string_values))
     self.assertEqual({'k2': 456}, dict(d.num_values))
     self.assertEqual({'k3': '789'.encode(), 'k4': 'xxx'.encode(), 'k5': binary_data}, dict(d.binary_values))
 
   def test_infer(self):
     binary_data = 'テスト'.encode('cp932')
 
-    schema = GenericSchema({
-      'k1': GenericSchema.INFER,
-      'k2': GenericSchema.INFER,
-      'k3': GenericSchema.INFER,
-      'k4': GenericSchema.INFER,
-      'k5': GenericSchema.INFER,
-    })
+    schema = GenericSchema({}, GenericSchema.INFER)
     d = schema.transform({
       'k1': '123',
       'k2': 456,
       'k3': '789'.encode(),
       'k4': 'xxx'.encode(),
       'k5': binary_data,
+      'k6': True,
+      'k7': False,
     })
 
-    self.assertEqual({'k4': 'xxx'}, dict(d.string_values))
+    self.assertEqual({'k4': 'xxx', 'k6': '1', 'k7': '0'}, dict(d.string_values))
     self.assertEqual({'k1': 123, 'k2': 456, 'k3': 789}, dict(d.num_values))
     self.assertEqual({'k5': binary_data}, dict(d.binary_values))
 
@@ -431,3 +468,18 @@ class TestGenericConfg(TestCase):
     self.assertEqual('false', config['converter']['string_types']['mecab3']['base'])
     self.assertEqual('名詞,*|動詞,*', config['converter']['string_types']['mecab3']['include_features'])
     self.assertEqual('動詞,*|名詞,固有名詞,*', config['converter']['string_types']['mecab3']['exclude_features'])
+
+class UtilsTest(TestCase):
+  def test_softmax(self):
+    res = Utils.softmax([0])
+    self.assertEqual(res, [1.0])
+
+    res = Utils.softmax([0,1])
+    self.assertEqual(res, [(1 / (1 + math.e)), (math.e / (1 + math.e))])
+
+    res = Utils.softmax([-5, 0, 5])
+    self.assertEqual(sum(res), 1.0)
+
+    # should not overflow for large numbers
+    res = Utils.softmax([-100000000, 100000000])
+    self.assertEqual(sum(res), 1.0)

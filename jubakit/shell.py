@@ -3,14 +3,15 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import sys
+import socket
 import optparse
 
 import msgpackrpc
 import jubatus
 
 from .compat import *
+from ._stdio import print, get_stdio
 from ._cli.base import BaseCLI, CLIInvalidatedException, CLIUnknownCommandException
-from ._cli.util import print, get_cli_output
 
 class JubaShell(object):
   """
@@ -55,7 +56,7 @@ class JubaShell(object):
     self._verbose = kwargs.get('verbose', False)
     self._prompt_format = kwargs.get('prompt', self._PS)
     self._input = kwargs.get('input', None)
-    self._output = kwargs.get('output', get_cli_output())
+    self._output = kwargs.get('output', get_stdio()[1])  # stdout
 
     self.set_remote(host, port, cluster, service)
 
@@ -69,13 +70,15 @@ class JubaShell(object):
         self.connect()
         cli.cmdloop()
         return True
+      except CLIInvalidatedException:
+        cli = self._new_cli()
       except CLIUnknownCommandException as e:
         print('Unknown command: {0}'.format(e))
         print('Type `help` for commands available.')
-      except CLIInvalidatedException:
-        cli = self._new_cli()
       except ValueError as e:
         print('Invalid argument: {0}; use `help` command for details'.format(e))
+      except socket.gaierror as e:
+        print('Socket Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
       except msgpackrpc.error.RPCError as e:
         print('RPC Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
       except JubaShellException as e:
@@ -86,8 +89,6 @@ class JubaShell(object):
         print('RPC Interface Mismatch ({0}:{1}): {2}'.format(self._host, self._port, e))
         print(self._INTERFACE_MISMATCH_ERROR)
         break  # abort interactive shell
-      except:
-        break;  # abort interactive shell
       finally:
         self.disconnect()
     return False
@@ -107,9 +108,10 @@ class JubaShell(object):
       return True
     except CLIUnknownCommandException as e:
       print('Unknown command: {0}'.format(e))
-      print('Type `help` for commands available.')
     except ValueError as e:
       print('Invalid argument: {0}'.format(e))
+    except socket.gaierror as e:
+      print('Socket Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
     except msgpackrpc.error.RPCError as e:
       print('RPC Error ({0}:{1}): {2} ({3})'.format(self._host, self._port, type(e).__name__, e))
     except JubaShellException as e:
@@ -332,16 +334,16 @@ class JubaShellRPCError(JubaShellException):
       errmsg += ' ({0}: {1})'.format(type(e).__name__, str(e))
     super(JubaShellRPCError, self).__init__(errmsg)
 
-class JubashOptionParser(optparse.OptionParser, object):
+class _JubashOptionParser(optparse.OptionParser, object):
   def __init__(self, *args, **kwargs):
     self._error = False
-    super(JubashOptionParser, self).__init__(*args, **kwargs)
+    super(_JubashOptionParser, self).__init__(*args, **kwargs)
 
   def error(self, msg):
     print('Error: {0}'.format(msg))
     self._error = True
 
-class JubashCommand(object):
+class _JubashCommand(object):
   """
   Provides command line interface for ``jubash`` command.
   """
@@ -358,7 +360,7 @@ class JubashCommand(object):
     services = sorted(JubaShell.get_cli_classes().keys())
 
     # TODO: migrate to argparse (which must be added into dependency to support Python 2.6)
-    parser = JubashOptionParser(add_help_option=False, usage=USAGE, epilog=EPILOG)
+    parser = _JubashOptionParser(add_help_option=False, usage=USAGE, epilog=EPILOG)
 
     parser.add_option('-H', '--host', type='string', default='127.0.0.1',
                       help='host name or IP address of the server / proxy (default: %default)')
@@ -390,7 +392,7 @@ class JubashCommand(object):
     def print_usage():
       print('Jubash - Jubatus Shell')
       print()
-      parser.print_help(get_cli_output())
+      parser.print_help(get_stdio()[1])  # stdout
       print()
       print('Available Services:')
       print('  {0}'.format(', '.join(services)))
@@ -452,14 +454,14 @@ class JubashCommand(object):
       else:
         # Interactive shell mode.
         success = shell.interact()
-    except JubaShellException as e:
+    except Exception as e:
       if args.debug: raise
       print('{0}: {1}'.format(type(e).__name__, e))
 
     return 0 if success else 3
 
-def main():
+def _main():
   """
   Entry point for ``jubash`` command.
   """
-  sys.exit(JubashCommand.start(sys.argv[1:]))
+  sys.exit(_JubashCommand.start(sys.argv[1:]))

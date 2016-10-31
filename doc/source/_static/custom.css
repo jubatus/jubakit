@@ -1,0 +1,283 @@
+@import url("theme.css");
+
+.wy-nav-content {
+    max-width: 1200px;
+}
+
+/* Main background color modification */
+.btn-info, .wy-menu-vertical a:active, .wy-side-nav-search, .wy-side-nav-search img, .wy-nav .wy-menu-vertical a:hover, .wy-nav-top img, .wy-tray-item-info, .wy-side-nav-search, .wy-dropdown-menu > dd > a:hover, .wy-dropdown-menu a:hover, .wy-nav-top {
+    background-color: #ccc4b2 !important;
+}
+
+.wy-side-nav-search input[type=text] {
+    border-color: #a47224 !important;
+}
+
+body {
+    font-family: 'Lucida Grande', 'Lucida Sans Unicode', 'Geneva',
+                 'Verdana', sans-serif;
+    font-size: 14px;
+    text-align: left;
+    background-color: #b8ad94;
+    color: #333333;
+    padding: 0;
+    margin: 0px 20px 0px 20px;
+}
+
+div.document {
+    text-align: left;
+    background-repeat: repeat-x;
+}
+
+
+
+/* -- body styles ----------------------------------------------------------- */
+
+p {
+    margin: 0.8em 0 0.5em 0;
+}
+
+a {
+    text-decoration: none;
+}
+
+a:hover {
+    color: #24c762;
+}
+
+.body .section:first-child{
+	margin-top:-10px;
+}
+
+div.body a {
+    text-decoration: underline;
+}
+
+h1 {
+    font-size: 1.35em;
+	border-radius: 5px;
+	-moz-border-radius: 5px;
+	-webkit-border-radius: 5px;
+	 margin: 15px -10px  10px -10px;
+     padding: 0.3em 0 0.3em 0.5em;
+    color: white;
+    background-color: #418237;
+}
+
+h2 {
+    margin: 0;
+    font-size: 1.2em;
+    padding: 1em 0 0.2em 0;
+	color: #108b3f;
+	border-bottom:2px solid #aaa;
+}
+
+h3 {
+    color: #108b3f;
+    margin: 1em 0 0 0;
+    font-size: 1.2em;
+}
+
+h4{
+	color: #108b3f;
+    margin: 1em 0 -1em 0;
+    font-size: 1em;
+}
+
+h5{
+	color: #333333;
+    margin: 2em 0 -1em 0;
+    font-size: 1em;
+}
+
+div.body h1 a{
+    color: #9ec19a;
+}
+
+div.body h2 a, div.body h3 a, div.body h4 a, div.body h5 a, div.body h6 a {
+    color: #999999;
+}
+
+h1 a.anchor, h2 a.anchor, h3 a.anchor, h4 a.anchor, h5 a.anchor, h6 a.anchor {
+    display: none;
+    margin: 0 0 0 0.3em;
+    padding: 0 0.2em 0 0.2em;
+    color: #aaa!important;
+}
+
+h1:hover a.anchor, h2:hover a.anchor, h3:hover a.anchor,
+h4:hover a.anchor, h5:hover a.anchor, h6:hover a.anchor {
+    display: inline;
+}
+
+h1 a.anchor:hover{
+    color: #b9f600;
+}
+
+h2 a.anchor:hover; h3 a.anchor:hover, h4 a.anchor:hover,
+h5 a.anchor:hover, h6 a.anchor:hover{
+   color: #333333;
+}
+
+a.headerlink {
+    font-size: 1em;
+    margin-left: 6px;
+    padding: 0 4px 0 4px;
+    text-decoration: none!important;
+}
+
+h1 a.headerlink:hover {
+    color: #b9f600;
+}
+
+h2 a.headerlink:hover; h3 a.headerlink:hover {
+    color: #cccccc;
+}
+
+cite, code, tt {
+    font-family: 'Consolas', 'Deja Vu Sans Mono',
+                 'Bitstream Vera Sans Mono', monospace;
+    letter-spacing: 0.01em;
+}
+
+tt {
+    background-color: #f2f2f2;
+    border-bottom: 1px solid #ddd;
+    color: #333;
+}
+
+tt.descname, tt.descclassname, tt.xref {
+    border: 0;
+}
+
+hr {
+    border: 1px solid #abc;
+    margin: 2em;
+}
+
+a tt {
+    border: 0;
+    color: #CA7900;
+}
+
+a tt:hover {
+    color: #2491CF;
+}
+
+pre {
+    font-family: 'Consolas', 'Deja Vu Sans Mono',
+                 'Bitstream Vera Sans Mono', monospace;
+    letter-spacing: 0.03em;
+}
+
+pre a {
+    color: inherit;
+    text-decoration: underline;
+}
+
+table.highlighttable {
+    width: 100%;
+    table-layout: fixed;
+}
+
+td.code {
+    background-color: #f8f8f8;
+}
+
+td.linenos {
+    width: 70px;
+    background-color: #f8f8f8;
+}
+
+td.code pre {
+    overflow-x: auto;
+}
+
+
+table {
+    border-collapse: collapse;
+}
+
+table td, table th {
+    padding: 0.2em 1em 0.2em 1em;
+}
+
+table th {
+   color:#418237;
+}
+
+div.admonition, div.warning {
+    font-size: 0.9em;
+    margin: 1em 0 1em 0;
+    border: 1px solid #86989B;
+    background-color: #f7f7f7;
+    padding: 0;
+}
+
+div.admonition p, div.warning p {
+    margin: 0.5em 1em 0.5em 1em;
+    padding: 0;
+}
+
+div.admonition pre, div.warning pre {
+    margin: 0.4em 1em 0.4em 1em;
+}
+
+div.admonition p.admonition-title,
+div.warning p.admonition-title {
+    margin: 0;
+    padding: 0.1em 0 0.1em 0.5em;
+    color: white;
+    border-bottom: 1px solid #86989B;
+    font-weight: bold;
+    background-color: #AFC1C4;
+}
+
+div.warning {
+    border: 1px solid #940000;
+}
+
+div.warning p.admonition-title {
+    background-color: #CF0000;
+    border-bottom-color: #940000;
+}
+
+div.admonition ul, div.admonition ol,
+div.warning ul, div.warning ol {
+    margin: 0.1em 0.5em 0.5em 3em;
+    padding: 0;
+}
+
+/* Jubatus Members */
+div.member-box {
+    margin: 20px;
+    border-bottom: solid 1px #cccccc;
+}
+
+div.member-photo {
+    float: left;
+    margin: 0px 10px 10px 10px;
+    padding: 0px 10px 10px 10px;
+}
+
+div.member-photo img {
+    width: 90px;
+}
+
+span.member-name {
+    font-size: 120%;
+    font-weight: bold;
+    margin-right: 10px;
+}
+
+ul.member-social {
+    list-style: none;
+    display: block;
+}
+
+ul.member-social li {
+    float: left;
+    margin-right: 20px;
+    background-repeat: no-repeat;
+    background-position: left 0px;　
+}

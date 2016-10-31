@@ -6,7 +6,7 @@ from unittest import TestCase
 
 from io import StringIO
 
-from jubakit.shell import JubaShell, JubashCommand
+from jubakit.shell import JubaShell, _JubashCommand
 from jubakit.classifier import Classifier, Config
 
 class JubaShellTest(TestCase):
@@ -42,6 +42,8 @@ class JubaShellTest(TestCase):
     self.assertTrue(self._shell().run('classify x 1'))
     self.assertFalse(self._shell().run('error'))
     self.assertFalse(self._shell().run('connect 127.0.0.1 0'))
+    self.assertFalse(self._shell().run('connect 127.0.0.1 -1'))
+    self.assertFalse(self._shell().run('connect this_must_be_unknown_host 9199'))
     self.assertFalse(self._shell('', 'anomaly').run('calc_score x 1'))
 
 class JubashCommandTest(TestCase):
@@ -52,7 +54,7 @@ class JubashCommandTest(TestCase):
     self._service.stop()
 
   def _assert_exit(self, args, status):
-    self.assertEqual(JubashCommand.start(args), status)
+    self.assertEqual(_JubashCommand.start(args), status)
 
   def test_simple(self):
     args = [

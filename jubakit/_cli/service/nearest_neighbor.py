@@ -7,6 +7,7 @@ from jubatus.nearest_neighbor.types import *
 from .generic import GenericCLI
 from ..args import Arguments, Optional, TDatum
 from ..util import *
+from ..._stdio import print
 
 class NearestNeighborCLI(GenericCLI):
   @classmethod

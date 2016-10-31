@@ -31,19 +31,13 @@ class SchemaTest(TestCase):
     self.assertEqual(label, None)
     self.assertEqual({'k1': 'foo'}, dict(d.string_values))
 
-  def test_predict(self):
-    schema = Schema({
+  def test_without_label(self):
+    # schema without label can be defined
+    Schema({
       'k1': Schema.STRING,
-      'k2': Schema.LABEL,
     })
-    self.assertRaises(RuntimeError, schema.predict, {}, True)
 
   def test_illegal_label(self):
-    # schema without label
-    self.assertRaises(RuntimeError, Schema, {
-      'k1': Schema.STRING,
-    })
-
     # schema with multiple labels
     self.assertRaises(RuntimeError, Schema, {
       'k1': Schema.LABEL,
@@ -69,7 +63,8 @@ class DatasetTest(TestCase):
 
   def test_predict(self):
     loader = StubLoader()
-    self.assertRaises(RuntimeError, Dataset, loader, None)
+    dataset = Dataset(loader)  # predict
+    self.assertEqual(['v', 1.0], dataset[0][1].num_values[0])
 
   def test_get_labels(self):
     loader = StubLoader()
@@ -139,6 +134,25 @@ class DatasetTest(TestCase):
     )
 
     expected_labels = ['pos', 'neg', 'pos']
+    expected_k1s = [10, 20, 40]
+    actual_labels = []
+    actual_k1s = []
+    for (idx, (label, d)) in ds:
+      actual_labels.append(label)
+      actual_k1s.append(dict(d.num_values)['k1'])
+
+    self.assertEqual(expected_labels, actual_labels)
+    self.assertEqual(expected_k1s, actual_k1s)
+
+  def test_from_array_without_label(self):
+    ds = Dataset.from_array(
+        [ [10,20,30], [20,10,50], [40,10,30] ], # data
+        None,                                   # labels
+        ['k1', 'k2', 'k3'],                     # feature_names
+        ['pos', 'neg'],                         # label_names
+    )
+
+    expected_labels = [None, None, None]
     expected_k1s = [10, 20, 40]
     actual_labels = []
     actual_k1s = []

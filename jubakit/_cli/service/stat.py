@@ -7,6 +7,7 @@ from jubatus.stat.types import *
 from .generic import GenericCLI
 from ..args import Arguments
 from ..util import *
+from ..._stdio import print
 
 class StatCLI(GenericCLI):
   @classmethod
