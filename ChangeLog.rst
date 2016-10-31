@@ -1,6 +1,29 @@
 ChangeLog
 ====================================================
 
+Release 0.4.0 (2016-10-31)
+---------------------------------------
+
+* New Features
+    * Add Recommender service (#52, #58)
+    * Add model file manipulation tools (#4, #62)
+    * Add ``ConcatLoader`` (#61)
+
+* Improvements
+    * Support Jubatus 1.0 (#66)
+    * Improve Classifier Schema to accept columns without LABEL (#40, #57)
+    * Improve handlign of bool-typed values (#9, #63)
+    * Add option to apply Softmax to the resulting score in Classifier (#59)
+    * Implement feature to enable logging by environment variable (#39, #65)
+    * Improve RPC port allocation method (#44, #54)
+    * Improve jubakit to work with non-standard Homebrew installations on macOS (#32, #35)
+    * Update theme of docs (#60)
+
+* Bug Fixes
+    * Fix non-static Datasets does not allow automatic Schema prediction (#41, #64)
+    * Fix error handling in ``jubash`` command (#55)
+    * Fix error message when Jubatus servers are not installed on macOS (#56)
+
 Release 0.3.0 (2016-08-29)
 ---------------------------------------
 
