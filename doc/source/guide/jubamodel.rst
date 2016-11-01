@@ -15,7 +15,7 @@ Description
 
 ``jubamodel`` is a command line utility to perform low-level manipulation of model files.
 If you are wishing for high-level, user friendly output of models, use ``jubadump`` command instead.
-Unlike ``jubadump``, ``jubamodel`` is service-independent; you can use ``jubadump`` for any services.
+Unlike ``jubadump``, ``jubamodel`` is service-independent; you can use ``jubamodel`` for any services.
 
 The binary model data structure is documented in `Jubatus Wiki <https://github.com/jubatus/jubatus/wiki/Save-and-Load-Policy-(ja)>`_ (in Japanese).
 
@@ -41,7 +41,7 @@ Options
 
    The format can be any of ``text`` (default), ``binary`` or ``json``.
    ``text`` is a user-friendly output of the model file.
-   See :option:`--in-format`` for ``binary`` and ``json``.
+   See :option:`--in-format` for ``binary`` and ``json``.
 
 .. option:: -O <output>, --output <output>
 
