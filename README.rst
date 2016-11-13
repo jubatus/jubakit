@@ -95,6 +95,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
+| weight_model_extract.py           | Extract contents of Weight model file         |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
 
 License
 -------
