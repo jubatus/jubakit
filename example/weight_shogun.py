@@ -53,5 +53,8 @@ for (idx, result) in weight.calc_weight(dataset):
     print('\t{0}\t{1}'.format(f.key, f.value))
   print('---------------------------------------')
 
+# Save the model.
+weight.save("shogun")
+
 # Stop the service.
 weight.stop()
