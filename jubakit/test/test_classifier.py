@@ -13,7 +13,7 @@ except ImportError:
 from jubakit.classifier import Schema, Dataset, Classifier, Config
 from jubakit.compat import *
 
-from . import requireSklearn
+from . import requireSklearn, requireEmbedded
 from .stub import *
 
 class SchemaTest(TestCase):
@@ -203,6 +203,10 @@ class DatasetTest(TestCase):
 class ClassifierTest(TestCase):
   def test_simple(self):
     classifier = Classifier()
+
+  @requireEmbedded
+  def test_embedded(self):
+    classifier = Classifier.run(Config(), embedded=True)
 
 class ConfigTest(TestCase):
   def test_simple(self):

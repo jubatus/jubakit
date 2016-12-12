@@ -7,6 +7,7 @@ from unittest import TestCase
 from jubakit.weight import Schema, Dataset, Weight, Config
 from jubakit.compat import *
 
+from . import requireEmbedded
 from .stub import *
 
 class SchemaTest(TestCase):
@@ -33,6 +34,10 @@ class DatasetTest(TestCase):
 class WeightTest(TestCase):
   def test_simple(self):
     weight = Weight()
+
+  @requireEmbedded
+  def test_embedded(self):
+    weight = Weight.run(Config(), embedded=True)
 
 class ConfigTest(TestCase):
   def test_simple(self):

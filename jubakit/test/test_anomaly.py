@@ -7,6 +7,7 @@ from unittest import TestCase
 from jubakit.anomaly import Schema, Dataset, Anomaly, Config
 from jubakit.compat import *
 
+from . import requireEmbedded
 from .stub import *
 
 class SchemaTest(TestCase):
@@ -50,6 +51,10 @@ class DatasetTest(TestCase):
 class AnomalyTest(TestCase):
   def test_simple(self):
     anomaly = Anomaly()
+
+  @requireEmbedded
+  def test_embedded(self):
+    anomaly = Anomaly.run(Config(), embedded=True)
 
 class ConfigTest(TestCase):
   def test_simple(self):
