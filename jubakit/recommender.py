@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import jubatus
+import jubatus.embedded
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
 from .compat import *
@@ -49,6 +50,10 @@ class Recommender(BaseService):
   @classmethod
   def _client_class(cls):
     return jubatus.recommender.client.Recommender
+
+  @classmethod
+  def _embedded_class(cls):
+    return jubatus.embedded.Recommender
 
   def update_row(self, dataset):
     """
