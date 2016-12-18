@@ -25,7 +25,10 @@ to see the term frequency of each feature vector.
 """
 
 # Load the model file.
-modelpath = sys.argv[1]
+modelpath = 'weight_shogun_model.jubatus'
+if 1 < len(sys.argv):
+    modelpath = sys.argv[1]
+
 with open(modelpath, 'rb') as f:
     model = JubaModel.load_binary(f)
 
