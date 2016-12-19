@@ -32,24 +32,24 @@ if 1 < len(sys.argv):
 model = JubaDump.dump_file(modelpath)
 
 # Extract Label Count
-print('\n{}\n{}\n{}'.format('-'*50, 'Label Information', '-'*50))
+print('\n{0}\n{1}\n{2}'.format('-'*50, 'Label Information', '-'*50))
 print('Count\tLabel')
 label_count = model['storage']['label']['label_count']
 for label, count in label_count.items():
-    print('{}\t{}'.format(count, label))
+    print('{0}\t{1}'.format(count, label))
 
 # Extract Feature Count
-print('\n{}\n{}\n{}'.format('-'*50, 'Feature Information', '-'*50))
+print('\n{0}\n{1}\n{2}'.format('-'*50, 'Feature Information', '-'*50))
 print('Count\tFeature')
 feature_count = model['weights']['document_frequencies']
 for feature, count in feature_count.items():
-    print('{}\t{}'.format(count, feature))
+    print('{0}\t{1}'.format(count, feature))
 
 # Extract Weight of Linear Classifier
-print('\n{}\n{}\n{}'.format('-'*50, 'Weight Information', '-'*50))
+print('\n{0}\n{1}\n{2}'.format('-'*50, 'Weight Information', '-'*50))
 weights = model['storage']['storage']['weight']
 for feature, label_values in weights.items():
-    print('Feature: {}'.format(feature))
+    print('Feature: {0}'.format(feature))
     print('\tWeight  \tClass')
     for label, values in label_values.items():
         print('\t{0:+.5f}\t{1}'.format(values['v1'], label))
