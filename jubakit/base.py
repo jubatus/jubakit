@@ -458,8 +458,8 @@ class BaseService(object):
   @classmethod
   def run(cls, config, port=None, embedded=False):
     """
-    Runs a new standalone server or embedded instnace and returns the
-    serivce instance.
+    Runs a new standalone server or embedded instance and returns the
+    service instance.
     """
     if embedded:
       backend = _ServiceBackendEmbedded(cls._embedded_class(), config)
