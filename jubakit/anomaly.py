@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import jubatus
+import jubatus.embedded
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
 from .compat import *
@@ -54,6 +55,10 @@ class Anomaly(BaseService):
   @classmethod
   def _client_class(cls):
     return jubatus.anomaly.client.Anomaly
+
+  @classmethod
+  def _embedded_class(cls):
+    return jubatus.embedded.Anomaly
 
   def add(self, dataset):
     """
