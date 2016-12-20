@@ -89,6 +89,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | classifier_twitter.py             | Handling Twitter Streams                      |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
+| classifier_model_extract.py       | Extract contents of Classfier model file      |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
 | anomaly_auc.py                    | Anomaly detection and metrics                 |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | recommender_npb.py                | Recommend similar items                       |                       |
