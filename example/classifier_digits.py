@@ -28,16 +28,19 @@ n_train_samples = int(n_samples / 2)
 cfg = Config(method='AROW', parameter={'regularization_weight': 0.1})
 classifier = Classifier.run(cfg)
 
+print("Started Service: {0}".format(classifier))
+
 # Train the classifier using the first half of the dataset.
-print("Training...")
 train_ds = dataset[:n_train_samples]
+print("Training...: {0}".format(train_ds))
 for _ in classifier.train(train_ds): pass
 
 # Test the classifier using the last half of the dataset.
-print("Testing...")
+test_ds = dataset[n_train_samples:]
+print("Testing...: {0}".format(test_ds))
 y_true = []
 y_pred = []
-for (idx, label, result) in classifier.classify(dataset[n_train_samples:]):
+for (idx, label, result) in classifier.classify(test_ds):
   y_true.append(label)
   y_pred.append(result[0][0])
 
