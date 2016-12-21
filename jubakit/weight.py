@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import jubatus
+import jubatus.embedded
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig
 from .compat import *
@@ -34,6 +35,10 @@ class Weight(BaseService):
   @classmethod
   def _client_class(cls):
     return jubatus.weight.client.Weight
+
+  @classmethod
+  def _embedded_class(cls):
+    return jubatus.embedded.Weight
 
   def update(self, dataset):
     """

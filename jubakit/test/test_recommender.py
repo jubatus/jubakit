@@ -10,6 +10,7 @@ from unittest import TestCase
 from jubakit.recommender import Schema, Dataset, Recommender, Config
 from jubakit.compat import *
 
+from . import requireEmbedded
 from .stub import *
 
 def filter_warning():
@@ -45,6 +46,10 @@ class DatasetTest(TestCase):
 class RecommenderTest(TestCase):
   def test_simple(self):
     recommender = Recommender()
+
+  @requireEmbedded
+  def test_embedded(self):
+    recommender = Recommender.run(Config(), embedded=True)
 
   def test_update_row(self):
     recommender = Recommender.run(Config())
