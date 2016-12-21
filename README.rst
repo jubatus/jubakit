@@ -91,6 +91,10 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | classifier_model_extract.py       | Extract contents of Classfier model file      |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
+| classifier_sklearn_wrapper.py     | Classification using scikit-learn wrapper     | ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| classifier_sklearn_grid_search.py | Grid Search example using scikit-learn wrapper| ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
 | anomaly_auc.py                    | Anomaly detection and metrics                 |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | recommender_npb.py                | Recommend similar items                       |                       |
