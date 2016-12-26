@@ -1,6 +1,20 @@
 ChangeLog
 ====================================================
 
+Release 0.4.1 (2016-12-26)
+---------------------------------------
+
+* New Features
+    * Support Embedded Jubatus (#70)
+
+* Improvements
+    * Implement ``__repr__`` method to base classes (#42, #71)
+    * Add ``jubakit.model.JubaModel`` example (#68)
+    * Add ``jubakit.model.JubaDump`` example (#69, #71)
+
+* Bug Fixes
+    * Fix document typos (#67)
+
 Release 0.4.0 (2016-10-31)
 ---------------------------------------
 
