@@ -50,6 +50,25 @@ Jubakit can even be used with externally managed Jubatus processes.
 
   # ... do some train/classify tasks ...
 
+Embedded Jubatus
+----------------
+
+Jubakit can use "embedded" version of Jubatus as a backend, which reduces the cost of process invocation and RPC overhead.
+
+.. code-block:: python
+
+  from jubakit.classifier import Config, Classifier
+
+  # Create a default configuration.
+  cfg = Config()
+
+  # Create a new service in "Embedded" mode.
+  classifier_service = Classifier.run(cfg, embedded=True)
+
+  # ... do some train/classify tasks ...
+
+To use "embedded" feature, ``embedded_jubatus`` ([embedded-jubatus-python](https://github.com/jubatus/embedded-jubatus-python)) Python module, which is a wrapper module to call machine learning algorithms provided in Jubatus Core library, needs to be installed.
+
 List of Services
 ----------------
 

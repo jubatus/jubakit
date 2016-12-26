@@ -121,8 +121,8 @@ class BaseSchema(object):
       raise RuntimeError('{0} key must be an unique key in schema'.format(name))
     return keys[0]
 
-  def __str__(self):
-    return str({'keys': self._key2name, 'types': self._key2type, 'fallback_type': self._fallback})
+  def __repr__(self):
+    return '<jubakit: Schema {0}>'.format(str({'keys': self._key2name, 'types': self._key2type, 'fallback_type': self._fallback}))
 
 class GenericSchema(BaseSchema):
   """
@@ -382,11 +382,10 @@ class BaseDataset(object):
     else:
       return self._schema.transform(self._data[index])
 
-  def __str__(self):
-    return str(self._data)
-
   def __repr__(self):
-    return repr(self._data)
+    if self._static:
+      return '<jubakit: Static Dataset {0} records>'.format(len(self._data))
+    return '<jubakit: Non-static Dataset>'
 
   def __iter__(self):
     """
@@ -423,6 +422,7 @@ class BaseService(object):
     self._port = port
     self._cluster = cluster
     self._timeout = timeout
+    self._embedded = False
     self._backend = None
 
   def __del__(self):
@@ -447,23 +447,40 @@ class BaseService(object):
     raise NotImplementedError()
 
   @classmethod
-  def run(cls, config, port=None):
+  def _embedded_class(cls):
     """
-    Runs a new standalone server and returns the serivce instance to access
-    the server.
+    Subclasses must override this method and return the embedded class.
     """
-    backend = _ServiceBackend(cls.name(), config, port)
-    _logger.info('service %s started on port %d', cls.name(), backend.port)
+    #return jubatus.embedded.Classifier
+    raise NotImplementedError()
 
-    # Returns the Service instance.
-    service = cls('127.0.0.1', backend.port)
-    service._backend = backend
+  @classmethod
+  def run(cls, config, port=None, embedded=False):
+    """
+    Runs a new standalone server or embedded instance and returns the
+    service instance.
+    """
+    if embedded:
+      backend = _ServiceBackendEmbedded(cls._embedded_class(), config)
+      service = cls()
+      service._backend = backend
+      service._embedded = True
+    else:
+      backend = _ServiceBackend(cls.name(), config, port)
+      _logger.info('service %s started on port %d', cls.name(), backend.port)
+      service = cls('127.0.0.1', backend.port)
+      service._backend = backend
     return service
 
   def _client(self):
+    if self._embedded:
+      return self._backend.model
     return self._client_class()(self._host, self._port, self._cluster, self._timeout)
 
   def _shell(self, **kwargs):
+    if self._embedded:
+      raise RuntimeError('embedded service does not support shell')
+
     return JubaShell(
       host=self._host,
       port=self._port,
@@ -513,6 +530,8 @@ class BaseService(object):
     Returns the status of this server.  In distributed mode, returns statuses
     of all members.
     """
+    if self._embedded:
+      return {'127.0.0.1_0': self._backend.get_status()}
     return self._client().get_status()
 
   def shell(self, **kwargs):
@@ -520,6 +539,26 @@ class BaseService(object):
     Starts an interactive shell session for this service.
     """
     self._shell(**kwargs).interact()
+
+  def __repr__(self):
+    if self._embedded:
+      return '<jubakit: Embedded Service ({0})>'.format(self.name())
+    return '<jubakit: RPC Service ({0}) [{1}@{2}:{3}]{4}>'.format(
+           self.name(), self._cluster, self._host, self._port,
+           ', started by jubakit' if self._backend else '')
+
+class _ServiceBackendEmbedded(object):
+  def __init__(self, clazz, config):
+    self.model = clazz(config)
+
+  def stop(self):
+    pass
+
+  def get_status(self):
+    """
+    get_status API is not supported in embedded service.
+    """
+    return {}
 
 class BaseConfig(dict):
   """

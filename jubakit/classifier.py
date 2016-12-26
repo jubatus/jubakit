@@ -3,6 +3,7 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import jubatus
+import jubatus.embedded
 
 from .base import GenericSchema, BaseDataset, BaseService, GenericConfig, Utils
 from .loader.array import ArrayLoader, ZipArrayLoader
@@ -125,6 +126,10 @@ class Classifier(BaseService):
   @classmethod
   def _client_class(cls):
     return jubatus.classifier.client.Classifier
+
+  @classmethod
+  def _embedded_class(cls):
+    return jubatus.embedded.Classifier
 
   def train(self, dataset):
     """
