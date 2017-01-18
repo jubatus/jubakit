@@ -6,7 +6,7 @@ Service makes update/analyze RPC calls to Jubatus servers for each record in Dat
 API
 ---
 
-Service classes generally provide APIs that have the same name as the `Jubatus RPC API <http://jubat.us/en/api.html>`_.
+Service classes generally provide APIs that have the same name as the `Jubatus RPC API <http://jubat.us/en/api/index.html>`_.
 These APIs takes Dataset as an argument.
 
 In addition to machine learning APIs, Service classes provide ``clear``, ``save``, ``load`` and ``get_status`` APIs.
@@ -74,9 +74,9 @@ List of Services
 
 Currently the following Services are available in Jubakit.
 
-* `Classifier <http://jubat.us/en/api_classifier.html>`_ -- :py:class:`jubakit.classifier.Classifier`
-* `Anomaly <http://jubat.us/en/api_anomaly.html>`_ -- :py:class:`jubakit.anomaly.Anomaly`
-* `Recommender <http://jubat.us/en/api_recommender.html>`_ -- :py:class:`jubakit.recommender.Recommender`
-* `Weight <http://jubat.us/en/api_weight.html>`_ -- :py:class:`jubakit.weight.Weight`
+* `Classifier <http://jubat.us/en/api/api_classifier.html>`_ -- :py:class:`jubakit.classifier.Classifier`
+* `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_ -- :py:class:`jubakit.anomaly.Anomaly`
+* `Recommender <http://jubat.us/en/api/api_recommender.html>`_ -- :py:class:`jubakit.recommender.Recommender`
+* `Weight <http://jubat.us/en/api/api_weight.html>`_ -- :py:class:`jubakit.weight.Weight`
 
 Support of other Services is ongoing.
