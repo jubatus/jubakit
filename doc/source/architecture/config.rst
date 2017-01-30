@@ -17,7 +17,7 @@ Here is a default Config contents for Classifier Service.
   {'converter': {'string_filter_rules': [], 'num_filter_types': {}, 'num_types': {}, 'num_filter_rules': [], 'string_rules': [{'global_weight': 'idf', 'sample_weight': 'tf', 'key': '*', 'type': 'unigram'}], 'string_filter_types': {}, 'num_rules': [{'key': '*', 'type': 'num'}], 'binary_types': {}, 'binary_rules': [], 'string_types': {'bigram': {'method': 'ngram', 'char_num': '2'}, 'trigram': {'method': 'ngram', 'char_num': '3'}, 'unigram': {'method': 'ngram', 'char_num': '1'}}}, 'method': 'AROW', 'parameter': {'regularization_weight': 1.0}}
 
 The data structure is same as the Jubatus servers' JSON configuration file.
-See the `Jubatus API Reference <http://jubat.us/en/api.html>`_ for details.
+See the `Jubatus API Reference <http://jubat.us/en/api/index.html>`_ for details.
 
 Machine Learning Parameters
 ---------------------------
