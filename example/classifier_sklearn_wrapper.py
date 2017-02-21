@@ -12,7 +12,7 @@ In this example, we show how to use scikit-learn wrapper's
 
 """
 
-from jubakit.classifier.wrapper import LinearClassifier, NearestNeighborsClassifier
+from jubakit.wrapper.classifier import LinearClassifier, NearestNeighborsClassifier
 
 from sklearn.datasets import load_digits
 from sklearn.decomposition import PCA

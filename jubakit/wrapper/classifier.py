@@ -4,7 +4,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 
 import numpy as np
 from sklearn.base import BaseEstimator, ClassifierMixin
-from .classifier import Classifier, Config, Dataset
+from ..classifier import Classifier, Config, Dataset
 
 
 class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):

@@ -13,7 +13,7 @@ In this example, we show how to use scikit-learn wrapper.
 
 import sklearn
 from operator import itemgetter
-from jubakit.wrapper import LinearClassifier, NearestNeighborsClassifier
+from jubakit.wrapper.classifier import LinearClassifier, NearestNeighborsClassifier
 from sklearn.datasets import load_digits
 from sklearn.utils import shuffle
 from sklearn.pipeline import Pipeline
