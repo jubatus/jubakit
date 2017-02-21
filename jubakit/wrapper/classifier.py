@@ -14,15 +14,13 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
   
   def __init__(self, n_iter=1, shuffle=False, softmax=False, embedded=True, seed=None):
     """
-    Creates a base class for Jubatus Classifiers"
+    Creates a base class for Jubatus Classifiers.
     """
     self.softmax = softmax
     self.n_iter = n_iter
     self.shuffle = shuffle
     self.embedded = embedded
     self.seed = seed
-    self.fitted_ = False
-    self.clf_ = None
 
   @classmethod
   def _launch_classifier(self):
@@ -38,16 +36,14 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
     """
     if getattr(self, 'classes_', None) is None:
       self.classes_ = np.unique(y)
-    if self.clf_ is None:
+    if getattr(self, 'classifier_', None) is None:
       self._launch_classifier()
-      if not self.embedded:
-        self.clf_.clear()
+      self.classifier_.clear()
     dataset = Dataset.from_data(X, y)
     for i in range(self.n_iter):
       if self.shuffle:
         dataset = dataset.shuffle(self.seed)
-      for _ in self.clf_.train(dataset): pass
-    self.fitted_ = True
+      for _ in self.classifier_.train(dataset): pass
     return self
 
   def fit(self, X, y):
@@ -55,19 +51,18 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
     Fit model.
     """
     self._launch_classifier()
-    if not self.embedded:
-      self.clf_.clear()
+    self.classifier_.clear()
     return self.partial_fit(X, y)
 
   def predict(self, X):
     """
     Predict class labels for samples in X.
     """
-    if not self.fitted_:
+    if getattr(self, 'classifier_', None) is None:
       raise RuntimeError('This estimator instance is not fitted yet.')
     y_pred = np.empty(X.shape[0], dtype=self.classes_.dtype)
     dataset = Dataset.from_data(X)
-    for idx, _, result in self.clf_.classify(dataset, softmax=self.softmax):
+    for idx, _, result in self.classifier_.classify(dataset, softmax=self.softmax):
       y_pred[idx] = result[0][0]
     return y_pred
 
@@ -75,11 +70,11 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
     """
     Predict confidence scores for samples.
     """
-    if not self.fitted_:
+    if getattr(self, 'classifier_', None) is None:
       raise RuntimeError('This estimator instance is not fitted yet.')
     scores = np.empty((X.shape[0], len(self.classes_)))
     dataset = Dataset.from_data(X)
-    for idx, _, result in self.clf_.classify(dataset, softmax=self.softmax):
+    for idx, _, result in self.classifier_.classify(dataset, softmax=self.softmax):
       for (label, score) in result:
         scores[idx][np.searchsorted(self.classes_, label)] = score
     return scores
@@ -87,13 +82,13 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
   @classmethod
   def get_params(self, deep=True):
     """ 
-    Return Parameters 
+    Return parameters. 
     """
     raise NotImplementedError()
   
   def set_params(self, **params):
     """
-    Set Parameters
+    Set parameters
     """
     for param, value in params.items():
       setattr(self, param, value)
@@ -103,16 +98,16 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
     """  
     Save the classifier model using name.
     """
-    if self.clf_ is not None:
-      self.clf_.save(name)
+    if self.classifier_ is not None:
+      self.classifier_.save(name)
 
   def stop(self):
     """
     Stop the backend process if exists.
     """
-    if not self.embedded and self.clf_ is not None:
-      self.clf_.stop()
-      self.clf_ = None
+    if not self.embedded and self.classifier_ is not None:
+      self.classifier_.stop()
+      self.classifier_ = None
 
 
 class LinearClassifier(BaseJubatusClassifier):
@@ -125,13 +120,13 @@ class LinearClassifier(BaseJubatusClassifier):
   
   def _launch_classifier(self):
     if self.method in ('perceptron', 'PA'):
-      self.cfg_ = Config(method=self.method)
+      self.config_ = Config(method=self.method)
     elif self.method in ('PA1', 'PA2', 'CW', 'AROW', 'NHERD'):
-      self.cfg_ = Config(method=self.method, 
+      self.config_ = Config(method=self.method, 
                             parameter={'regularization_weight': self.regularization_weight})
     else:
       raise NotImplementedError('method {} is not implememented yet.'.format(self.method))
-    self.clf_ = Classifier.run(config=self.cfg_, embedded=self.embedded) 
+    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded) 
 
   def get_params(self, deep=True):
     return {
@@ -157,17 +152,17 @@ class NearestNeighborsClassifier(BaseJubatusClassifier):
 
   def _launch_classifier(self):
     if self.method in ('euclid_lsh', 'lsh', 'minhash'):
-      self.cfg_ = Config(method='NN', parameter={'method': self.method,
-                                                 'nearest_neighbor_num': self.nearest_neighbor_num,
-                                                 'local_sensitivity': self.local_sensitivity,
-                                                 'parameter': {'hash_num': self.hash_num}})
+      self.config_ = Config(method='NN', parameter={'method': self.method,
+                                                    'nearest_neighbor_num': self.nearest_neighbor_num,
+                                                    'local_sensitivity': self.local_sensitivity,
+                                                    'parameter': {'hash_num': self.hash_num}})
     elif self.method in ('euclidean', 'cosine'):
-      self.cfg_ = Config(method=self.method, 
-                         parameter={'nearest_neighbor_num': self.nearest_neighbor_num,
-                                    'local_sensitivity': self.local_sensitivity})
+      self.config_ = Config(method=self.method, 
+                            parameter={'nearest_neighbor_num': self.nearest_neighbor_num,
+                                       'local_sensitivity': self.local_sensitivity})
     else:
       raise NotImplementedError('method {} is not implememented yet.'.format(self.method))                            
-    self.clf_ = Classifier.run(config=self.cfg_, embedded=self.embedded) 
+    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded) 
 
   def get_params(self, deep=True):
     return {

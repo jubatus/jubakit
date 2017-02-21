@@ -9,7 +9,7 @@ try:
 except ImportError:
   pass
 
-from jubakit.wrapper import LinearClassifier, NearestNeighborsClassifier
+from jubakit.wrapper.classifier import LinearClassifier, NearestNeighborsClassifier
 from . import requireEmbedded
 
 
