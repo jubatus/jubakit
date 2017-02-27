@@ -49,7 +49,7 @@ You can also connect to a remote server and/or a custom port:
 
 For other options refer to :doc:`../guide/jubash` or ``jubash --help``.
 
-Now you can call any methods defined in `Jubatus RPC API <http://jubat.us/en/api.html>`_ as if it is a command.
+Now you can call any methods defined in `Jubatus RPC API <http://jubat.us/en/api/index.html>`_ as if it is a command.
 For Classifier, you can use ``train`` and ``classify`` command to communicate with Jubatus server interactively.
 
 .. code::
