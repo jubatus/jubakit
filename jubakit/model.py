@@ -7,6 +7,7 @@ This module provides features to manipulate model files.
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 import sys
+import copy
 import struct
 from binascii import crc32
 from io import BytesIO
@@ -244,6 +245,23 @@ class JubaModel(object):
     """
     return self.user.user_data
 
+  def transform(self, service):
+    t = self.system.type
+    trans = None
+    if t == 'classifier':
+      trans = ClassifierTransformer(self)
+    elif t == 'regression':
+      trans = RegressionTransformer(self)
+    elif t == 'recommender':
+      trans = RecommenderTransformer(self)
+    elif t == 'anomaly':
+      trans = AnomalyTransformer(self)
+    elif t == 'clustering':
+      trans = ClusteringTransformer(self)
+    else:
+      raise UnsupportedTransformationError(t)
+    return trans.transform(service)
+
   class ModelPart(object):
     def __init__(self):
       for (key, _, default) in self.fields():
@@ -366,6 +384,160 @@ class JubaModel(object):
         ('user_data', dict, {}),
       ]
 
+class BaseTransformer(object):
+  def __init__(self, _m):
+    self._m = _m
+    self._cfg = json.loads(_m.system.config)
+
+  def transform(self, service):
+    """
+    Transforms the model into the specified service.
+    """
+    # This is a fallback implementation.
+    # Subclasses implement actual transformation rules.
+    raise UnsupportedTransformationError(service)
+
+  def _get_converted_model(self, service, user_version, user_data, config):
+    user_raw = BytesIO()
+
+    # Write user container header to user_raw.
+    pk = msgpack.Packer()
+    user_raw.write(pk.pack_array_header(2))
+    user_raw.write(pk.pack(user_version))
+    user_raw.write(pk.pack_array_header(len(user_data)))
+
+    # Write user_data to user_raw.
+    for d in user_data:
+      user_raw.write(d.getvalue())
+
+    # Create transformed model.
+    m1 = self._m
+    m2 = JubaModel()
+    m2.header = copy.deepcopy(m1.header)
+    m2.system = copy.deepcopy(m1.system)
+    m2.system.type = service
+    m2.system.config = json.dumps(config)
+    m2._user_raw = user_raw.getvalue()
+    m2.user = JubaModel.UserContainer.loads(m2._user_raw)
+
+    # Recompute CRC32 checksum and field lengths.
+    m2.fix_header()
+
+    return m2
+
+class GenericTransformer(BaseTransformer):
+  """
+  Transformation for services having generic 2-element model data
+  structure (service model and weight manager model).
+  It can be converted to Weight model.
+  """
+
+  def transform(self, service):
+    if service == 'weight':
+      (rm, wm) = self._unpack_generic()
+      return self._get_converted_model(service, 1, [wm], self._cfg)
+    return super(GenericTransformer, self).transform(service)
+
+  def _unpack_generic(self, expected_version=1):
+    """
+    Unpacks the 2-element model data structure and returns file-like objects
+    of raw service model and weight manager model.
+    """
+    (rm, wm) = (BytesIO(), BytesIO())
+    unp = msgpack.Unpacker(BytesIO(self._m._user_raw))
+    assert unp.read_array_header() == 2     # <user_container>
+    assert unp.unpack() == expected_version #  +- <version>
+    assert unp.read_array_header() == 2     #  +- <user_data>
+    unp.unpack(rm.write)                    #      +- (service model)
+    unp.unpack(wm.write)                    #      +- wm_.get_model()->pack(pk)
+    return rm, wm
+
+  def _is_method(self, *methods):
+    """
+    Returns True if the method used in the model is any of the specified methods.
+    """
+    return self._cfg['method'] in methods
+
+  def _get_backend_config(self):
+    """
+    Extracts and returns the backend configuration data.
+    """
+    cfg = self._cfg
+    return {
+      'method': cfg['parameter']['method'],
+      'parameter': cfg['parameter']['parameter'],
+      'converter': cfg['converter'],
+    }
+
+class ClassifierTransformer(GenericTransformer):
+  def transform(self, service):
+    if service == 'nearest_neighbor' and self._is_method('nearest_neighbor', 'NN'):
+      (rm, wm) = self._unpack_generic()
+      return self._get_converted_model(service, 1, [self._extract_nn(rm), wm], self._get_backend_config())
+    return super(ClassifierTransformer, self).transform(service)
+
+  def _extract_nn(self, rm):
+    nn = BytesIO()
+    unp = msgpack.Unpacker(rm)
+    assert unp.read_array_header() == 2   # classifier_->pack(pk)
+    unp.unpack(nn.write)                  #  +- nearest_neighbor_engine_->pack(pk)
+    unp.skip()                            #  +- labels_.pack(pk)
+    return nn
+
+class RegressionTransformer(ClassifierTransformer):
+  # The same transformation code as Classifier can be used for Regression models.
+  pass
+
+class RecommenderTransformer(GenericTransformer):
+  def transform(self, service):
+    if service == 'nearest_neighbor' and self._is_method('nearest_neighbor_recommender'):
+      (rm, wm) = self._unpack_generic()
+      return self._get_converted_model(service, 1, [self._extract_nn(rm), wm], self._get_backend_config())
+    return super(RecommenderTransformer, self).transform(service)
+
+  def _extract_nn(self, rm):
+    nn = BytesIO()
+    unp = msgpack.Unpacker(rm)
+    assert unp.read_array_header() == 2   # recommender_->pack(pk)
+    unp.skip()                            #  +- orig_.pack(packer)
+    unp.unpack(nn.write)                  #  +- nearest_neighbor_engine_->pack(pk)
+    return nn
+
+class AnomalyTransformer(GenericTransformer):
+  def transform(self, service):
+    if service == 'nearest_neighbor' and self._is_method('light_lof'):
+      (rm, wm) = self._unpack_generic()
+      return self._get_converted_model(service, 1, [self._extract_nn(rm), wm], self._get_backend_config())
+    elif service == 'recommender' and self._is_method('lof'):
+      (rm, wm) = self._unpack_generic()
+      return self._get_converted_model(service, 1, [self._extract_recommender(rm), wm], self._get_backend_config())
+    return super(AnomalyTransformer, self).transform(service)
+
+  def _extract_nn(self, rm):
+    nn = BytesIO()
+    unp = msgpack.Unpacker(rm)
+    assert unp.read_array_header() == 2   # anomaly_->pack(pk)
+    unp.unpack(nn.write)                  #  +- nearest_neighbor_engine_->pack(pk)
+    unp.skip()                            #  +- mixable_scores_->get_model()->pack(packer)
+    return nn
+
+  def _extract_recommender(self, rm):
+    nn = BytesIO()
+    unp = msgpack.Unpacker(rm)
+    assert unp.read_array_header() == 2   # anomaly_->pack(pk)
+    unp.skip()                            #  +- mixable_storage_->get_model()->pack(packer)
+    unp.unpack(nn.write)                  #  +- nn_engine_->pack(packer)
+    return nn
+
+class ClusteringTransformer(GenericTransformer):
+  # Only supports conversion to weight service.
+  pass
+
+class UnsupportedTransformationError(Exception):
+  def __init__(self, service):
+    msg = 'Error: this model cannot be transformed as {0}'.format(service)
+    super(UnsupportedTransformationError, self).__init__(msg)
+
 class InvalidModelFormatError(Exception):
   pass
 
@@ -393,7 +565,7 @@ class _JubaModelCommand(object):
 
   @classmethod
   def run(cls, target, in_fmt, out_fmt, output=None,
-          fix_header=False, output_config=None,
+          fix_header=False, output_config=None, transform=None,
           replace_config=None, replace_version=None,
           no_validate=False):
     # Predict model file format
@@ -419,6 +591,10 @@ class _JubaModelCommand(object):
       raise JubaModelError('{0}: failed to parse model as {1}'.format(target, in_fmt), e)
     except Exception as e:
       raise JubaModelError('{0}: failed to load from model'.format(target), e)
+
+    # Transform model
+    if transform:
+      m = m.transform(transform)
 
     # Replace config file
     if replace_config is not None:
@@ -478,6 +654,7 @@ class _JubaModelCommand(object):
     USAGE = '''
     jubamodel [--in-format IN_FORMAT] [--out-format OUT_FORMAT]
               [--output OUTPUT] [--output-config OUTPUT_CONFIG]
+              [--transform TRANSFORM]
               [--no-validate] [--fix-header]  model_file
     jubamodel --help'''
 
@@ -495,6 +672,8 @@ class _JubaModelCommand(object):
                       help='specify output file instead of stdout')
     parser.add_option('-C', '--output-config',   type='str',                       default=None,
                       help='specify output file of config extracted from model')
+    parser.add_option('-T', '--transform',       type='str',                       default=None,
+                      help='transform model into another service')
     parser.add_option('-R', '--replace-config',  type='str',                       default=None,
                       help='replace configuration in model with specified file')
     parser.add_option('-Z', '--replace-version', type='str',                       default=None,
@@ -549,6 +728,7 @@ class _JubaModelCommand(object):
         out_fmt=args.out_format,
         output=args.output,
         output_config=args.output_config,
+        transform=args.transform,
         replace_config=args.replace_config,
         replace_version=args.replace_version,
         no_validate=args.no_validate,
