@@ -8,7 +8,7 @@ Synopsis
 
   jubamodel [--in-format IN_FORMAT] [--out-format OUT_FORMAT]
             [--output OUTPUT] [--output-config OUTPUT_CONFIG]
-            [--replae-config REPLACE_CONFIG] [--replace-version REPLACE_VERSION]
+            [--replace-config REPLACE_CONFIG] [--replace-version REPLACE_VERSION]
             [--no-validate] [--fix-header] [--help]  model_file
 
 Description
@@ -55,7 +55,7 @@ Options
    Path to the output config file.
    When specified, Jubatus configuration (JSON) will be extracted from the model and written to the specified file.
 
-.. option:: -R <replace_config>, --replae-config <replace_config>
+.. option:: -R <replace_config>, --replace-config <replace_config>
 
    Path to the configuration file to use.
    When specified, Jubatus configuration (JSON) in the original model file will be overwritten by the contents of the specified file.
