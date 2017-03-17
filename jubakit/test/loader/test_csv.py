@@ -94,6 +94,25 @@ class CSVLoaderTest(TestCase):
         self.assertEqual('テスト2', row['列2'])
       self.assertEqual(2, lines)
 
+  def test_restkey(self):
+    with TempFile() as f:
+      f.write("テスト1,テスト2\nテスト1,テスト2".encode('utf-8'))
+      f.flush()
+      loader = CSVLoader(f.name, ['c1'], 'utf-8', restkey='garbage')
+      for row in loader:
+        self.assertEqual('テスト1', row['c1'])
+        self.assertEqual(['テスト2'], row['garbage'])
+
+  def test_restval(self):
+    with TempFile() as f:
+      f.write("テスト1,テスト2\nテスト1,テスト2".encode('utf-8'))
+      f.flush()
+      loader = CSVLoader(f.name, ['c1', 'c2', 'c3'], 'utf-8', restval='<blank>')
+      for row in loader:
+        self.assertEqual('テスト1', row['c1'])
+        self.assertEqual('テスト2', row['c2'])
+        self.assertEqual('<blank>', row['c3'])
+
   @requirePython3
   def test_unicode_separator(self):
     with TempFile() as f:
