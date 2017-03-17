@@ -8,6 +8,7 @@ Synopsis
 
   jubamodel [--in-format IN_FORMAT] [--out-format OUT_FORMAT]
             [--output OUTPUT] [--output-config OUTPUT_CONFIG]
+            [--replae-config REPLACE_CONFIG] [--replace-version REPLACE_VERSION]
             [--no-validate] [--fix-header] [--help]  model_file
 
 Description
@@ -54,6 +55,22 @@ Options
    Path to the output config file.
    When specified, Jubatus configuration (JSON) will be extracted from the model and written to the specified file.
 
+.. option:: -R <replace_config>, --replae-config <replace_config>
+
+   Path to the configuration file to use.
+   When specified, Jubatus configuration (JSON) in the original model file will be overwritten by the contents of the specified file.
+   You may also want to specify :option:`--fix-header` together, so that CRC32 checksum and other header values are updated according to the new configuration.
+
+   When using this option, be sure you truly understand what you are doing, as some hyper parameters are not expected to be changed after training models.
+
+.. option:: -Z <replace_version>, --replace-version <replace_version>
+
+   New Jubatus version string (e.g., `1.0.1`) to use.
+   When specified, Jubatus version embedded in the model file will be overwritten by the specified version.
+   You may also want to specify :option:`--fix-header` together, so that CRC32 checksum and other header values are updated according to the new version.
+
+   Although this may help migrating models between different Jubatus versions, there is no guarantee that the modified model can be loaded to the specified Jubatus version.
+
 .. option:: -f, --no-validate
 
    When loading model files in ``binary`` format, ``jubamodel`` validates the model data structure (including CRC32 checksum).
@@ -61,7 +78,9 @@ Options
 
 .. option:: -F, --fix-header
 
-   When this option is specified, the model data structure will be fixed.
+   When this option is specified, the model data structure is tried to be fixed.
+   This includes recomputation of CRC32 checksum and container lengths.
+
    See the example section for details.
 
 .. option:: -h, --help
@@ -85,7 +104,7 @@ To convert the binary model into JSON format:
   $ jubamodel -o json -O /tmp/model.json /tmp/127.0.0.1_9199_classifier_test.jubatus
 
 Once converted into JSON format, you can manually modify the JSON file.
-You can then convert the modified JSON model back to the binary model; note the ``-F`` option, which recomputes CRC32 checksum and other system data.
+You can then convert the modified JSON model back to the binary model; note the :option:`-F` option, which recomputes CRC32 checksum and other system data.
 
 ::
 
