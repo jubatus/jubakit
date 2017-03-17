@@ -57,34 +57,50 @@ class _UnicodeDictReader(csv.DictReader):
     self._encoding = encoding
 
     # DictReader in Python 2.x use str (bytes) for parameters, whereas Python 3.x use
-    # str (unicode) for them.  The code below is intended to absorbs the difference.
-    def convert(v):
-      if PYTHON3 and isinstance(v, bytes):
-        return v.decode(encoding)
-      elif not PYTHON3 and isinstance(v, unicode_t):
-        return v.encode(encoding)
-      return v
-
-    for k in ['delimiter', 'escapechar', 'quotechar', 'lineterminator', 'restkey', 'restval']:
-      if k in kwargs: kwargs[k] = convert(kwargs[k])
-
-    fieldnames = kwargs.get('fieldnames', None)
-    if fieldnames:
-      kwargs['fieldnames'] = list(map(lambda x: convert(x), fieldnames))
+    # str (unicode) for them.  The code below is intended to absorb the difference.
+    for k in ['delimiter', 'escapechar', 'quotechar', 'lineterminator', 'restkey', 'restval', 'fieldnames']:
+      if k in kwargs: kwargs[k] = self._native_all(kwargs[k], encoding)
 
     # DictReader in Python 2.x cannot handle Unicode input.
     # We transcode each line of CSV row into bytes for Py2.
-    def encode_file(f):
-      for line in f:
-        yield line.encode(encoding)
-    f = f if PYTHON3 else encode_file(f)
+    f = f if PYTHON3 else self._encode_file(f, encoding)
     csv.DictReader.__init__(self, f, *args, **kwargs)
 
   def next(self):
     r = csv.DictReader.next(self)
-    if PYTHON3:
-      return r
-    else:
-      # DictReader in Python 2.x returns rows in bytes.  We transcode keys/values of
-      # the row dict into Unicode like in Python 3.x.
-      return dict([(k.decode(self._encoding), r[k].decode(self._encoding)) for k in r.keys()])
+
+    # DictReader in Python 2.x returns rows in bytes.  We transcode keys/values of
+    # the row dict into Unicode like in Python 3.x.
+    return r if PYTHON3 else self._decode_all(r, self._encoding)
+
+  def _native_all(self, v, enc):
+    """
+    Converts the input to native `str` (i.e., Unicode on Python 3, bytes on Python 2), which
+    is supported by `csv.DictReader`, recursively.
+    """
+    if PYTHON3 and isinstance(v, bytes):
+      return v.decode(enc)
+    elif not PYTHON3 and isinstance(v, unicode_t):
+      return v.encode(enc)
+    elif isinstance(v, list):
+      return [self._native_all(elem, enc) for elem in v]
+    return v
+
+  def _decode_all(self, v, enc):
+    """
+    Decodes the input recursively.
+    """
+    if isinstance(v, bytes):
+      return v.decode(enc)
+    elif isinstance(v, list):
+      return [self._decode_all(elem, enc) for elem in v]
+    elif isinstance(v, dict):
+      return dict([ (self._decode_all(elem[0], enc), self._decode_all(elem[1], enc)) for elem in v.items() ])
+    return v
+
+  def _encode_file(self, f, enc):
+    """
+    Read from the text stream (unicode) and emits it as bytes.
+    """
+    for line in f:
+      yield line.encode(enc)
