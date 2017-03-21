@@ -393,7 +393,9 @@ class _JubaModelCommand(object):
 
   @classmethod
   def run(cls, target, in_fmt, out_fmt, output=None,
-          fix_header=False, output_config=None, no_validate=False):
+          fix_header=False, output_config=None,
+          replace_config=None, replace_version=None,
+          no_validate=False):
     # Predict model file format
     if in_fmt == 'auto':
       try:
@@ -417,6 +419,22 @@ class _JubaModelCommand(object):
       raise JubaModelError('{0}: failed to parse model as {1}'.format(target, in_fmt), e)
     except Exception as e:
       raise JubaModelError('{0}: failed to load from model'.format(target), e)
+
+    # Replace config file
+    if replace_config is not None:
+      with open(replace_config) as f:
+        m.system.config = f.read()
+      if not fix_header:
+        printe('Warning: replacing config without fixing header; may generate corrupt model')
+
+    # Replace version
+    if replace_version is not None:
+      (major, minor, maint) = map(int, replace_version.split('.'))
+      m.header.jubatus_version_major = major
+      m.header.jubatus_version_minor = minor
+      m.header.jubatus_version_maint = maint
+      if not fix_header:
+        printe('Warning: replacing version without fixing header; may generate corrupt model')
 
     # Repair header
     if fix_header:
@@ -477,10 +495,14 @@ class _JubaModelCommand(object):
                       help='specify output file instead of stdout')
     parser.add_option('-C', '--output-config',   type='str',                       default=None,
                       help='specify output file of config extracted from model')
+    parser.add_option('-R', '--replace-config',  type='str',                       default=None,
+                      help='replace configuration in model with specified file')
+    parser.add_option('-Z', '--replace-version', type='str',                       default=None,
+                      help='replace Jubatus version in model file')
     parser.add_option('-f', '--no-validate',     action='store_true',              default=False,
                       help='disable validation of binary model files')
     parser.add_option('-F', '--fix-header',      action='store_true',              default=False,
-                      help='fix corrupt header if possible')
+                      help='recompute CRC32 checksum and fix corrupt header if possible')
     parser.add_option('-h', '--help',            action='store_true',              default=False,
                       help='show usage')
 
@@ -527,6 +549,8 @@ class _JubaModelCommand(object):
         out_fmt=args.out_format,
         output=args.output,
         output_config=args.output_config,
+        replace_config=args.replace_config,
+        replace_version=args.replace_version,
         no_validate=args.no_validate,
         fix_header=args.fix_header,
       )
