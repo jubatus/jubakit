@@ -4,10 +4,14 @@
 from __future__ import absolute_import, division, print_function, unicode_literals
 
 """
-Using Regression and Boston dataset
+Using Regression and CSV file
 ==================================================
 
-In this example we show regression using Boston dataset.
+This is a simple example that illustrates:
+
+* How to load CSV files and convert int into Jubakit dataset.
+* Training the regression using the dataset.
+* Getting regression result.
 """
 
 import numpy as np

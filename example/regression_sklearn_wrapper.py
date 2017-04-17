@@ -21,7 +21,7 @@ from sklearn.metrics import mean_squared_error
 from sklearn.pipeline import Pipeline
 from sklearn.utils import shuffle
 
-# load hand-writtern number recognition dataset
+# load boston housing values dataset
 boston = load_boston()
 # shuffle and separate the dataset
 X, y = shuffle(boston.data, boston.target, random_state=42)

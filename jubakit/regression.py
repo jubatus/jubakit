@@ -179,8 +179,8 @@ class Config(GenericConfig):
         return {'learning_rate': 1.0}
       elif method in ('PA', 'passive_aggressive'):
         return {'sensitivity': 1.0}
-      elif method in ('PA1', 'passive_aggressive1',
-                      'PA2', 'passive_aggressive2',
+      elif method in ('PA1', 'passive_aggressive_1',
+                      'PA2', 'passive_aggressive_2',
                       'CW', 'confidence_weighted',
                       'AROW',
                       'NHERD', 'normal_herd'):

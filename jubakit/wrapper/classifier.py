@@ -11,7 +11,7 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
   """
   scikit-learn Wrapper for Jubatus Classifiers.
   """
-  
+
   def __init__(self, n_iter=1, shuffle=False, softmax=False, embedded=True, seed=None):
     """
     Creates a base class for Jubatus Classifiers.
@@ -24,8 +24,8 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
 
   @classmethod
   def _launch_classifier(self):
-    """ 
-    Launch Jubatus Classifier 
+    """
+    Launch Jubatus Classifier
     """
     raise NotImplementedError()
 
@@ -81,11 +81,11 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
 
   @classmethod
   def get_params(self, deep=True):
-    """ 
-    Return parameters. 
+    """
+    Return parameters.
     """
     raise NotImplementedError()
-  
+
   def set_params(self, **params):
     """
     Set parameters
@@ -95,7 +95,7 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
     return self
 
   def save(self, name):
-    """  
+    """
     Save the classifier model using name.
     """
     if self.classifier_ is not None:
@@ -111,22 +111,22 @@ class BaseJubatusClassifier(BaseEstimator, ClassifierMixin):
 
 
 class LinearClassifier(BaseJubatusClassifier):
-  
-  def __init__(self, method='AROW', regularization_weight=1.0, 
+
+  def __init__(self, method='AROW', regularization_weight=1.0,
                softmax=False, n_iter=1, shuffle=False, embedded=True, seed=None):
     super(LinearClassifier, self).__init__(n_iter, shuffle, softmax, embedded, seed)
     self.method = method
     self.regularization_weight = regularization_weight
-  
+
   def _launch_classifier(self):
     if self.method in ('perceptron', 'PA'):
       self.config_ = Config(method=self.method)
     elif self.method in ('PA1', 'PA2', 'CW', 'AROW', 'NHERD'):
-      self.config_ = Config(method=self.method, 
+      self.config_ = Config(method=self.method,
                             parameter={'regularization_weight': self.regularization_weight})
     else:
-      raise NotImplementedError('method {} is not implememented yet.'.format(self.method))
-    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded) 
+      raise NotImplementedError('method {} is not implemented yet.'.format(self.method))
+    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded)
 
   def get_params(self, deep=True):
     return {
@@ -141,7 +141,7 @@ class LinearClassifier(BaseJubatusClassifier):
 
 
 class NearestNeighborsClassifier(BaseJubatusClassifier):
-  
+
   def __init__(self, method='euclid_lsh', nearest_neighbor_num=5, local_sensitivity=1.0,
                hash_num=128, n_iter=1, shuffle=False, softmax=False, embedded=True, seed=None):
     super(NearestNeighborsClassifier, self).__init__(n_iter, shuffle, softmax, embedded, seed)
@@ -157,12 +157,12 @@ class NearestNeighborsClassifier(BaseJubatusClassifier):
                                                     'local_sensitivity': self.local_sensitivity,
                                                     'parameter': {'hash_num': self.hash_num}})
     elif self.method in ('euclidean', 'cosine'):
-      self.config_ = Config(method=self.method, 
+      self.config_ = Config(method=self.method,
                             parameter={'nearest_neighbor_num': self.nearest_neighbor_num,
                                        'local_sensitivity': self.local_sensitivity})
     else:
-      raise NotImplementedError('method {} is not implememented yet.'.format(self.method))                            
-    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded) 
+      raise NotImplementedError('method {} is not implemented yet.'.format(self.method))
+    self.classifier_ = Classifier.run(config=self.config_, embedded=self.embedded)
 
   def get_params(self, deep=True):
     return {

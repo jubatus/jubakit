@@ -116,7 +116,7 @@ class LinearRegression(BaseJubatusRegression):
     if self.method in ('perceptron'):
       self.config_ = Config(method=self.method,
                             parameter={'learning_rate': self.learning_rate})
-    if self.method in ('PA'):
+    elif self.method in ('PA'):
       self.config_ = Config(method=self.method,
                             parameter={'sensitivity': self.sensitivity})
     elif self.method in ('PA1', 'PA2', 'CW', 'AROW', 'NHERD'):
@@ -124,7 +124,7 @@ class LinearRegression(BaseJubatusRegression):
                             parameter={'regularization_weight': self.regularization_weight,
                                        'sensitivity': self.sensitivity})
     else:
-      raise NotImplementedError('method {} is not implememented yet.'.format(self.method))
+      raise NotImplementedError('method {} is not implemented yet.'.format(self.method))
     self.regression_ = Regression.run(config=self.config_, embedded=self.embedded)
 
   def get_params(self, deep=True):
@@ -158,7 +158,7 @@ class NearestNeighborsRegression(BaseJubatusRegression):
       self.config_ = Config(method=self.method,
                             parameter={'nearest_neighbor_num': self.nearest_neighbor_num})
     else:
-      raise NotImplementedError('method {} is not implememented yet.'.format(self.method))
+      raise NotImplementedError('method {} is not implemented yet.'.format(self.method))
     self.regression_ = Regression.run(config=self.config_, embedded=self.embedded)
 
   def get_params(self, deep=True):
