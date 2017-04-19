@@ -75,6 +75,7 @@ List of Services
 Currently the following Services are available in Jubakit.
 
 * `Classifier <http://jubat.us/en/api/api_classifier.html>`_ -- :py:class:`jubakit.classifier.Classifier`
+* `Regression <http://jubat.us/en/api/api_regression.html>`_ -- :py:class:`jubakit.regression.Regression`
 * `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_ -- :py:class:`jubakit.anomaly.Anomaly`
 * `Recommender <http://jubat.us/en/api/api_recommender.html>`_ -- :py:class:`jubakit.recommender.Recommender`
 * `Weight <http://jubat.us/en/api/api_weight.html>`_ -- :py:class:`jubakit.weight.Weight`
