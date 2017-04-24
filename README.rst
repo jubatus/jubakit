@@ -16,7 +16,7 @@ jubakit is a Python module to access Jubatus features easily.
 jubakit can be used in conjunction with `scikit-learn <http://scikit-learn.org/>`_ so that you can use powerful features like cross validation and model evaluation.
 See the `Jubakit Documentation <http://jubat.us/en/jubakit>`_ for the detailed description.
 
-Currently jubakit supports `Classifier <http://jubat.us/en/api/api_classifier.html>`_, `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_, `Recommender <http://jubat.us/en/api/api_recommender.html>`_ and `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
+Currently jubakit supports `Classifier <http://jubat.us/en/api/api_classifier.html>`_, `Regression <http://jubat.us/en/api/api_regression.html>`_, `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_, `Recommender <http://jubat.us/en/api/api_recommender.html>`_ and `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
 
 Install
 -------
@@ -94,6 +94,12 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | classifier_sklearn_wrapper.py     | Classification using scikit-learn wrapper     | ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | classifier_sklearn_grid_search.py | Grid Search example using scikit-learn wrapper| ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| regression_boston.py              | Regression with toy dataset (boston)          | ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| regression_csv.py                 | Regression with CSV file                      |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| regression_sklearn_wrapper.py     | Regression using scikit-learn wrapper         | ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | anomaly_auc.py                    | Anomaly detection and metrics                 |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+

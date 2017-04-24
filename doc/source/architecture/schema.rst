@@ -72,6 +72,8 @@ Following data types can be specified for Schema.
 +---------------+-------------------------------------------------------------------------------+
 | ``LABEL``     | Ground truth (label column) -- Classifier only                                |
 +---------------+-------------------------------------------------------------------------------+
+| ``TARGET``    | Ground truth (target column) -- Regression only                               |
++---------------+-------------------------------------------------------------------------------+
 | ``FLAG``      | Flag if the record is anomaly or not -- Anomaly only                          |
 +---------------+-------------------------------------------------------------------------------+
 | ``ID``        | Key that uniquely identifies each record -- Anomaly and Recommender only      |
