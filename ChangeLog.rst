@@ -1,6 +1,19 @@
 ChangeLog
 ====================================================
 
+Release 0.5.0 (2017-04-24)
+---------------------------------------
+
+* New Features
+    * Add Regression service (#82, #87)
+    * Add ``--replace-config`` / ``--replace-version`` options to ``jubamodel`` command (#76, #77)
+
+* Improvements
+    * Improve color of version number in docs (#80, #81)
+
+* Bug Fixes
+    * Fix CSVLoader not working with ``restkey`` option in Python 2 (#78, #79)
+
 Release 0.4.2 (2017-02-27)
 ---------------------------------------
 
