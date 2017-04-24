@@ -40,6 +40,7 @@ setup(name='jubakit',
           ],
       },
       install_requires=[
+          'tornado<=4.4.3',
           'jubatus>=0.8.0',
           'psutil',
       ],
