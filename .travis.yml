@@ -13,7 +13,7 @@ before_install:
 
 install:
     # Install Jubatus
-    - sudo bash -c 'echo "deb http://download.jubat.us/apt binary/" > /etc/apt/sources.list.d/jubatus.list'
+    - sudo bash -c 'echo "deb [arch=amd64] http://download.jubat.us/apt binary/" > /etc/apt/sources.list.d/jubatus.list'
     - sudo apt-get -qq update
     - sudo apt-get -qq --force-yes install jubatus
     - source /opt/jubatus/profile
