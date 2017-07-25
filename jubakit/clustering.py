@@ -2,6 +2,8 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import uuid
+
 import jubatus
 import jubatus.embedded
 
@@ -29,6 +31,8 @@ class Schema(GenericSchema):
     row_id = row.get(self._id_key, None)
     if row_id is not None:
       row_id = unicode_t(row_id)
+    else:
+      row_id = unicode_t(uuid.uuid4())
     d = self._transform_as_datum(row, None, [self._id_key])
     return (row_id, d)
 
@@ -157,7 +161,7 @@ class Clustering(BaseService):
     method = self._get_method()
     if method not in ('kmeans', 'gmm'):
       raise RuntimeError('{0} is not supported'.format(method))
-      
+
     if light:
       return cli.get_core_members_light()
     else:
@@ -180,7 +184,7 @@ class Clustering(BaseService):
     method = self._get_method()
     if method not in ('kmeans', 'gmm'):
       raise RuntimeError('{0} is not supported'.format(method))
-      
+
     for (idx, (row_id, d)) in dataset:
       result = cli.get_nearest_center(d)
       yield (idx, row_id, result)
@@ -230,7 +234,7 @@ class Config(GenericConfig):
 
     if compressor_parameter is not None:
       if 'compressor_parameter' in self:
-        self['compressor_parameter'].update(compressor_method)
+        self['compressor_parameter'].update(compressor_parameter)
       else:
         self['compressor_parameter'] = parameter
 
@@ -297,3 +301,4 @@ class Config(GenericConfig):
   @classmethod
   def compressor_methods(cls):
     return ['simple', 'compressive']
+
