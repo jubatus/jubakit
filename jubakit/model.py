@@ -435,7 +435,7 @@ class GenericTransformer(BaseTransformer):
   def transform(self, service):
     if service == 'weight':
       (rm, wm) = self._unpack_generic()
-      return self._get_converted_model(service, 1, [wm], self._cfg)
+      return self._get_converted_model(service, 1, [wm], self._get_weight_config())
     return super(GenericTransformer, self).transform(service)
 
   def _unpack_generic(self, expected_version=1):
@@ -459,6 +459,15 @@ class GenericTransformer(BaseTransformer):
     Returns True if the method used in the model is any of the specified methods.
     """
     return self._cfg['method'] in methods
+
+  def _get_weight_config(self):
+    """
+    Extracts and returns the weight configuration data.
+    """
+    cfg = self._cfg
+    return {
+      'converter': cfg['converter'],
+    }
 
   def _get_backend_config(self):
     """
