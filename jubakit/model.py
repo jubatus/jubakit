@@ -450,6 +450,8 @@ class GenericTransformer(BaseTransformer):
     assert unp.read_array_header() == 2     #  +- <user_data>
     unp.unpack(rm.write)                    #      +- (service model)
     unp.unpack(wm.write)                    #      +- wm_.get_model()->pack(pk)
+    rm.seek(0)
+    wm.seek(0)
     return rm, wm
 
   def _is_method(self, *methods):
