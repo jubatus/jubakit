@@ -90,18 +90,20 @@ Options
 
    Supported transformations are as follows:
 
-   ============================     ============================
-   Models of service (methods)      ... can be transofmred into:
-   ============================     ============================
-   Classifier (``NN``)              Nearest Neighbor / Weight
-   Classifier (others)              Weight
-   Regression (``NN``)              Nearest Neighbor / Weight
-   Regression (others)              Weight
-   Recommender                      Weight
-   Anomaly (``lof``)                Recommender / Weight
-   Anomaly (``light_lof``)          Nearest Neighbor / Weight
-   Clustering                       Weight
-   ============================     ============================
+   ================================================     ============================
+   Models of service (methods)                          ... can be transofmred into:
+   ================================================     ============================
+   Classifier (``NN``)                                  Nearest Neighbor / Weight
+   Classifier (others)                                  Weight
+   Regression (``NN``)                                  Nearest Neighbor / Weight
+   Regression (others)                                  Weight
+   Recommender (``nearest_neighbor_recommender``)       Nearest Neighbor / Weight
+   Recommender (others)                                 Weight
+   Recommender                                          Weight
+   Anomaly (``lof``)                                    Recommender / Weight
+   Anomaly (``light_lof``)                              Nearest Neighbor / Weight
+   Clustering                                           Weight
+   ================================================     ============================
 
 .. option:: -f, --no-validate
 
