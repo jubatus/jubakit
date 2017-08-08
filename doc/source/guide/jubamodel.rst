@@ -9,6 +9,7 @@ Synopsis
   jubamodel [--in-format IN_FORMAT] [--out-format OUT_FORMAT]
             [--output OUTPUT] [--output-config OUTPUT_CONFIG]
             [--replace-config REPLACE_CONFIG] [--replace-version REPLACE_VERSION]
+            [--transform TRANSFORM]
             [--no-validate] [--fix-header] [--help]  model_file
 
 Description
@@ -70,6 +71,37 @@ Options
    You may also want to specify :option:`--fix-header` together, so that CRC32 checksum and other header values are updated according to the new version.
 
    Although this may help migrating models between different Jubatus versions, there is no guarantee that the modified model can be loaded to the specified Jubatus version.
+
+.. option:: -T <transform>, --transform <TRANSFORM>
+
+   Transfrom the input model file for the specified service.
+
+   For example, if you are using NN-based methods in Classifier (``NN``) or Anomaly (``light_lof``), you can transform the model file into Nearest Neighbor model by:
+
+   ::
+
+     $ jubamodel --transform nearest_neighbor -o binary -O output_transformed_model.jubatus input_classifier_model.jubatus
+
+   You can then load the transformed model into Nearest Neighbor.
+
+   ::
+
+     $ jubanearest_neighbor --model_file output_transformed_model.jubatus
+
+   Supported transformations are as follows:
+
+   ============================     ============================
+   Models of service (methods)      ... can be transofmred into:
+   ============================     ============================
+   Classifier (``NN``)              Nearest Neighbor / Weight
+   Classifier (others)              Weight
+   Regression (``NN``)              Nearest Neighbor / Weight
+   Regression (others)              Weight
+   Recommender                      Weight
+   Anomaly (``lof``)                Recommender / Weight
+   Anomaly (``light_lof``)          Nearest Neighbor / Weight
+   Clustering                       Weight
+   ============================     ============================
 
 .. option:: -f, --no-validate
 
