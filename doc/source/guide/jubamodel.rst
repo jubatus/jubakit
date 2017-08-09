@@ -74,7 +74,7 @@ Options
 
 .. option:: -T <transform>, --transform <TRANSFORM>
 
-   Transfrom the input model file for the specified service.
+   Transform the input model file for the specified service.
 
    For example, if you are using NN-based methods in Classifier (``NN``) or Anomaly (``light_lof``), you can transform the model file into Nearest Neighbor model by:
 
@@ -91,7 +91,7 @@ Options
    Supported transformations are as follows:
 
    ================================================     ============================
-   Models of service (methods)                          ... can be transofmred into:
+   Models of service (method)                           ... can be transformed into:
    ================================================     ============================
    Classifier (``NN``)                                  Nearest Neighbor / Weight
    Classifier (others)                                  Weight
@@ -99,7 +99,6 @@ Options
    Regression (others)                                  Weight
    Recommender (``nearest_neighbor_recommender``)       Nearest Neighbor / Weight
    Recommender (others)                                 Weight
-   Recommender                                          Weight
    Anomaly (``lof``)                                    Recommender / Weight
    Anomaly (``light_lof``)                              Nearest Neighbor / Weight
    Clustering                                           Weight
