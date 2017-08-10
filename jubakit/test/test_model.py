@@ -8,7 +8,10 @@ import json
 
 import jubatus
 
-from jubakit.model import JubaDump, JubaModel, InvalidModelFormatError, _JubaModelCommand
+from jubakit.model import \
+    JubaDump, JubaModel, \
+    InvalidModelFormatError, UnsupportedTransformationError, \
+    _JubaModelCommand
 from jubakit.compat import *
 from jubakit._stdio import set_stdio, devnull
 
@@ -152,6 +155,12 @@ class JubaModelTest(TestCase):
         for ((k1, v1), (k2, v2)) in zip(m.system.get(), m2.system.get()):
           self.assertEqual(k1, k2)
           self.assertEqual(v1, v2)
+
+  def test_transform(self):
+    m1 = _get_model()  # classifier model
+    m2 = m1.transform('weight')
+    self.assertEqual('weight', m2.system.type)
+    self.assertRaises(UnsupportedTransformationError, m2.transform, 'recommender')
 
 class JubaModelCommandTest(TestCase):
   def _exit(self, args, status):
