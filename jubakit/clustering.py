@@ -2,6 +2,7 @@
 
 from __future__ import absolute_import, division, print_function, unicode_literals
 
+import json
 import uuid
 
 import jubatus
@@ -206,11 +207,14 @@ class Clustering(BaseService):
       yield (idx, row_id, result)
 
   def _get_method(self):
-    if self._backend is not None:
+    method = None
+    if self._embedded:
+      config = json.loads(self._backend.model.get_config())
+      method = config['method']
+    else:
       if 'method' in self._backend.config:
         method = self._backend.config['method']
-        return method
-    return None
+    return method
 
 class Config(GenericConfig):
   """
