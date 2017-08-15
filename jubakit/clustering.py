@@ -154,14 +154,10 @@ class Clustering(BaseService):
   def get_core_members(self, light=False):
     """
     Returns coreset of cluster in datum.
-    This method support only kmeans and gmm.
     """
 
     cli = self._client()
     method = self._get_method()
-    if method not in ('kmeans', 'gmm'):
-      raise RuntimeError('{0} is not supported'.format(method))
-
     if light:
       return cli.get_core_members_light()
     else:
@@ -173,6 +169,9 @@ class Clustering(BaseService):
     """
 
     cli = self._client()
+    method = self._get_method()
+    if method not in ('kmeans', 'gmm'):
+      raise RuntimeError('{0} is not supported'.format(method))
     return cli.get_k_center()
 
   def get_nearest_center(self, dataset):
@@ -236,7 +235,7 @@ class Config(GenericConfig):
       if 'compressor_parameter' in self:
         self['compressor_parameter'].update(compressor_parameter)
       else:
-        self['compressor_parameter'] = parameter
+        self['compressor_parameter'] = compressor_parameter
 
   @classmethod
   def _default(cls, cfg):

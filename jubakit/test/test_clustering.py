@@ -41,7 +41,7 @@ class SchemaTest(TestCase):
       'k1': Schema.ID,
       'k2': Schema.ID,
     })
-    
+
     # schema fallback set to id
     self.assertRaises(RuntimeError, Schema, {
       'k1': Schema.ID
@@ -65,7 +65,7 @@ class DatasetTest(TestCase):
     self.assertEqual(['v', 1.0], dataset[0][1].num_values[0])
 
   def test_from_data(self):
-    # load from array format 
+    # load from array format
     ds = Dataset.from_data(
       [ [10, 20, 30], [20, 10, 50], [40, 10, 30]],  # data
       ['i1', 'i2', 'i3'],                           # ids
@@ -119,9 +119,24 @@ class DatasetTest(TestCase):
     for (idx, (row_id, d)) in ds:
       actual_k1s.append(dict(d.num_values).get('k1', None))
       actual_ids.append(row_id)
-    
+
     self.assertEqual(expected_k1s, actual_k1s)
     self.assertEqual(expected_ids, actual_ids)
+
+  def test_from_array_without_ids(self):
+    ds = Dataset.from_array(
+      [ [10, 20, 30], [20, 10, 50], [40, 10, 30]],  # data
+      feature_names=['k1', 'k2', 'k3']              # feature names
+    )
+
+    expected_k1s = [10, 20, 40]
+    actual_k1s = []
+    actual_ids = []
+    for (idx, (row_id, d)) in ds:
+      actual_k1s.append(dict(d.num_values).get('k1', None))
+      actual_ids.append(row_id)
+    self.assertEqual(expected_k1s, actual_k1s)
+    self.assertEqual(len(actual_ids), 3)
 
   @requireSklearn
   def test_from_matrix(self):
@@ -141,10 +156,29 @@ class DatasetTest(TestCase):
       actual_k1s.append(dict(d.num_values).get('k1', None))
       actual_k3s.append(dict(d.num_values).get('k3', None))
       actual_ids.append(row_id)
-    
+
     self.assertEqual(expected_k1s, actual_k1s)
     self.assertEqual(expected_k3s, actual_k3s)
     self.assertEqual(expected_ids, actual_ids)
+
+  def test_get_ids(self):
+    ds = Dataset.from_array(
+      [ [10, 20, 30], [20, 10, 50], [40, 10, 30]],  # data
+      ['i1', 'i2', 'i3'],                           # ids
+      static=True
+    )
+    actual_ids = []
+    expected_ids = ['i1', 'i2', 'i3']
+    for row_id in ds.get_ids():
+      actual_ids.append(row_id)
+    self.assertEqual(expected_ids, actual_ids)
+
+    ds = Dataset.from_array(
+      [ [10, 20, 30], [20, 10, 50], [40, 10, 30]],  # data
+      ['i1', 'i2', 'i3'],                           # ids
+      static=False
+    )
+    self.assertRaises(RuntimeError, list, ds.get_ids())
 
   def _create_matrix(self):
     """
@@ -162,21 +196,105 @@ class DatasetTest(TestCase):
 class ClusteringTest(TestCase):
   def test_simple(self):
     clustering = Clustering()
+    clustering.stop()
 
   @requireEmbedded
   def test_embedded(self):
     clustering = Clustering.run(Config(), embedded=True)
+    clustering.stop()
+
+  def test_push(self):
+    clustering = Clustering.run(Config())
+    dataset = self._make_stub_dataset()
+    for (idx, row_id, result) in clustering.push(dataset):
+      self.assertEqual(result, True)
+    clustering.stop()
+
+  def test_get_revision(self):
+    clustering = Clustering.run(Config())
+    self.assertEqual(0, clustering.get_revision())
+    clustering.stop()
+
+  def test_get_core_members(self):
+    dataset = self._make_stub_dataset()
+    config = Config(method='kmeans', compressor_parameter={"bucket_size": 5})
+    clustering = self._make_stub_clustering(config, dataset)
+    clustering.get_core_members(light=False)
+    clustering.get_core_members(light=True)
+    clustering.stop()
+
+  def test_get_k_center(self):
+    def func(clustering, dataset):
+      clustering.get_k_center()
+    self._test_func_with_legal_and_illegal_config(func)
+
+  def test_get_nearest_center(self):
+    def func(clustering, dataset):
+      for _ in clustering.get_nearest_center(dataset): pass
+    self._test_func_with_legal_and_illegal_config(func)
+
+  def test_get_nearest_members(self):
+    def func1(clustering, dataset):
+      for _ in clustering.get_nearest_members(dataset, light=False): pass
+    self._test_func_with_legal_and_illegal_config(func1)
+
+    def func2(clustering, dataset):
+      for _ in clustering.get_nearest_members(dataset, light=True): pass
+    self._test_func_with_legal_and_illegal_config(func2)
+
+  def _test_func_with_legal_and_illegal_config(self, func):
+    dataset = self._make_stub_dataset()
+    # test illegal method
+    config = Config(method='dbscan', compressor_parameter={"bucket_size": 5})
+    clustering = self._make_stub_clustering(config, dataset)
+    self.assertRaises(RuntimeError, lambda: func(clustering, dataset))
+    clustering.stop()
+
+    # test legal method
+    config = Config(method='kmeans', compressor_parameter={"bucket_size": 5})
+    clustering = self._make_stub_clustering(config, dataset)
+    func(clustering, dataset)
+    clustering.stop()
+
+  def _make_stub_clustering(self, config, dataset):
+    dataset = self._make_stub_dataset()
+    clustering = Clustering.run(config)
+    for _ in clustering.push(dataset): pass
+    return clustering
+
+  def _make_stub_dataset(self):
+    ids = ['id1', 'id2', 'id3', 'id4', 'id5']
+    X = [
+        [0, 0, 0],
+        [1, 1, 1],
+        [2, 2, 2],
+        [3, 3, 3],
+        [4, 4, 4]
+    ]
+    dataset = Dataset.from_array(X, ids=ids)
+    return dataset
+
 
 class ConfigTest(TestCase):
   def test_simple(self):
     config = Config()
     self.assertEqual('kmeans', config['method'])
+    self.assertEqual({'k': 3, 'seed': 0}, config['parameter'])
     self.assertEqual('simple', config['compressor_method'])
+    self.assertEqual({'bucket_size': 100}, config.get('compressor_parameter'))
 
   def test_methods(self):
     config = Config()
     self.assertTrue(isinstance(config.methods(), list))
+
+  def test_compressor_methods(self):
+    config = Config()
     self.assertTrue(isinstance(config.compressor_methods(), list))
+
+  def test_illegal_comporessor_method(self):
+    self.assertRaises(RuntimeError,
+                      Config._default_compressor_parameter,
+                      'invalid_compressor_method')
 
   def test_default(self):
     config = Config.default()
@@ -192,20 +310,23 @@ class ConfigTest(TestCase):
     self.assertTrue('min_core_point' in Config(method='dbscan')['parameter'])
 
   def test_compressor_params(self):
-    self.assertTrue('bucket_size' in 
+    self.assertTrue('bucket_size' in
       Config(compressor_method='simple')['compressor_parameter'])
-    self.assertTrue('bucket_size' in 
+    self.assertTrue('bucket_size' in
       Config(compressor_method='compressive')['compressor_parameter'])
-    self.assertTrue('bucket_length' in 
+    self.assertTrue('bucket_length' in
       Config(compressor_method='compressive')['compressor_parameter'])
-    self.assertTrue('compressed_bucket_size' in 
+    self.assertTrue('compressed_bucket_size' in
       Config(compressor_method='compressive')['compressor_parameter'])
-    self.assertTrue('bicriteria_base_size' in 
+    self.assertTrue('bicriteria_base_size' in
       Config(compressor_method='compressive')['compressor_parameter'])
-    self.assertTrue('forgetting_factor' in 
+    self.assertTrue('forgetting_factor' in
       Config(compressor_method='compressive')['compressor_parameter'])
-    self.assertTrue('seed' in 
+    self.assertTrue('seed' in
       Config(compressor_method='compressive')['compressor_parameter'])
+    config = Config(compressor_method='simple',
+                    compressor_parameter={'bucket_size': 10})
+    self.assertEqual(10, config['compressor_parameter']['bucket_size'])
 
   def test_invalid_method(self):
     self.assertRaises(RuntimeError, Config._default_parameter, 'invalid_method')
