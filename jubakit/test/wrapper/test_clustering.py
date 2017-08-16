@@ -65,18 +65,18 @@ class KMeansTest(TestCase):
 
   def test_fit(self):
     X = np.array([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]])
-    clustering = KMeans(k=10)
+    clustering = KMeans(k=10, embedded=False)
     self.assertRaises(RuntimeWarning, clustering.fit(X))
     clustering.stop()
 
-    clustering = KMeans(k=5)
+    clustering = KMeans(k=5, embedded=False)
     self.assertTrue(not clustering.fitted)
     clustering.fit(X)
     self.assertTrue(clustering.fitted)
 
   def test_predict(self):
     X = np.array([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]])
-    clustering = KMeans(k=5)
+    clustering = KMeans(k=5, embedded=False)
     self.assertRaises(RuntimeError, clustering.predict(X))
     clustering.fit(X)
     y_pred = clustering.predict(X)
@@ -84,7 +84,7 @@ class KMeansTest(TestCase):
 
   def test_fit_predict(self):
     X = np.array([[0, 0], [1, 1], [2, 2], [3, 3], [4, 4]])
-    clustering = KMeans(k=5)
+    clustering = KMeans(k=5, embedded=False)
     self.assertTrue(not clustering.fitted)
     y_pred = clustering.fit_predict(X)
     self.assertTrue(clustering.fitted)

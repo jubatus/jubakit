@@ -21,9 +21,9 @@ X, y = make_blobs(n_samples=200, centers=3, n_features=2, random_state=42)
 
 # launch clustering instance
 clusterings = [
-    KMeans(k=3, bucket_size=200, embedded=True),
-    GMM(k=3, bucket_size=200, embedded=True),
-    DBSCAN(eps=2.0, bucket_size=200, embedded=True)
+    KMeans(k=3, bucket_size=200, embedded=False),
+    GMM(k=3, bucket_size=200, embedded=False),
+    DBSCAN(eps=2.0, bucket_size=200, embedded=False)
 ]
 
 for clustering in clusterings:
