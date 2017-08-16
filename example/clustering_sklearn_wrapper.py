@@ -11,7 +11,6 @@ This is a simple example that illustrates Clustering service usage.
 
 """
 
-import collections
 from sklearn.datasets import make_blobs
 
 from jubakit.wrapper.clustering import KMeans, GMM, DBSCAN
@@ -30,9 +29,13 @@ for clustering in clusterings:
     # fit and predict
     y_pred = clustering.fit_predict(X)
     # print result
+    labels = set(y_pred)
+    label_counts = {}
+    for label in labels:
+        label_counts[label] = y_pred.count(label)
     print('{0}: {1}'.format(
            clustering.__class__.__name__,
-           collections.Counter(y_pred)))
+           label_counts))
     # stop clustering service
     clustering.stop()
 
