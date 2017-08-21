@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
+import sys
 from setuptools import setup, find_packages
 
 def _read(filename):
@@ -9,6 +10,19 @@ def _read(filename):
 
 # Load package version.
 exec(_read('jubakit/_version.py'))
+
+def get_extras_requires():
+  if sys.version_info < (2, 7):
+    extras_requires = {
+      'test': ['numpy<=1.10.3', 'scipy<=0.16.1',
+               'scikit-learn', 'tweepy', 'jq'],
+    }
+  else:
+    extras_requires = {
+      'test': ['numpy', 'scipy',
+               'scikit-learn', 'tweepy', 'jq'],
+    }
+  return extras_requires
 
 setup(name='jubakit',
       version='.'.join(str(x) for x in VERSION),
@@ -43,8 +57,6 @@ setup(name='jubakit',
           'jubatus>=0.8.0',
           'psutil',
       ],
-      extras_require={
-          'test': ['numpy', 'scipy', 'scikit-learn', 'tweepy', 'jq'],
-      },
+      extras_require=get_extras_requires(),
       test_suite = 'jubakit.test',
 )
