@@ -1,6 +1,15 @@
 ChangeLog
 ====================================================
 
+Release 0.5.1 (2017-08-28)
+---------------------------------------
+
+* New Features
+    * Add ``--transform`` option to ``jubamodel`` command (#75, #83)
+
+* Improvements
+    * Fix library version for Python 2.6 (#88, #91)
+
 Release 0.5.0 (2017-04-24)
 ---------------------------------------
 
