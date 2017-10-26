@@ -12,16 +12,10 @@ def _read(filename):
 exec(_read('jubakit/_version.py'))
 
 def get_extras_requires():
-  if sys.version_info < (2, 7):
-    extras_requires = {
-      'test': ['numpy<=1.10.3', 'scipy<=0.16.1',
-               'scikit-learn', 'tweepy', 'jq'],
-    }
-  else:
-    extras_requires = {
-      'test': ['numpy', 'scipy',
-               'scikit-learn', 'tweepy', 'jq'],
-    }
+  extras_requires = {
+    'test': ['numpy', 'scipy',
+             'scikit-learn', 'tweepy', 'jq'],
+  }
   return extras_requires
 
 setup(name='jubakit',
@@ -39,7 +33,6 @@ setup(name='jubakit',
           'License :: OSI Approved :: MIT License',
           'Programming Language :: Python',
           'Programming Language :: Python :: 2',
-          'Programming Language :: Python :: 2.6',
           'Programming Language :: Python :: 2.7',
           'Programming Language :: Python :: 3',
           'Programming Language :: Python :: 3.3',

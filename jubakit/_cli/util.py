@@ -17,9 +17,6 @@ __all__ = [
 ]
 
 def shell_split(s):
-  if isinstance(s, unicode_t) and PYTHON2_6:
-    # shlex does not support Unicode on Python 2.6
-    return map(lambda x: x.decode(), shlex.split(s.encode()))
   return shlex.split(s)
 
 def comp_position(text, line, begidx, endidx):

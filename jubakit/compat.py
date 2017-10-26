@@ -12,7 +12,6 @@ except ImportError:
   # Python 2
   import __builtin__ as builtins
 
-PYTHON2_6 = sys.version_info[:2] == (2, 6)
 PYTHON3 = sys.version_info >= (3, 0)
 
 zip_longest = itertools.zip_longest if PYTHON3 else itertools.izip_longest
