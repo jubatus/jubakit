@@ -359,7 +359,6 @@ class _JubashCommand(object):
 
     services = sorted(JubaShell.get_cli_classes().keys())
 
-    # TODO: migrate to argparse (which must be added into dependency to support Python 2.6)
     parser = _JubashOptionParser(add_help_option=False, usage=USAGE, epilog=EPILOG)
 
     parser.add_option('-H', '--host', type='string', default='127.0.0.1',

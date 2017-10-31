@@ -28,7 +28,7 @@ Install
 Requirements
 ------------
 
-* Python 2.6, 2.7, 3.3, 3.4 or 3.5.
+* Python 2.7, 3.3, 3.4 or 3.5.
 * `Jubatus <http://jubat.us/en/quickstart.html>`_ needs to be installed.
 * Although not mandatory, `installing scikit-learn <http://scikit-learn.org/stable/install.html>`_ is required to use some features like K-fold cross validation.
 

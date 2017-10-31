@@ -671,7 +671,6 @@ class _JubaModelCommand(object):
 
     EPILOG = '  model_file            input model file in format specified by --in-format'
 
-    # TODO: migrate to argparse (which must be added into dependency to support Python 2.6)
     parser = _JubaModelOptionParser(add_help_option=False, usage=USAGE, epilog=EPILOG)
 
     # arguments
