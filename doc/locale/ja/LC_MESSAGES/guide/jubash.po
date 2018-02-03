@@ -1,0 +1,122 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/guide/jubash.rst:2
+msgid "Jubash Reference"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:5
+msgid "Synopsis"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:15
+msgid "Description"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:17
+msgid ""
+"``jubash`` is a command line interface to interactively communicate with "
+"Jubatus servers. See :doc:`../architecture/shell` for the detailed "
+"description."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:21
+msgid "Options"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:23
+msgid "``[]`` indicates the default value."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:29
+msgid "Host name or IP address of the server or proxy.  [127.0.0.1]"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:33
+msgid "Port number of the server or proxy.  [9199]"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:37
+msgid "Jubatus cluster name. Required when connecting to a proxy."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:42
+msgid ""
+"Name of Jubatus service (``classifier``, ``nearest_neighbor``, etc.) "
+"Generally you don't have to specify this option; it is auto-detected by "
+"default."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:47
+msgid "Deprecated; equivalent to :option:`--service`."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:51
+msgid ""
+"When specified, run the specified one-shot command instead of starting an"
+" interactive shell."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:55
+msgid "Client side timeout in seconds.  [10]"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:59
+msgid "Use keep-alive connection mode."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:61
+msgid ""
+"By default, ``jubash`` establishes new TCP connection for each RPC call. "
+"When this option is specified, ``jubash`` reuses TCP connection. Keep-"
+"alive mode provides better performance."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:65
+msgid ""
+"Note that timeout of server or proxy must be disabled (e.g., "
+"``jubaclassifier --timeout 0``) to use keep-alive mode."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:69
+msgid "Stop when error occurred when running script."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:73
+msgid ""
+"Use specified shell prompt format in interactive mode.  "
+"[``[Jubatus:{service}<{cluster}>@{host}:{port}] #``]"
+msgstr ""
+
+#: ../../source/guide/jubash.rst:77
+msgid ""
+"Enable verbose mode. In verbose mode, the contents of Datum are displayed"
+" when making RPC call."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:82
+msgid ""
+"Enable debug mode. In debug mode, stacktrace will be displayed when fatal"
+" error occurred."
+msgstr ""
+
+#: ../../source/guide/jubash.rst:87
+msgid "Show the usage of the command."
+msgstr ""
+

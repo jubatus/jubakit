@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/overview.rst:2
+msgid "Overview"
+msgstr ""
+
+#: ../../source/overview.rst:4
+msgid ""
+"Jubakit is a Python module to access Jubatus features easily. The goal of"
+" Jubakit is to:"
+msgstr ""
+
+#: ../../source/overview.rst:7
+msgid ""
+"Accelerate cycles of data analysis by integrating powerful scikit-learn "
+"features into Jubatus"
+msgstr ""
+
+#: ../../source/overview.rst:8
+msgid ""
+"Conceal the system architecture of Jubatus (config files, TCP port number"
+" assignment, process invocation, RPC call, etc.) to provide an interface "
+"that users can focus on data analysis"
+msgstr ""
+
+#: ../../source/overview.rst:10
+msgid ""
+"Here is a shortest example of code using Jubakit. You can perform anomaly"
+" detection on CSV dataset only by 4 lines of Python code:"
+msgstr ""
+
+#: ../../source/overview.rst:20
+msgid ""
+"Jubakit provides a simple-to-use APIs while allowing users to customize "
+"detailed behaviors. Jubakit also comes with configuration parameters that"
+" works well in most cases, so you don't have to configure them until "
+"necessary."
+msgstr ""
+

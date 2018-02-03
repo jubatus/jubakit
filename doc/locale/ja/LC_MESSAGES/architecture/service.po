@@ -1,0 +1,132 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/architecture/service.rst:2
+msgid "Service"
+msgstr ""
+
+#: ../../source/architecture/service.rst:4
+msgid ""
+"Service makes update/analyze RPC calls to Jubatus servers for each record"
+" in Dataset and returns the result."
+msgstr ""
+
+#: ../../source/architecture/service.rst:7
+msgid "API"
+msgstr ""
+
+#: ../../source/architecture/service.rst:9
+msgid ""
+"Service classes generally provide APIs that have the same name as the "
+"`Jubatus RPC API <http://jubat.us/en/api/index.html>`_. These APIs takes "
+"Dataset as an argument."
+msgstr ""
+
+#: ../../source/architecture/service.rst:12
+msgid ""
+"In addition to machine learning APIs, Service classes provide ``clear``, "
+"``save``, ``load`` and ``get_status`` APIs."
+msgstr ""
+
+#: ../../source/architecture/service.rst:15
+msgid "Process Invocation"
+msgstr ""
+
+#: ../../source/architecture/service.rst:17
+msgid ""
+"Service classes can launch Jubatus server processes. The following "
+"example runs ``jubaclassifier`` process with the default configuration."
+msgstr ""
+
+#: ../../source/architecture/service.rst:35
+msgid ""
+"The server process will run in the standalone mode. A TCP port that does "
+"not conflict with other processes will be picked and assigned "
+"automatically. Once the Service instance (``classifier_service``) got out"
+" of focus, the server process will be terminated by the destructor."
+msgstr ""
+
+#: ../../source/architecture/service.rst:40
+msgid "Working with External Jubatus"
+msgstr ""
+
+#: ../../source/architecture/service.rst:42
+msgid "Jubakit can even be used with externally managed Jubatus processes."
+msgstr ""
+
+#: ../../source/architecture/service.rst:54
+msgid "Embedded Jubatus"
+msgstr ""
+
+#: ../../source/architecture/service.rst:56
+msgid ""
+"Jubakit can use \"embedded\" version of Jubatus as a backend, which "
+"reduces the cost of process invocation and RPC overhead."
+msgstr ""
+
+#: ../../source/architecture/service.rst:70
+msgid ""
+"To use \"embedded\" feature, ``embedded_jubatus`` ([embedded-jubatus-"
+"python](https://github.com/jubatus/embedded-jubatus-python)) Python "
+"module, which is a wrapper module to call machine learning algorithms "
+"provided in Jubatus Core library, needs to be installed."
+msgstr ""
+
+#: ../../source/architecture/service.rst:73
+msgid "List of Services"
+msgstr ""
+
+#: ../../source/architecture/service.rst:75
+msgid "Currently the following Services are available in Jubakit."
+msgstr ""
+
+#: ../../source/architecture/service.rst:77
+msgid ""
+"`Classifier <http://jubat.us/en/api/api_classifier.html>`_ -- "
+":py:class:`jubakit.classifier.Classifier`"
+msgstr ""
+
+#: ../../source/architecture/service.rst:78
+msgid ""
+"`Regression <http://jubat.us/en/api/api_regression.html>`_ -- "
+":py:class:`jubakit.regression.Regression`"
+msgstr ""
+
+#: ../../source/architecture/service.rst:79
+msgid ""
+"`Anomaly <http://jubat.us/en/api/api_anomaly.html>`_ -- "
+":py:class:`jubakit.anomaly.Anomaly`"
+msgstr ""
+
+#: ../../source/architecture/service.rst:80
+msgid ""
+"`Recommender <http://jubat.us/en/api/api_recommender.html>`_ -- "
+":py:class:`jubakit.recommender.Recommender`"
+msgstr ""
+
+#: ../../source/architecture/service.rst:81
+msgid ""
+"`Weight <http://jubat.us/en/api/api_weight.html>`_ -- "
+":py:class:`jubakit.weight.Weight`"
+msgstr ""
+
+#: ../../source/architecture/service.rst:83
+msgid "Support of other Services is ongoing."
+msgstr ""
+

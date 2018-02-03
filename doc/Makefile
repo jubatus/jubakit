@@ -4,6 +4,7 @@
 # You can set these variables from the command line.
 SPHINXOPTS    =
 SPHINXBUILD   = sphinx-build
+SPHINXINTL    = sphinx-intl
 PAPER         =
 BUILDDIR      = _build
 
@@ -11,6 +12,10 @@ BUILDDIR      = _build
 PAPEROPT_a4     = -D latex_paper_size=a4
 PAPEROPT_letter = -D latex_paper_size=letter
 ALLSPHINXOPTS   = -d $(BUILDDIR)/doctrees $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
+LOCALES         =   \
+				en  \
+				ja
+
 # the i18n builder cannot share the environment and doctrees with the others
 I18NSPHINXOPTS  = $(PAPEROPT_$(PAPER)) $(SPHINXOPTS) source
 
@@ -48,11 +53,19 @@ help:
 clean:
 	rm -rf $(BUILDDIR)/*
 
+.PHONY: update-po
+update-po: gettext
+	for locale in $(LOCALES); do									\
+	    ($(SPHINXINTL) update -p $(BUILDDIR)/locale -l $${locale});	\
+	done
+
 .PHONY: html
 html:
-	$(SPHINXBUILD) -b html $(ALLSPHINXOPTS) $(BUILDDIR)/html
-	@echo
-	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
+	for locale in $(LOCALES); do																		\
+	    ($(SPHINXBUILD) -b html $(ALLSPHINXOPTS) -D language=$${locale} $(BUILDDIR)/$${locale}/html);	\
+	    echo;																							\
+	    echo "Build finished. The HTML pages are in $(BUILDDIR)/$${locale}/html.";						\
+	done
 
 .PHONY: dirhtml
 dirhtml:

@@ -443,3 +443,7 @@ def autodoc_skip_handler(app, what, name, obj, skip, options):
 
 def setup(app):
     app.connect("autodoc-skip-member", autodoc_skip_handler)
+
+# The directories that has *.mo files.
+locale_dirs = ["../locale"]
+gettext_compact = False

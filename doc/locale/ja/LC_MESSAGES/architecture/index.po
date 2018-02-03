@@ -1,0 +1,75 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/architecture/index.rst:2
+msgid "Architecture"
+msgstr ""
+
+#: ../../source/architecture/index.rst:4
+msgid "Here is a brief architecture of Jubakit:"
+msgstr ""
+
+#: ../../source/architecture/index.rst:8
+msgid "There are 6 components that consists of Jubakit:"
+msgstr ""
+
+#: ../../source/architecture/index.rst:10
+msgid ""
+":doc:`loader` fetches data from various data sources (e.g., CSV file, "
+"RDBMS, MQ, Twitter stream, etc.) in key-value format."
+msgstr ""
+
+#: ../../source/architecture/index.rst:11
+msgid ""
+":doc:`schema` defines the data type (string feature, numeric feature, "
+"ground truth (label), etc.) for each keys of data loaded by Loader."
+msgstr ""
+
+#: ../../source/architecture/index.rst:12
+msgid ""
+":doc:`dataset` transforms records loaded from Loader into Jubatus Datum "
+"using Schema.  Dataset is an abstract representation of a sequence of "
+"data."
+msgstr ""
+
+#: ../../source/architecture/index.rst:13
+msgid ""
+":doc:`service` makes update/analyze RPC calls to Jubatus servers for each"
+" record in Dataset and returns the result."
+msgstr ""
+
+#: ../../source/architecture/index.rst:14
+msgid ":doc:`config` defines parameters of Service."
+msgstr ""
+
+#: ../../source/architecture/index.rst:15
+msgid ""
+":doc:`shell` provides an interactive command line interface to "
+"communicate with Jubatus servers."
+msgstr ""
+
+#: ../../source/architecture/index.rst:17
+msgid ""
+"Note that *Schema*, *Dataset* and *Config* are defined for each "
+"*Service*. For example, you must use "
+":py:class:`jubakit.classifier.Schema` for "
+":py:class:`jubakit.classifier.Classifier` service, not "
+":py:class:`jubakit.anomaly.Schema`."
+msgstr ""
+
