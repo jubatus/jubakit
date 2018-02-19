@@ -72,6 +72,15 @@ class Anomaly(BaseService):
       result = cli.add(d)
       yield (idx, result.id, row_flag, result.score)
 
+  def add_bulk(self, dataset):
+    """
+    Adds data points to the anomaly model using the given dataset and returns
+    a list of data point IDs.
+    """
+    cli = self._client()
+    data = [d[1][2] for d in dataset]
+    return cli.add_bulk(data)
+
   def update(self, dataset):
     """
     Updates data points in the anomaly model using the given dataset and
