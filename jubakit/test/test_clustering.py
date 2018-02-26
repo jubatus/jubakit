@@ -7,7 +7,7 @@ from unittest import TestCase
 try:
   import numpy as np
   from scipy.sparse import csr_matrix
-except importError:
+except ImportError:
   pass
 
 from jubakit.clustering import Schema, Dataset, Clustering, Config

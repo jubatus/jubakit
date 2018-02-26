@@ -1,6 +1,13 @@
 ChangeLog
 ====================================================
 
+Release 0.5.4 (2018-02-26)
+---------------------------------------
+
+* New Features
+    * Add Nearest Neighbor service (#92, #103)
+    * Add support for add_bulk of Anomaly (#106)
+
 Release 0.5.3 (2017-12-18)
 ---------------------------------------
 
