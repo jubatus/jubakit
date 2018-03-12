@@ -1,0 +1,181 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/architecture/schema.rst:2
+msgid "Schema"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:4
+msgid ""
+"Schema defines the meaning of each column of record loaded from Loader. "
+"The basic usage of Schema is to specify data types for each key one by "
+"one. In the following example, ``name`` and ``age`` columns are used as "
+"features and ``gender`` column is used as a label when training "
+"classifier."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:19
+msgid "Fallback Type"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:21
+msgid ""
+"Data types must be defined for all column keys that may input from "
+"Loader. If you have many columns in your data and only a part of the "
+"columns is of your interest, you can specify a fallback data type. The "
+"Schema in the following example ignores columns other than ``name``, "
+"``age`` and ``gender``."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:33
+msgid ""
+"Similarly, if you know that all of your records are numeric feature, you "
+"can just specify Schema as follows using fallback data type."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:40
+msgid "Alias Names"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:42
+msgid ""
+"By default, the column key names passed from Loader is used as a Datum "
+"key name. However, you can manually assign the Datum key name by giving "
+"alias names. In the following example, ``user_name`` and ``user_profile``"
+" columns will become ``name`` and ``profile`` in Datum respectively."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:53
+msgid ""
+"Alias names are convenient when training records from multiple data "
+"sources that have different Schema into one Service."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:56
+msgid "List of Data Types"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:58
+msgid "Following data types can be specified for Schema."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:61
+msgid "Type"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:61
+msgid "Description"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:63
+msgid "``NUMBER``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:63
+msgid "Feature (numeric)"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:65
+msgid "``STRING``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:65
+msgid "Feature (string)"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:67
+msgid "``BINARY``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:67
+msgid "Feature (binary)"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:69
+msgid "``INFER``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:69
+msgid "Feature (infer data type automatically [1]_)"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:71
+msgid "``AUTO``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:71
+msgid "Feature (use data type loaded by Loader [2]_)"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:73
+msgid "``LABEL``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:73
+msgid "Ground truth (label column) -- Classifier only"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:75
+msgid "``TARGET``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:75
+msgid "Ground truth (target column) -- Regression only"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:77
+msgid "``FLAG``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:77
+msgid "Flag if the record is anomaly or not -- Anomaly only"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:79
+msgid "``ID``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:79
+msgid "Key that uniquely identifies each record -- Anomaly and Recommender only"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:81
+msgid "``IGNORE``"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:81
+msgid "Discard the column"
+msgstr ""
+
+#: ../../source/architecture/schema.rst:84
+msgid ""
+"Each data is tried to be cast to  ``NUMBER``, ``STRING`` and ``BINARY``, "
+"and treated as that type once cast succeeds. Type will be estimated for "
+"every single record, so be aware that result of type inference for the "
+"same key may different between records."
+msgstr ""
+
+#: ../../source/architecture/schema.rst:86
+msgid ""
+"``AUTO`` is intended to be used with Loader that loads records from typed"
+" data sources like RDBMS. Note that all data will become STRING when "
+"using :py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` as CSV files "
+"is not typed data source."
+msgstr ""
+
