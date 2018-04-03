@@ -19,11 +19,11 @@ msgstr ""
 
 #: ../../source/guide/faq.rst:2
 msgid "Frequently Asked Questions"
-msgstr ""
+msgstr "よくある質問"
 
 #: ../../source/guide/faq.rst:7
 msgid "How can I debug Jubakit script?"
-msgstr ""
+msgstr "Jubakitスクリプトをデバッグする方法はありますか?"
 
 #: ../../source/guide/faq.rst:5
 msgid ""
@@ -32,4 +32,6 @@ msgid ""
 "``export JUBAKIT_LOG_LEVEL=DEBUG`` or adding the following two lines to "
 "your code:"
 msgstr ""
-
+"Jubakitはログ機能を有しています。デフォルトでは、ログ機能は無効になっています。"
+"``export JUBAKIT_LOG_LEVEL=DEBUG`` のように環境変数を使って、ログ機能を有効にすることができます。"
+"または、以下の２行をスクリプトに追加することで有効にすることができます。"
