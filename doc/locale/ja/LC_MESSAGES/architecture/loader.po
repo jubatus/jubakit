@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/architecture/loader.rst:2
 msgid "Loader"
-msgstr ""
+msgstr "Loader"
 
 #: ../../source/architecture/loader.rst:4
 msgid ""
@@ -28,52 +28,59 @@ msgid ""
 ":py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` class to load CSV "
 "dataset."
 msgstr ""
-
+"Loaderはデータソースからデータを取得する機能を提供します。"
+"Loaderクラスはデータソース毎に実装されています。"
+"例えばCSVのデータセットのロードには :py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` を使います。"
 #: ../../source/architecture/loader.rst:14
 msgid ""
 "The Loader outputs a dict-like (key-value) object for each record loaded "
 "from the data source:"
 msgstr ""
+"Loaderの出力はデータソースから読み込んだレコード毎に辞書形式のオブジェクトとなります。"
+
 
 #: ../../source/architecture/loader.rst:25
 msgid "List of Loaders"
-msgstr ""
+msgstr "Loader一覧"
 
 #: ../../source/architecture/loader.rst:27
 msgid "Loaders for the following data sources are bundled with Jubakit."
-msgstr ""
+msgstr "以下のLoaderがJubakitには含まれています。"
 
 #: ../../source/architecture/loader.rst:29
 msgid "Plain line-based streams and files -- :py:mod:`jubakit.loader.core`"
-msgstr ""
+msgstr "一行ごとに処理するプレーンテキストのストリームやファイル -- :py:mod:`jubakit.loader.core`"
 
 #: ../../source/architecture/loader.rst:30
 msgid ""
 "Array-like (Python lists, NumPy arrays, etc.) data structure -- "
 ":py:mod:`jubakit.loader.array`"
 msgstr ""
+"配列形式(PythonのリストやNumPyのarrayなど) -- :py:mod:`jubakit.loader.array`"
 
 #: ../../source/architecture/loader.rst:31
 msgid "SciPy sparse matrix data structure -- :py:mod:`jubakit.loader.sparse`"
-msgstr ""
+msgstr "SciPyの疎行列データ -- :py:mod:`jubakit.loader.sparse`"
 
 #: ../../source/architecture/loader.rst:32
 msgid "CSV files -- :py:mod:`jubakit.loader.csv`"
-msgstr ""
+msgstr "CSVファイル -- :py:mod:`jubakit.loader.csv`"
 
 #: ../../source/architecture/loader.rst:33
 msgid "Twitter streams -- :py:mod:`jubakit.loader.twitter`"
-msgstr ""
+msgstr "Twitterのストリーム -- :py:mod:`jubakit.loader.twitter`"
 
 #: ../../source/architecture/loader.rst:34
 msgid ""
 "*Chain* Loaders (that wraps other Loaders) -- "
 ":py:mod:`jubakit.loader.chain`"
-msgstr ""
+msgstr "他のLoaderをラップするLoader(*Chain* Loader) -- :py:mod:`jubakit.loader.chain`"
 
 #: ../../source/architecture/loader.rst:36
 msgid ""
 "You can extend these Loaders or even write your own one. See "
 ":doc:`../guide/loader_develop` for details."
 msgstr ""
+"Loaderを拡張することや自分でLoaderを実装することもできます。"
+"詳しくは :doc:`../guide/loader_develop` を参照してください。"
 
