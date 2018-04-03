@@ -22,7 +22,7 @@ Currently jubakit supports
 `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_,
 `Recommender <http://jubat.us/en/api/api_recommender.html>`_,
 `NearestNeighbor <http://jubat.us/en/api/api_nearest_neighbor.html>`_,
-`Clustering <http://jubat.us/en/api/api_clustering/html>`_ and
+`Clustering <http://jubat.us/en/api/api_clustering.html>`_ and
 `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
 
 Install
