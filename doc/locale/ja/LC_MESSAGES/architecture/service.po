@@ -26,6 +26,8 @@ msgid ""
 "Service makes update/analyze RPC calls to Jubatus servers for each record"
 " in Dataset and returns the result."
 msgstr ""
+"ServiceはDatasetに含まれる各レコードを利用して、Jubatusサーバに対して"
+"updateやanalyzeといったRPCコールを行い、結果を取得します。"
 
 #: ../../source/architecture/service.rst:7
 msgid "API"
@@ -37,22 +39,28 @@ msgid ""
 "`Jubatus RPC API <http://jubat.us/en/api/index.html>`_. These APIs takes "
 "Dataset as an argument."
 msgstr ""
+"Serviceクラスは `Jubatus RPC API <http://jubat.us/en/api/index.html>`_ と"
+"同じAPIを提供します。これらのAPIはDatasetを引数に取ります。"
 
 #: ../../source/architecture/service.rst:12
 msgid ""
 "In addition to machine learning APIs, Service classes provide ``clear``, "
 "``save``, ``load`` and ``get_status`` APIs."
 msgstr ""
+"機械学習APIに加えて、Serviceクラスは ``clear``、 ``save`` 、 ``load`` および"
+" ``get_status`` API を提供します。 "
 
 #: ../../source/architecture/service.rst:15
 msgid "Process Invocation"
-msgstr ""
+msgstr "プロセス呼び出し"
 
 #: ../../source/architecture/service.rst:17
 msgid ""
 "Service classes can launch Jubatus server processes. The following "
 "example runs ``jubaclassifier`` process with the default configuration."
 msgstr ""
+"ServiceクラスはJubatusサーバプロセスを起動することができます。"
+" ``jubaclassifier`` プロセスをデフォルト設定で起動する例を以下に示します。"
 
 #: ../../source/architecture/service.rst:35
 msgid ""
@@ -61,14 +69,21 @@ msgid ""
 "automatically. Once the Service instance (``classifier_service``) got out"
 " of focus, the server process will be terminated by the destructor."
 msgstr ""
+"サーバプロセスはスタンドアロンモードで起動します。"
+"TCPポートは他のプロセスに競合しないように自動的に採番されます。"
+"一度Serviceインスタンスがフォーカスから外れたら、サーバプロセスは"
+"デストラクタにより停止します。"
+
 
 #: ../../source/architecture/service.rst:40
 msgid "Working with External Jubatus"
-msgstr ""
+msgstr "外部のJubatusサーバで動作させる"
 
 #: ../../source/architecture/service.rst:42
 msgid "Jubakit can even be used with externally managed Jubatus processes."
 msgstr ""
+"Jubakitは外部で動作しているJubatusサーバプロセスへも"
+"アクセスし、動作させることができます。"
 
 #: ../../source/architecture/service.rst:54
 msgid "Embedded Jubatus"
@@ -79,6 +94,8 @@ msgid ""
 "Jubakit can use \"embedded\" version of Jubatus as a backend, which "
 "reduces the cost of process invocation and RPC overhead."
 msgstr ""
+"Jubakitは \"embedded\" 版Jubatusをバックエンドとして利用することができます。"
+"これによりRPC通信のオーバヘッドを削減することができます。"
 
 #: ../../source/architecture/service.rst:70
 msgid ""
@@ -87,14 +104,18 @@ msgid ""
 "module, which is a wrapper module to call machine learning algorithms "
 "provided in Jubatus Core library, needs to be installed."
 msgstr ""
+"\"embedded\" 版の機能を利用するためには、``embedded_jubatus`` ([embedded-"
+"jubatus-python](https://github.com/jubatus/embedded-jubatus-python))"
+"Pythonモジュールをインストールしている必要があります。"
+"embedded_jubatusはJubatusの機械学習部分を直接呼び出し可能なモジュールです。"
 
 #: ../../source/architecture/service.rst:73
 msgid "List of Services"
-msgstr ""
+msgstr "Service一覧"
 
 #: ../../source/architecture/service.rst:75
 msgid "Currently the following Services are available in Jubakit."
-msgstr ""
+msgstr "Jubakitでは現在、以下のServiceをサポートしています。"
 
 #: ../../source/architecture/service.rst:77
 msgid ""
@@ -128,5 +149,5 @@ msgstr ""
 
 #: ../../source/architecture/service.rst:83
 msgid "Support of other Services is ongoing."
-msgstr ""
+msgstr "他の機能のService化は現在進行系です。"
 
