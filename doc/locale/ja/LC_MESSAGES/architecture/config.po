@@ -8,34 +8,36 @@ msgid ""
 msgstr ""
 "Project-Id-Version: jubakit 0.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"POT-Creation-Date: 2018-04-06 18:14+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.3\n"
+"Generated-By: Babel 2.4.0\n"
 
 #: ../../source/architecture/config.rst:2
 msgid "Config"
-msgstr ""
+msgstr "Config"
 
 #: ../../source/architecture/config.rst:4
 msgid ""
 "Config defines machine learning parameters and feature extraction rules "
 "of Service."
-msgstr ""
+msgstr "ConfigはServiceで利用する機械学習のパラメータや特徴抽出ルールを定義します。"
 
 #: ../../source/architecture/config.rst:7
 msgid "Data Structure"
-msgstr ""
+msgstr "データ構造"
 
 #: ../../source/architecture/config.rst:9
 msgid ""
 "Config classes inherits ``dict`` class. Here is a default Config contents"
 " for Classifier Service."
 msgstr ""
+"Configクラスは ``dict`` クラスを継承しています。以下に示すのは"
+"Classifierで設定されたデフォルトコンフィグです。"
 
 #: ../../source/architecture/config.rst:19
 msgid ""
@@ -43,10 +45,12 @@ msgid ""
 "file. See the `Jubatus API Reference "
 "<http://jubat.us/en/api/index.html>`_ for details."
 msgstr ""
+"データ構造はJSONコンフィグファイルと全く同じです。詳細は `Jubatus APIリファレンス "
+"<http://jubat.us/ja/api/index.html>`_ を参照してください"
 
 #: ../../source/architecture/config.rst:23
 msgid "Machine Learning Parameters"
-msgstr ""
+msgstr "機械学習パラメータ"
 
 #: ../../source/architecture/config.rst:25
 msgid ""
@@ -54,31 +58,31 @@ msgid ""
 "Parameters that works well in most cases are set to Config class by "
 "default, so you can start using machine learning features without "
 "configuring them."
-msgstr ""
+msgstr "機械学習パラメータはアルゴリズム(method)とハイパーパラメータから構成されています。デフォルトパラメータでも十分な場合が大半ですので、どうしても予測精度が出ない場合など、必要になって初めて設定を変えてみるのがよいでしょう。"
 
 #: ../../source/architecture/config.rst:28
 msgid "You can create Config instance using these parameters specified."
-msgstr ""
+msgstr "パラメータを設定する場合には、次のようにしてConfigを作成します。"
 
 #: ../../source/architecture/config.rst:35
 msgid ""
 "If you only specify ``method``, the default parameter for the specified "
 "method will be set automatically."
-msgstr ""
+msgstr "``method`` のみ設定した場合には、その手法に適したデフォルトパラメータが自動的に設定されます。"
 
 #: ../../source/architecture/config.rst:46
 msgid ""
 "You can even modify parameters after creating Config instance as if it is"
 " a ``dict`` object."
-msgstr ""
+msgstr "Configは ``dict`` 型のオブジェクトなので、一度Configを作成したあとでも変更することができます。"
 
 #: ../../source/architecture/config.rst:58
 msgid "Feature Extraction Rules"
-msgstr ""
+msgstr "特徴抽出ルール"
 
 #: ../../source/architecture/config.rst:60
 msgid "The default feature extraction rules are as follows:"
-msgstr ""
+msgstr "デフォルトの特徴抽出ルールは次のようになっています:"
 
 #: ../../source/architecture/config.rst:62
 msgid ""
@@ -86,18 +90,22 @@ msgid ""
 " convenience ``bigram`` and ``trigram`` are also defined in "
 "``string_types`` by default."
 msgstr ""
+"テキスト特徴量は ``unigram`` により分割され、TF-IDFにより重み付けされます。利便性を高めるため、``bigram`` と "
+"``trigram`` もテキスト特徴抽出にデフォルトで設定されています。"
 
 #: ../../source/architecture/config.rst:64
 msgid "Numeric features are processed as is (using ``num`` type)."
-msgstr ""
+msgstr "数値特徴量は、Jubatusで言うところの ``num`` 型として処理されます。"
 
 #: ../../source/architecture/config.rst:65
 msgid "Binary features are not processed."
-msgstr ""
+msgstr "バイナリ特徴量は特徴抽出を特に行わず、そのまま学習や予測に利用されます。"
 
 #: ../../source/architecture/config.rst:67
 msgid ""
 "You can clear these default rules by calling ``clear_converter`` method. "
 "It is convenient when writing rules from scratch."
 msgstr ""
+"デフォルトで設定されている特徴抽出ルールは ``clear_converter`` "
+"メソッドにより無効にすることができます。特徴抽出ルールを一から書く場合には便利です。"
 
