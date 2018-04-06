@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:2
 msgid "Schema"
-msgstr ""
+msgstr "Schema"
 
 #: ../../source/architecture/schema.rst:4
 msgid ""
@@ -29,10 +29,15 @@ msgid ""
 "features and ``gender`` column is used as a label when training "
 "classifier."
 msgstr ""
+"SchemaはLoaderで読み込んだレコードの各カラムの意味を定義します。"
+"Schemaの基本的な使い方は、各カラムのデータ型を1つずつ定義することです。"
+"以下の例では、 ``name`` と ``age`` カラムはそれぞれ"
+"テキスト特徴量、数値特徴量として利用され、 ``gender`` カラムは"
+"Classifierを学習する際の教師ラベルとして利用されます。"
 
 #: ../../source/architecture/schema.rst:19
 msgid "Fallback Type"
-msgstr ""
+msgstr "フォールバック型"
 
 #: ../../source/architecture/schema.rst:21
 msgid ""
@@ -42,16 +47,23 @@ msgid ""
 "Schema in the following example ignores columns other than ``name``, "
 "``age`` and ``gender``."
 msgstr ""
+"Loaderから読み込まれたレコードの各カラムのデータ型は必ず定義する"
+"必要があります。もし大量のカラムが存在する場合、分析を行いたい"
+"一部のカラムを残して、その他のカラムを無視することができます。"
+"以下の例では、 ``name`` 、 ``age`` および ``gender`` 以外の"
+"カラムは全て無視され、分析対象外となります。"
 
 #: ../../source/architecture/schema.rst:33
 msgid ""
 "Similarly, if you know that all of your records are numeric feature, you "
 "can just specify Schema as follows using fallback data type."
 msgstr ""
+"同様に、もし全てのカラムが数値型であることが予め分かっている場合、"
+"以下のようすることで、全てのカラムを数値型として読み込むことができます。"
 
 #: ../../source/architecture/schema.rst:40
 msgid "Alias Names"
-msgstr ""
+msgstr "キー名の変更"
 
 #: ../../source/architecture/schema.rst:42
 msgid ""
@@ -60,28 +72,34 @@ msgid ""
 "alias names. In the following example, ``user_name`` and ``user_profile``"
 " columns will become ``name`` and ``profile`` in Datum respectively."
 msgstr ""
+"デフォルトでは、Loaderから渡されたカラム名がそのままDatumのキー名として"
+"利用されますが、Schema内でキーの名前を変更することができます。"
+"以下の例では、 ``user_name`` と ``user_profile`` がそれぞれ"
+" ``name`` と ``profile`` という名前に変換され、Datumのキーとして渡されます。"
 
 #: ../../source/architecture/schema.rst:53
 msgid ""
 "Alias names are convenient when training records from multiple data "
 "sources that have different Schema into one Service."
 msgstr ""
+"キー名の変更は複数のデータソースから取得したレコードを利用して学習を行う場合に"
+"便利です。"
 
 #: ../../source/architecture/schema.rst:56
 msgid "List of Data Types"
-msgstr ""
+msgstr "データ型一覧"
 
 #: ../../source/architecture/schema.rst:58
 msgid "Following data types can be specified for Schema."
-msgstr ""
+msgstr "以下にSchemaで指定可能なデータ型一覧を示します。"
 
 #: ../../source/architecture/schema.rst:61
 msgid "Type"
-msgstr ""
+msgstr "データ型"
 
 #: ../../source/architecture/schema.rst:61
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: ../../source/architecture/schema.rst:63
 msgid "``NUMBER``"
@@ -89,7 +107,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:63
 msgid "Feature (numeric)"
-msgstr ""
+msgstr "数値特徴量"
 
 #: ../../source/architecture/schema.rst:65
 msgid "``STRING``"
@@ -97,7 +115,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:65
 msgid "Feature (string)"
-msgstr ""
+msgstr "テキスト特徴量"
 
 #: ../../source/architecture/schema.rst:67
 msgid "``BINARY``"
@@ -105,7 +123,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:67
 msgid "Feature (binary)"
-msgstr ""
+msgstr "バイナリ特徴量"
 
 #: ../../source/architecture/schema.rst:69
 msgid "``INFER``"
@@ -113,7 +131,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:69
 msgid "Feature (infer data type automatically [1]_)"
-msgstr ""
+msgstr "自動推論された特徴量 [1]_"
 
 #: ../../source/architecture/schema.rst:71
 msgid "``AUTO``"
@@ -121,7 +139,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:71
 msgid "Feature (use data type loaded by Loader [2]_)"
-msgstr ""
+msgstr "Loaderから渡された特徴量 [2]_"
 
 #: ../../source/architecture/schema.rst:73
 msgid "``LABEL``"
@@ -129,7 +147,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:73
 msgid "Ground truth (label column) -- Classifier only"
-msgstr ""
+msgstr "ラベル (Classifierのみ)"
 
 #: ../../source/architecture/schema.rst:75
 msgid "``TARGET``"
@@ -137,7 +155,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:75
 msgid "Ground truth (target column) -- Regression only"
-msgstr ""
+msgstr "目的変数 (Regressionのみ)"
 
 #: ../../source/architecture/schema.rst:77
 msgid "``FLAG``"
@@ -145,7 +163,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:77
 msgid "Flag if the record is anomaly or not -- Anomaly only"
-msgstr ""
+msgstr "異常フラグ (Anomalyのみ)"
 
 #: ../../source/architecture/schema.rst:79
 msgid "``ID``"
@@ -153,7 +171,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:79
 msgid "Key that uniquely identifies each record -- Anomaly and Recommender only"
-msgstr ""
+msgstr "レコードを特定するためのID (Anomaly、Recommenderのみ)"
 
 #: ../../source/architecture/schema.rst:81
 msgid "``IGNORE``"
@@ -161,7 +179,7 @@ msgstr ""
 
 #: ../../source/architecture/schema.rst:81
 msgid "Discard the column"
-msgstr ""
+msgstr "そのカラムを無視する"
 
 #: ../../source/architecture/schema.rst:84
 msgid ""
@@ -170,6 +188,10 @@ msgid ""
 "every single record, so be aware that result of type inference for the "
 "same key may different between records."
 msgstr ""
+"``INFER`` では、各キーについて ``NUMBER``、``STRING`` および ``BINARY`` "
+"への型変換を試行し、変換が成功したデータ型が利用されます。"
+"データ型推論は各レコードに対して行われるため、同じキーでもレコード間で"
+"異なるデータ型へと推論されることがある点に注意してください。"
 
 #: ../../source/architecture/schema.rst:86
 msgid ""
@@ -178,4 +200,8 @@ msgid ""
 "using :py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` as CSV files "
 "is not typed data source."
 msgstr ""
+"``AUTO`` は、RDBMSのような型付きデータソースからデータを読み込む"
+"Loaderを利用する場合に指定することができます。"
+"CSVファイルから :py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` を"
+"利用して読み込んだデータは必ず ｀｀STRING`` 型になる点に注意してください。"
 
