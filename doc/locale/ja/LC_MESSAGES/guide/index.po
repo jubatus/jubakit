@@ -19,5 +19,5 @@ msgstr ""
 
 #: ../../source/guide/index.rst:2
 msgid "User's Guide"
-msgstr ""
+msgstr "ユーザーズガイド"
 
