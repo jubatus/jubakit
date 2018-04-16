@@ -19,15 +19,15 @@ msgstr ""
 
 #: ../../source/guide/jubash.rst:2
 msgid "Jubash Reference"
-msgstr ""
+msgstr "Jubash Reference"
 
 #: ../../source/guide/jubash.rst:5
 msgid "Synopsis"
-msgstr ""
+msgstr "書式"
 
 #: ../../source/guide/jubash.rst:15
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: ../../source/guide/jubash.rst:17
 msgid ""
@@ -35,26 +35,28 @@ msgid ""
 "Jubatus servers. See :doc:`../architecture/shell` for the detailed "
 "description."
 msgstr ""
+"``jubash`` は、Jubatusサーバを対話的に操作するコマンドラインインタフェースです。"
+"詳細な説明は :doc:`../architecture/shell` を参照ください。"
 
 #: ../../source/guide/jubash.rst:21
 msgid "Options"
-msgstr ""
+msgstr "オプション"
 
 #: ../../source/guide/jubash.rst:23
 msgid "``[]`` indicates the default value."
-msgstr ""
+msgstr "``[]`` 内の値はデフォルト値を示します。"
 
 #: ../../source/guide/jubash.rst:29
 msgid "Host name or IP address of the server or proxy.  [127.0.0.1]"
-msgstr ""
+msgstr "接続先のServerまたはProxyが稼働するホスト名またはIPアドレス。 [127.0.0.1]"
 
 #: ../../source/guide/jubash.rst:33
 msgid "Port number of the server or proxy.  [9199]"
-msgstr ""
+msgstr "接続先のServerまたはProxyのポート番号。 [9199]"
 
 #: ../../source/guide/jubash.rst:37
 msgid "Jubatus cluster name. Required when connecting to a proxy."
-msgstr ""
+msgstr "接続先のJubatusクラスタ名。接続先がProxyの場合は必須。"
 
 #: ../../source/guide/jubash.rst:42
 msgid ""
@@ -62,24 +64,28 @@ msgid ""
 "Generally you don't have to specify this option; it is auto-detected by "
 "default."
 msgstr ""
+"Jubatusサービス名(``classifier``, ``nearest_neighbor``, etc.)。"
+"自動的に判別されるため、通常は指定しなくて良い。"
 
 #: ../../source/guide/jubash.rst:47
 msgid "Deprecated; equivalent to :option:`--service`."
-msgstr ""
+msgstr ":option:`--service` と同じ (非推奨)。"
 
 #: ../../source/guide/jubash.rst:51
 msgid ""
 "When specified, run the specified one-shot command instead of starting an"
 " interactive shell."
 msgstr ""
+"指定された場合には、対話シェルを起動せず、引数に指定されたコマンドを"
+"実行する。"
 
 #: ../../source/guide/jubash.rst:55
 msgid "Client side timeout in seconds.  [10]"
-msgstr ""
+msgstr "通信タイムアウト(秒)。 [10]"
 
 #: ../../source/guide/jubash.rst:59
 msgid "Use keep-alive connection mode."
-msgstr ""
+msgstr "keep-alive通信モード。"
 
 #: ../../source/guide/jubash.rst:61
 msgid ""
@@ -87,36 +93,44 @@ msgid ""
 "When this option is specified, ``jubash`` reuses TCP connection. Keep-"
 "alive mode provides better performance."
 msgstr ""
+"デフォルトでは、 ``jubash`` はRPCの呼び出しのたびにTCPコネクションを確立する"
+"が、このオプションが指定された場合には、TCPコネクションを再利用する。"
+"デフォルトのコネクション確立方法と比べて、高い性能が期待できるモードである。"
 
 #: ../../source/guide/jubash.rst:65
 msgid ""
 "Note that timeout of server or proxy must be disabled (e.g., "
 "``jubaclassifier --timeout 0``) to use keep-alive mode."
 msgstr ""
+"このモードを利用する場合には、ServerやProxyのタイムアウトを無効にする"
+"必要がある(例: ``jubaclassifier --timeout 0``)。"
 
 #: ../../source/guide/jubash.rst:69
 msgid "Stop when error occurred when running script."
-msgstr ""
+msgstr "スクリプト実行時にエラーとなった場合に、処理を終了する。"
 
 #: ../../source/guide/jubash.rst:73
 msgid ""
 "Use specified shell prompt format in interactive mode.  "
 "[``[Jubatus:{service}<{cluster}>@{host}:{port}] #``]"
 msgstr ""
+"対話シェルのプロンプトフォーマット。"
 
 #: ../../source/guide/jubash.rst:77
 msgid ""
 "Enable verbose mode. In verbose mode, the contents of Datum are displayed"
 " when making RPC call."
 msgstr ""
+"冗長モード。本モードの場合、Datumの内容を出力する。"
 
 #: ../../source/guide/jubash.rst:82
 msgid ""
 "Enable debug mode. In debug mode, stacktrace will be displayed when fatal"
 " error occurred."
 msgstr ""
+"デバッグモード。本モードの場合、異常発生時にスタックトレースを出力する。"
 
 #: ../../source/guide/jubash.rst:87
 msgid "Show the usage of the command."
-msgstr ""
+msgstr "コマンドの使用方法を出力する。"
 
