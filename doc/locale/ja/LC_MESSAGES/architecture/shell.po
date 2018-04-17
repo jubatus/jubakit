@@ -26,7 +26,7 @@ msgid ""
 "Shell provides an interactive command line interface, also known as REPL "
 "(read-eval-print loop), to communicate with Jubatus servers."
 msgstr ""
-"ShellはJubatuサーバとの対話型評価環境(REPL)を提供します。"
+"ShellはJubatusサーバとの対話型評価環境(REPL)を提供します。"
 
 #: ../../source/architecture/shell.rst:7
 msgid "Using REPL from Jubakit Script"
@@ -134,7 +134,7 @@ msgid ""
 "existing command-line workflow or command-based data sources."
 msgstr ""
 "``jubash`` を利用すれば、コマンドライン処理やコマンドから取得できる"
-"データをJubatuと簡単に統合することができます。"
+"データをJubatusと簡単に統合することができます。"
 
 #: ../../source/architecture/shell.rst:109
 msgid ""
