@@ -99,7 +99,7 @@ msgid ""
 "Classifier, you can use ``train`` and ``classify`` command to communicate"
 " with Jubatus server interactively."
 msgstr ""
-"シェルプロンプトからは `Jubatus RPC API <http://jubat.us/en/api/index.html>`_ で"
+"シェルプロンプトからは `Jubatus RPC API <http://jubat.us/ja/api/index.html>`_ で"
 "定義されている全てのRPCメソッドをコマンドのように呼び出すことができます。"
 "Classifierであれば、 ``train`` と ``classify`` コマンドをJubatusサーバに対して"
 "対話的に呼び出すことができます。"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: ../../source/architecture/shell.rst:166
 msgid "Binary features are not supported."
-msgstr "バイナリ型はサポートしていません。"
+msgstr "バイナリ特徴量はサポートしていません。"
 
 #: ../../source/architecture/shell.rst:167
 msgid ""
