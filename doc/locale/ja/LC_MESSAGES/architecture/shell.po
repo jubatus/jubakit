@@ -186,7 +186,7 @@ msgid ""
 "interactive interface is not intended to handle data processing in use "
 "cases where strict consistency of data types is required."
 msgstr ""
-"それぞれのデータの型は自動的に少数型か文字列型に解釈されます。つまり、厳密な"
+"それぞれのデータの型は自動的にfloatまたがstringに解釈されます。つまり、厳密な"
 "データ型が要求されるケースを想定していません。"
 
 #: ../../source/architecture/shell.rst:166
