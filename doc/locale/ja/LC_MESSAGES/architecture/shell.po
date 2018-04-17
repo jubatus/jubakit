@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/architecture/shell.rst:2
 msgid "Shell"
-msgstr "Shell"
+msgstr ""
 
 #: ../../source/architecture/shell.rst:4
 msgid ""
