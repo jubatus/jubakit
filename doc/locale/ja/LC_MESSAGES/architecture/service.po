@@ -39,7 +39,7 @@ msgid ""
 "`Jubatus RPC API <http://jubat.us/en/api/index.html>`_. These APIs takes "
 "Dataset as an argument."
 msgstr ""
-"Serviceクラスは `Jubatus RPC API <http://jubat.us/en/api/index.html>`_ と"
+"Serviceクラスは `Jubatus RPC API <http://jubat.us/ja/api/index.html>`_ と"
 "同じAPIを提供します。これらのAPIはDatasetを引数に取ります。"
 
 #: ../../source/architecture/service.rst:12
@@ -149,5 +149,5 @@ msgstr ""
 
 #: ../../source/architecture/service.rst:83
 msgid "Support of other Services is ongoing."
-msgstr "他の機能のService化は現在進行系です。"
+msgstr "他の機能のService化は対応中です。"
 
