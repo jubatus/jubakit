@@ -19,11 +19,11 @@ msgstr ""
 
 #: ../../../README.rst:1
 msgid "|Travis|_ |Coveralls|_ |PyPi|_"
-msgstr "|Travis|_ |Coveralls|_ |PyPi|_"
+msgstr ""
 
 #: ../../../README.rst:13
 msgid "jubakit: Jubatus Toolkit"
-msgstr "jubakit: Jubatus Toolkit"
+msgstr ""
 
 #: ../../../README.rst:15
 msgid ""
@@ -119,11 +119,11 @@ msgstr "トピック"
 
 #: ../../../README.rst:79
 msgid "Requires scikit-learn"
-msgstr "Requires scikit-learn"
+msgstr ""
 
 #: ../../../README.rst:81
 msgid "classifier_csv.py"
-msgstr "classifier_csv.py"
+msgstr ""
 
 #: ../../../README.rst:81
 msgid "Handling CSV file and numeric features"
@@ -131,7 +131,7 @@ msgstr "CSVファイルと数値機能を扱う。"
 
 #: ../../../README.rst:83
 msgid "classifier_shogun.py"
-msgstr "classifier_shogun.py"
+msgstr ""
 
 #: ../../../README.rst:83
 msgid "Handling CSV file and string features"
@@ -139,7 +139,7 @@ msgstr "CSVファイルと文字列機能を扱う。"
 
 #: ../../../README.rst:85
 msgid "classifier_digits.py"
-msgstr "classifier_digits.py"
+msgstr ""
 
 #: ../../../README.rst:85
 msgid "Handling toy dataset (digits)"
@@ -149,11 +149,11 @@ msgstr "toyデータセット (digits) を扱う。"
 #: ../../../README.rst:91 ../../../README.rst:93 ../../../README.rst:101
 #: ../../../README.rst:103 ../../../README.rst:105 ../../../README.rst:109
 msgid "✓"
-msgstr "✓"
+msgstr ""
 
 #: ../../../README.rst:87
 msgid "classifier_libsvm.py"
-msgstr "classifier_libsvm.py"
+msgstr ""
 
 #: ../../../README.rst:87
 msgid "Handling LIBSVM file"
@@ -161,7 +161,7 @@ msgstr "LIBSVMファイルを扱う。"
 
 #: ../../../README.rst:89
 msgid "classifier_kfold.py"
-msgstr "classifier_kfold.py"
+msgstr ""
 
 #: ../../../README.rst:89
 msgid "K-fold cross validation and metrics"
@@ -169,7 +169,7 @@ msgstr "K-分割交差検証と評価指標。"
 
 #: ../../../README.rst:91
 msgid "classifier_parameter.py"
-msgstr "classifier_parameter.py"
+msgstr ""
 
 #: ../../../README.rst:91
 msgid "Finding best hyper parameter"
@@ -177,7 +177,7 @@ msgstr "最適なハイパーパラメータを見つける。"
 
 #: ../../../README.rst:93
 msgid "classifier_hyperopt_tuning.py"
-msgstr "classifier_hyperopt_tuning.py"
+msgstr ""
 
 #: ../../../README.rst:93
 msgid "Finding best hyper parameter using hyperopt"
@@ -185,7 +185,7 @@ msgstr "hyperoptを使用して最適なハイパーパラメータを見つけ�
 
 #: ../../../README.rst:95
 msgid "classifier_bulk.py"
-msgstr "classifier_bulk.py"
+msgstr ""
 
 #: ../../../README.rst:95
 msgid "Bulk Train-Test Classifier"
@@ -193,7 +193,7 @@ msgstr "分類モデルの学習-テストの一括化。"
 
 #: ../../../README.rst:97
 msgid "classifier_twitter.py"
-msgstr "classifier_twitter.py"
+msgstr ""
 
 #: ../../../README.rst:97
 msgid "Handling Twitter Streams"
@@ -201,7 +201,7 @@ msgstr "Twitter Streams を扱う。"
 
 #: ../../../README.rst:99
 msgid "classifier_model_extract.py"
-msgstr "classifier_model_extract.py"
+msgstr ""
 
 #: ../../../README.rst:99
 msgid "Extract contents of Classfier model file"
@@ -209,7 +209,7 @@ msgstr "分類モデルファイルの内容を抽出する。"
 
 #: ../../../README.rst:101
 msgid "classifier_sklearn_wrapper.py"
-msgstr "classifier_sklearn_wrapper.py"
+msgstr ""
 
 #: ../../../README.rst:101
 msgid "Classification using scikit-learn wrapper"
@@ -217,7 +217,7 @@ msgstr "scikit-learnラッパーを使用した分類。"
 
 #: ../../../README.rst:103
 msgid "classifier_sklearn_grid_search.py"
-msgstr "classifier_sklearn_grid_search.py"
+msgstr ""
 
 #: ../../../README.rst:103
 msgid "Grid Search example using scikit-learn wrapper"
@@ -225,7 +225,7 @@ msgstr "scikit-learnラッパーを使用したグリッドサーチ例。"
 
 #: ../../../README.rst:105
 msgid "regression_boston.py"
-msgstr "regression_boston.py"
+msgstr ""
 
 #: ../../../README.rst:105
 msgid "Regression with toy dataset (boston)"
@@ -233,7 +233,7 @@ msgstr "toyデータセット (boston) を使用した回帰。"
 
 #: ../../../README.rst:107
 msgid "regression_csv.py"
-msgstr "regression_csv.py"
+msgstr ""
 
 #: ../../../README.rst:107
 msgid "Regression with CSV file"
@@ -241,7 +241,7 @@ msgstr "CSVファイルを使用した回帰。"
 
 #: ../../../README.rst:109
 msgid "regression_sklearn_wrapper.py"
-msgstr "regression_sklearn_wrapper.py"
+msgstr ""
 
 #: ../../../README.rst:109
 msgid "Regression using scikit-learn wrapper"
@@ -249,7 +249,7 @@ msgstr "scikit-learnラッパーを使用した回帰。"
 
 #: ../../../README.rst:111
 msgid "anomaly_auc.py"
-msgstr "anomaly_auc.py"
+msgstr ""
 
 #: ../../../README.rst:111
 msgid "Anomaly detection and metrics"
@@ -257,7 +257,7 @@ msgstr "異常検知と評価指標。"
 
 #: ../../../README.rst:113
 msgid "recommender_npb.py"
-msgstr "recommender_npb.py"
+msgstr ""
 
 #: ../../../README.rst:113
 msgid "Recommend similar items"
@@ -265,7 +265,7 @@ msgstr "類似アイテムの推薦。"
 
 #: ../../../README.rst:115
 msgid "nearest_neighbor_aaai.py"
-msgstr "nearest_neighbor_aaai.py"
+msgstr ""
 
 #: ../../../README.rst:115
 msgid "Search neighbor items"
@@ -273,7 +273,7 @@ msgstr "近傍アイテムの探索。"
 
 #: ../../../README.rst:117
 msgid "clustering_2d.py"
-msgstr "clustering_2d.py"
+msgstr ""
 
 #: ../../../README.rst:117
 msgid "Clustering 2-dimensional dataset"
@@ -281,7 +281,7 @@ msgstr "2次元データセットのクラスタリング。"
 
 #: ../../../README.rst:119
 msgid "weight_shogun.py"
-msgstr "weight_shogun.py"
+msgstr ""
 
 #: ../../../README.rst:119
 msgid "Tracing fv_converter behavior using Weight"
@@ -289,7 +289,7 @@ msgstr "Weightを使用したfv_converterのふるまいの追跡。"
 
 #: ../../../README.rst:121
 msgid "weight_model_extract.py"
-msgstr "weight_model_extract.py"
+msgstr ""
 
 #: ../../../README.rst:121
 msgid "Extract contents of Weight model file"
@@ -301,7 +301,7 @@ msgstr "ライセンス"
 
 #: ../../../README.rst:127
 msgid "MIT License"
-msgstr "MIT License"
+msgstr ""
 
 #: ../../source/introduction.rst:4
 msgid "Resources"
