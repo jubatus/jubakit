@@ -127,7 +127,7 @@ msgstr ""
 
 #: ../../../README.rst:81
 msgid "Handling CSV file and numeric features"
-msgstr "CSVファイルと数値機能を扱う。"
+msgstr "CSVファイルと数値特徴量を扱う。"
 
 #: ../../../README.rst:83
 msgid "classifier_shogun.py"
@@ -135,7 +135,7 @@ msgstr ""
 
 #: ../../../README.rst:83
 msgid "Handling CSV file and string features"
-msgstr "CSVファイルと文字列機能を扱う。"
+msgstr "CSVファイルと文字列特徴量を扱う。"
 
 #: ../../../README.rst:85
 msgid "classifier_digits.py"
