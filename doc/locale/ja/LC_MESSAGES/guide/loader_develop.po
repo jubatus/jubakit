@@ -31,7 +31,7 @@ msgstr ""
 
 #: ../../source/guide/loader_develop.rst:7
 msgid "Extending Existing Loader"
-msgstr "既存のLoaderを拡張する"
+msgstr "既存のLoaderの拡張"
 
 #: ../../source/guide/loader_develop.rst:9
 msgid ""
@@ -44,7 +44,7 @@ msgstr ""
 "全てのLoaderには ``preprocess`` という拡張するためのポイントがあります。"
 "このメソッドをオーバーライドすることでレコードに対して様々な処理を行うことができます。"
 "``preprocess`` メソッドの引数は、Loaderが読み込んだレコード(辞書形式)1つだけです。"
-"戻り値は処理をした辞書形式のオブジェクトかNoneでなければなりません。"
+"戻り値は処理をした辞書形式のオブジェクトか ``None`` でなければなりません。"
 
 #: ../../source/guide/loader_develop.rst:13
 msgid ""
@@ -92,7 +92,7 @@ msgid ""
 " line number is odd."
 msgstr ""
 "``preprocess`` メソッドをフィルタリングに使うこともできます。"
-"あるレコードをスキップさせるにはNoneを返すようにすれば良いでしょう。"
+"あるレコードをスキップさせるには ``None`` を返すようにすれば良いでしょう。"
 "以下のLoaderは奇数行のみ返します。"
 
 #: ../../source/guide/loader_develop.rst:54
