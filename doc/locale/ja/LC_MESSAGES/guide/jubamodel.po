@@ -19,15 +19,15 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:2
 msgid "Jubamodel Reference"
-msgstr ""
+msgstr "Jubamodel Reference"
 
 #: ../../source/guide/jubamodel.rst:5
 msgid "Synopsis"
-msgstr ""
+msgstr "書式"
 
 #: ../../source/guide/jubamodel.rst:16
 msgid "Description"
-msgstr ""
+msgstr "説明"
 
 #: ../../source/guide/jubamodel.rst:18
 msgid ""
@@ -37,6 +37,12 @@ msgid ""
 "``jubamodel`` is service-independent; you can use ``jubamodel`` for any "
 "services."
 msgstr ""
+"``jubamodel`` はモデルファイルの低レベルな操作をするコマンドライン"
+"ユーティリティです。高レベルで使いやすいモデルの出力をしたい場合は、"
+"``jubadump`` コマンドを利用して下さい。``jubadump`` とは異なり、"
+"``jubamodel`` はサービスに依存しません。 どのサービスのモデルファイルにも"
+" ``jubamodel`` を使うことができます。 "
+
 
 #: ../../source/guide/jubamodel.rst:22
 msgid ""
@@ -44,18 +50,21 @@ msgid ""
 "<https://github.com/jubatus/jubatus/wiki/Save-and-Load-Policy-(ja)>`_ (in"
 " Japanese)."
 msgstr ""
+"モデルの構造は `Jubatus Wiki "
+"<https://github.com/jubatus/jubatus/wiki/Save-and-Load-Policy-(ja)>`_ "
+"に書かれています。"
 
 #: ../../source/guide/jubamodel.rst:25
 msgid "Options"
-msgstr ""
+msgstr "オプション"
 
 #: ../../source/guide/jubamodel.rst:27
 msgid "``[]`` indicates the default value."
-msgstr ""
+msgstr "``[]`` 内の値はデフォルト値を示します。"
 
 #: ../../source/guide/jubamodel.rst:33
 msgid "Format of the input model file.  [``auto``]"
-msgstr ""
+msgstr "入力のモデルファイルの形式。[``auto``]"
 
 #: ../../source/guide/jubamodel.rst:35
 msgid ""
@@ -64,10 +73,14 @@ msgid ""
 " ``binary`` is a model format that can be loaded by Jubatus server. "
 "``json`` is a model format that can be loaded by ``jubamodel`` command."
 msgstr ""
+"指定可能な形式は ``auto`` (デフォルト)と ``binary`` 、 ``json`` です。"
+"``auto`` : 指定されたファイルから自動で形式を推定します。 ``binary`` : "
+"Jubatus サーバで読み込める形式です。 ``json`` : ``jubamodel`` コマンドで"
+"読める形式です。"
 
 #: ../../source/guide/jubamodel.rst:42
 msgid "Format of the output model file.  [``text``]"
-msgstr ""
+msgstr "出力のモデルファイルの形式。[``text``]"
 
 #: ../../source/guide/jubamodel.rst:44
 msgid ""
@@ -75,6 +88,9 @@ msgid ""
 "``text`` is a user-friendly output of the model file. See :option:`--in-"
 "format` for ``binary`` and ``json``."
 msgstr ""
+"指定可能な形式は ``text`` (デフォルト)と ``binary`` 、 ``json`` です。"
+"``text`` はユーザフレンドリーな形式です。 ``binary`` と ``json`` は "
+":option:`--in-format` と同じです。"
 
 #: ../../source/guide/jubamodel.rst:50
 msgid ""
@@ -82,6 +98,9 @@ msgid ""
 "the file instead of the standard output. This option is mandatory if you "
 "specify ``binary`` to :option:`--out-format`."
 msgstr ""
+"モデルの出力先パス。指定された場合、結果は標準出力のかわりにここで指定された"
+"ファイルに書き込まれます。このオプションは :option:`--out-format` オプションで"
+" ``binary`` を指定した場合は必須です。"
 
 #: ../../source/guide/jubamodel.rst:56
 msgid ""
@@ -89,15 +108,20 @@ msgid ""
 "(JSON) will be extracted from the model and written to the specified "
 "file."
 msgstr ""
+"Jubatus の設定ファイルの出力先パス。指定された場合、モデルファイルから抽出"
+"された Jubatus の設定ファイルはここで指定されたファイルに書き込まれます。"
 
 #: ../../source/guide/jubamodel.rst:61
 msgid ""
 "Path to the configuration file to use. When specified, Jubatus "
 "configuration (JSON) in the original model file will be overwritten by "
-"the contents of the specified file. You may also want to specify :option"
-":`--fix-header` together, so that CRC32 checksum and other header values "
+"the contents of the specified file. You may also want to specify :option:"
+"`--fix-header` together, so that CRC32 checksum and other header values "
 "are updated according to the new configuration."
 msgstr ""
+"使用するコンフィグファイルのパス。指定された場合、モデルファイルの設定( JSON )"
+"はここで指定されたファイルで上書きされます。 :option:`--fix-header` と同時に"
+"指定する場合、 CRC32 チェックサムと他のヘッダの値は新しい設定で上書かれます。"
 
 #: ../../source/guide/jubamodel.rst:65
 msgid ""
@@ -105,6 +129,8 @@ msgid ""
 "as some hyper parameters are not expected to be changed after training "
 "models."
 msgstr ""
+"このオプションを使用する場合、学習済みモデルのハイパーパラメータが予期せず"
+"変更されてしまうことが無いよう、よく理解した上でご利用下さい。"
 
 #: ../../source/guide/jubamodel.rst:69
 msgid ""
@@ -114,6 +140,10 @@ msgid ""
 "together, so that CRC32 checksum and other header values are updated "
 "according to the new version."
 msgstr ""
+"Jubatus のバージョン番号(例: `1.0.1`)。指定された場合、モデルファイルに"
+"埋め込まれる Jubatus のバージョン番号は指定された番号で上書きされます。"
+":option:`--fix-header` オプションと同時に指定する場合、 CRC32 チェックサムと"
+"他のヘッダの値が新しいバージョン番号に併せて変更されます。"
 
 #: ../../source/guide/jubamodel.rst:73
 msgid ""
@@ -121,10 +151,13 @@ msgid ""
 "versions, there is no guarantee that the modified model can be loaded to "
 "the specified Jubatus version."
 msgstr ""
+"この機能は異なるバージョンの Jubatus の間でモデルを移行するのに役立ちますが、"
+"変更されたモデルが指定されたバージョンの Jubatus でロードできるという保証は"
+"ありません。"
 
 #: ../../source/guide/jubamodel.rst:77
 msgid "Transform the input model file for the specified service."
-msgstr ""
+msgstr "モデルファイルを異なるサービスのモデルファイルに変換します。"
 
 #: ../../source/guide/jubamodel.rst:79
 msgid ""
@@ -132,22 +165,25 @@ msgid ""
 "Anomaly (``light_lof``), you can transform the model file into Nearest "
 "Neighbor model by:"
 msgstr ""
+"例えば、 NN ベースのモデルを Classifier(``NN``) または Anomaly(``light_lof``)"
+"で利用している場合、以下のコマンドでモデルファイルを Nearest Neighbor のモデル"
+"に変換することができます。"
 
 #: ../../source/guide/jubamodel.rst:85
 msgid "You can then load the transformed model into Nearest Neighbor."
-msgstr ""
+msgstr "そうして変換したモデルは Nearest Neighbor でロードすることが出来ます。"
 
 #: ../../source/guide/jubamodel.rst:91
 msgid "Supported transformations are as follows:"
-msgstr ""
+msgstr "サポートされている変換方法は以下の通りです。"
 
 #: ../../source/guide/jubamodel.rst:94
 msgid "Models of service (method)"
-msgstr ""
+msgstr "サービス (method)"
 
 #: ../../source/guide/jubamodel.rst:94
 msgid "... can be transformed into:"
-msgstr ""
+msgstr "変換可能なサービス"
 
 #: ../../source/guide/jubamodel.rst:96
 msgid "Classifier (``NN``)"
@@ -160,7 +196,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:97
 msgid "Classifier (others)"
-msgstr ""
+msgstr "Classifier (``NN`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:97 ../../source/guide/jubamodel.rst:99
 #: ../../source/guide/jubamodel.rst:101 ../../source/guide/jubamodel.rst:104
@@ -173,7 +209,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:99
 msgid "Regression (others)"
-msgstr ""
+msgstr "Regression (``NN`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:100
 msgid "Recommender (``nearest_neighbor_recommender``)"
@@ -181,7 +217,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:101
 msgid "Recommender (others)"
-msgstr ""
+msgstr "Recommender (``nearest_neighbor_recommender`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:102
 msgid "Anomaly (``lof``)"
@@ -205,6 +241,9 @@ msgid ""
 "the model data structure (including CRC32 checksum). When this option is "
 "specified, the validation will be disabled."
 msgstr ""
+"``binary`` 形式のモデルファイルをロードする際、 ``jubamodel`` コマンドは"
+"モデルデータの構造を( CRC32 チェックサムを含めて)バリデーションしますが、"
+"このオプションが指定された場合はバリデーションは行われません。"
 
 #: ../../source/guide/jubamodel.rst:114
 msgid ""
@@ -212,26 +251,31 @@ msgid ""
 "fixed. This includes recomputation of CRC32 checksum and container "
 "lengths."
 msgstr ""
+"このオプションを指定すると、モデルのデータ構造が修正されます。 これには、"
+"CRC32 チェックサムとコンテナの長さの再計算が含まれます。"
 
 #: ../../source/guide/jubamodel.rst:117
 msgid "See the example section for details."
-msgstr ""
+msgstr "詳細については、利用例のセクションを参照してください。"
 
 #: ../../source/guide/jubamodel.rst:121
 msgid "Show the usage of the command."
-msgstr ""
+msgstr "コマンドの使用方法を表示します。"
 
 #: ../../source/guide/jubamodel.rst:125
 msgid "Examples"
-msgstr ""
+msgstr "利用例"
 
 #: ../../source/guide/jubamodel.rst:127
 msgid "You can see the meta data of the model file using ``jubamodel``:"
 msgstr ""
+"``jubamodel`` コマンドを使うことで、モデルファイルのメタデータを確認すること"
+"ができます。"
 
 #: ../../source/guide/jubamodel.rst:133
 msgid "To convert the binary model into JSON format:"
 msgstr ""
+"バイナリのモデルファイルを JSON 形式に変換するには、以下のように使います。"
 
 #: ../../source/guide/jubamodel.rst:139
 msgid ""
@@ -240,4 +284,7 @@ msgid ""
 "note the :option:`-F` option, which recomputes CRC32 checksum and other "
 "system data."
 msgstr ""
+"JSON 形式に変換したら、 JSON ファイルを手動で変更できます。その後、変更された "
+"JSON のモデルをバイナリ形式に再度変換することができます。(CRC32 チェックサム"
+"と他のシステムデータを再計算する :option:`-F` オプションにご注意下さい。"
 
