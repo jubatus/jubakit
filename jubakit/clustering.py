@@ -223,7 +223,7 @@ class Config(GenericConfig):
 
   def __init__(self, method=None, parameter=None,
                compressor_method=None, compressor_parameter=None,
-               converter=None):
+               converter=None, distance=None):
     super(Config, self).__init__(method, parameter, converter)
     if compressor_method is not None:
       self['compressor_method'] = compressor_method
@@ -241,17 +241,26 @@ class Config(GenericConfig):
       else:
         self['compressor_parameter'] = compressor_parameter
 
+    if distance is not None:
+      if 'distance' in self:
+        self['distance'].update(distance)
+      else:
+        self['distance'] = distance
+
   @classmethod
   def _default(cls, cfg):
     super(Config, cls)._default(cfg)
 
     compressor_method = cls._default_compressor_method()
     compressor_parameter = cls._default_compressor_parameter(compressor_method)
+    distance = cls._default_distance()
 
     if compressor_method is not None:
         cfg['compressor_method'] = compressor_method
     if compressor_parameter is not None:
         cfg['compressor_parameter'] = compressor_parameter
+    if distance is not None:
+        cfg['distance'] = distance
 
     return cfg
 
@@ -262,6 +271,10 @@ class Config(GenericConfig):
   @classmethod
   def _default_compressor_method(cls):
     return 'simple'
+
+  @classmethod
+  def _default_distance(cls):
+    return 'euclidean'
 
   @classmethod
   def _default_parameter(cls, method):
@@ -305,3 +318,6 @@ class Config(GenericConfig):
   def compressor_methods(cls):
     return ['simple', 'compressive']
 
+  @classmethod
+  def distances(cls):
+    return ['euclidean', 'cosine']
