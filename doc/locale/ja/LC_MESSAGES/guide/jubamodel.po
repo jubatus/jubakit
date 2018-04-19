@@ -40,8 +40,8 @@ msgstr ""
 "``jubamodel`` はモデルファイルの低レベルな操作をするコマンドライン"
 "ユーティリティです。高レベルで使いやすいモデルの出力をしたい場合は、"
 "``jubadump`` コマンドを利用して下さい。``jubadump`` とは異なり、"
-"``jubamodel`` はサービスに依存しません。 どのサービスにも ``jubamodel`` "
-"を使うことができます。 "
+"``jubamodel`` はサービスに依存しません。 どのサービスのモデルファイルにも"
+" ``jubamodel`` を使うことができます。 "
 
 
 #: ../../source/guide/jubamodel.rst:22
@@ -89,8 +89,8 @@ msgid ""
 "format` for ``binary`` and ``json``."
 msgstr ""
 "指定可能な形式は ``text`` (デフォルト)と ``binary`` 、 ``json`` です。"
-"``text`` : ユーザフレンドリーな形式です。 ``binary`` と ``json`` は "
-"``--in-format`` と同じです。"
+"``text`` はユーザフレンドリーな形式です。 ``binary`` と ``json`` は "
+":option:`--in-format` と同じです。"
 
 #: ../../source/guide/jubamodel.rst:50
 msgid ""
@@ -99,8 +99,8 @@ msgid ""
 "specify ``binary`` to :option:`--out-format`."
 msgstr ""
 "モデルの出力先パス。指定された場合、結果は標準出力のかわりにここで指定された"
-"ファイルに書き込まれます。このオプションは `--out-format` オプションで "
-"``binary`` を指定した場合は必須です。"
+"ファイルに書き込まれます。このオプションは :option:`--out-format` オプションで"
+" ``binary`` を指定した場合は必須です。"
 
 #: ../../source/guide/jubamodel.rst:56
 msgid ""
@@ -115,13 +115,13 @@ msgstr ""
 msgid ""
 "Path to the configuration file to use. When specified, Jubatus "
 "configuration (JSON) in the original model file will be overwritten by "
-"the contents of the specified file. You may also want to specify :option"
-":`--fix-header` together, so that CRC32 checksum and other header values "
+"the contents of the specified file. You may also want to specify :option:"
+"`--fix-header` together, so that CRC32 checksum and other header values "
 "are updated according to the new configuration."
 msgstr ""
 "使用するコンフィグファイルのパス。指定された場合、モデルファイルの設定( JSON )"
-"はここで指定されたファイルで上書きされます。 `--fix-header` と同時に指定する"
-"場合、 CRC32 チェックサムと他のヘッダの値は新しい設定で上書きされます。"
+"はここで指定されたファイルで上書きされます。 :option:`--fix-header` と同時に"
+"指定する場合、 CRC32 チェックサムと他のヘッダの値は新しい設定で上書かれます。"
 
 #: ../../source/guide/jubamodel.rst:65
 msgid ""
@@ -142,8 +142,8 @@ msgid ""
 msgstr ""
 "Jubatus のバージョン番号(例: `1.0.1`)。指定された場合、モデルファイルに"
 "埋め込まれる Jubatus のバージョン番号は指定された番号で上書きされます。"
-"`--fix-header` オプションと同時に指定する場合、 CRC32 チェックサムと他のヘッダ"
-"の値が新しいバージョン番号に併せて変更されます。"
+":option:`--fix-header` オプションと同時に指定する場合、 CRC32 チェックサムと"
+"他のヘッダの値が新しいバージョン番号に併せて変更されます。"
 
 #: ../../source/guide/jubamodel.rst:73
 msgid ""
@@ -157,7 +157,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:77
 msgid "Transform the input model file for the specified service."
-msgstr "指定されたサービスのモデルファイルへの変換。"
+msgstr "モデルファイルを異なるサービスのモデルファイルに変換します。"
 
 #: ../../source/guide/jubamodel.rst:79
 msgid ""
@@ -165,8 +165,8 @@ msgid ""
 "Anomaly (``light_lof``), you can transform the model file into Nearest "
 "Neighbor model by:"
 msgstr ""
-"例えば、 NN ベースのモデルを Classifier(`NN`) または Anomaly(`light_lof`)で"
-"利用している場合、以下のコマンドでモデルファイルを Nearest Neighbor のモデル"
+"例えば、 NN ベースのモデルを Classifier(``NN``) または Anomaly(``light_lof``)"
+"で利用している場合、以下のコマンドでモデルファイルを Nearest Neighbor のモデル"
 "に変換することができます。"
 
 #: ../../source/guide/jubamodel.rst:85
@@ -179,11 +179,11 @@ msgstr "サポートされている変換方法は以下の通りです。"
 
 #: ../../source/guide/jubamodel.rst:94
 msgid "Models of service (method)"
-msgstr ""
+msgstr "サービス (method)"
 
 #: ../../source/guide/jubamodel.rst:94
 msgid "... can be transformed into:"
-msgstr ""
+msgstr "変換可能なサービス"
 
 #: ../../source/guide/jubamodel.rst:96
 msgid "Classifier (``NN``)"
@@ -196,7 +196,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:97
 msgid "Classifier (others)"
-msgstr ""
+msgstr "Classifier (``NN`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:97 ../../source/guide/jubamodel.rst:99
 #: ../../source/guide/jubamodel.rst:101 ../../source/guide/jubamodel.rst:104
@@ -209,7 +209,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:99
 msgid "Regression (others)"
-msgstr ""
+msgstr "Regression (``NN`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:100
 msgid "Recommender (``nearest_neighbor_recommender``)"
@@ -217,7 +217,7 @@ msgstr ""
 
 #: ../../source/guide/jubamodel.rst:101
 msgid "Recommender (others)"
-msgstr ""
+msgstr "Recommender (``nearest_neighbor_recommender`` 以外)"
 
 #: ../../source/guide/jubamodel.rst:102
 msgid "Anomaly (``lof``)"
@@ -252,7 +252,7 @@ msgid ""
 "lengths."
 msgstr ""
 "このオプションを指定すると、モデルのデータ構造が修正されます。 これには、"
-"CRC32 チェックサムの再計算とコンテナの長さが含まれます。"
+"CRC32 チェックサムとコンテナの長さの再計算が含まれます。"
 
 #: ../../source/guide/jubamodel.rst:117
 msgid "See the example section for details."
@@ -285,6 +285,6 @@ msgid ""
 "system data."
 msgstr ""
 "JSON 形式に変換したら、 JSON ファイルを手動で変更できます。その後、変更された "
-"JSON のモデルをバイナリモデルに再度変換することができます。(CRC32 "
-"チェックサムと他のシステムデータを再計算する `-F` オプションにご注意下さい。"
+"JSON のモデルをバイナリ形式に再度変換することができます。(CRC32 チェックサム"
+"と他のシステムデータを再計算する :option:`-F` オプションにご注意下さい。"
 
