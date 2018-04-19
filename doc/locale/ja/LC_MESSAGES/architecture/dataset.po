@@ -19,7 +19,7 @@ msgstr ""
 
 #: ../../source/architecture/dataset.rst:2
 msgid "Dataset"
-msgstr ""
+msgstr "Dataset"
 
 #: ../../source/architecture/dataset.rst:4
 msgid ""
@@ -28,6 +28,9 @@ msgid ""
 "information defined in Schema. Dataset can be constructed from Loader and"
 " Schema."
 msgstr ""
+"DatasetはLoaderとSchemaの組合せで構成されます。"
+"Loaderで読み込んだレコードに対して、Schemaにより定義されたデータ型情報に基づいて"
+"Datum型に変換して保持します。"
 
 #: ../../source/architecture/dataset.rst:16
 msgid ""
@@ -39,10 +42,18 @@ msgid ""
 " in this section are implemented in :py:class:`jubakit.base.BaseDataset`,"
 " which is a base Dataset class for all Services."
 msgstr ""
+"いくつかのServiceは、上記の方法以外にもDatasetの作成方法が実装されています。"
+"例えば、 :py:class:`jubakit.classifier.Dataset` は scikit-learn などを
+"利用して生成したデータセットを読み込むために、"
+" :py:func:`from_array <jubakit.classifier.Dataset.from_array>` や"
+" :py:func:`from_matrix <jubakit.classifier.Dataset.from_matrix>` "
+"といった関数が提供されています。その他、本章で説明する機能は"
+" :py:class:`jubakit.base.BaseDataset` に実装されており、"
+"全てのServiceで利用することができます。"
 
 #: ../../source/architecture/dataset.rst:21
 msgid "Static and Non-static Datasets"
-msgstr ""
+msgstr "静的、非静的なDataset"
 
 #: ../../source/architecture/dataset.rst:23
 msgid ""
@@ -52,28 +63,41 @@ msgid ""
 "first, you can specify ``static`` option to create Dataset as *Non-static"
 " Dataset*."
 msgstr ""
+"デフォルトでは、全てのレコードはDatasetインスタンスが作成された際に"
+"Loaderからメモリ上へ全て読み出されます。"
+"上記の方法で読み出したデータセットを *静的なDataset* と呼んでいます。"
+"Loaderから逐次的にレコードを読み出したい場合には、 ``static`` オプションを"
+"指定することで、 *非静的なDataset* を生成することができます。
 
 #: ../../source/architecture/dataset.rst:31
 msgid ""
 "Note that some features like index-based record access cannot be used "
 "over non-static Datasets."
 msgstr ""
+"注意点としては、非静的なDatasetを利用した場合、インデックスを利用した"
+"レコードアクセスなど、いくつかの機能が利用できなくなります。"
 
 #: ../../source/architecture/dataset.rst:33
 msgid ""
 "Datasets constructed from infinite Loaders are non-static by default. You"
 " cannot specify ``static=True`` when using infinite Loaders."
 msgstr ""
+"Twitterデータなど読み込み上限なしLoaderから作成されたDatasetは"
+"非静的になります。上限なしLoaderを利用する際には"
+" ``static=True`` とすることはできません。"
 
 #: ../../source/architecture/dataset.rst:37
 msgid "Schema Prediction"
-msgstr ""
+msgstr "スキーマ推定"
 
 #: ../../source/architecture/dataset.rst:39
 msgid ""
 "If you don't specify Schema class when constructing Dataset, the Schema "
 "will automatically be predicted from the first record of the Dataset."
 msgstr ""
+"Datasetを作成する際にSchemaを指定しない場合には、データセットの一番上の"
+"レコードを利用してスキーマの自動推定を行います。"
+
 
 #: ../../source/architecture/dataset.rst:47
 msgid ""
@@ -81,28 +105,36 @@ msgid ""
 "``k1`` and ``k2`` columns are typed as ``STRING`` and ``NUMBER`` "
 "respectively."
 msgstr ""
+"``types`` には自動推定されたスキーマ情報が格納されています。上記の例では、"
+"``k1`` と ``k2`` がそれぞれ ``文字列型``、``数値型`` と推定されています。"
 
 #: ../../source/architecture/dataset.rst:51
 msgid "Accessing Records"
-msgstr ""
+msgstr "レコードアクセス"
 
 #: ../../source/architecture/dataset.rst:53
 msgid ""
 "You can access the raw record (i.e., record loaded from Loader) using "
 "``get`` method."
 msgstr ""
+"``get`` 関数を利用することでLoaderから読み込まれて変換される前の"
+"生データにアクセスすることができます。"
+
 
 #: ../../source/architecture/dataset.rst:60
 msgid ""
 "You can access the transformed record (i.e., Datum) using index operator."
 " You don't need this in most cases, though."
 msgstr ""
+"Datumなどに変換されたレコードへはインデックスアクセスすることができます。"
+"ただ、殆どのケースで上記のこのような操作は不要でしょう。"
 
 #: ../../source/architecture/dataset.rst:70
 msgid ""
 "You can create a subset of Dataset using index operator with slice or "
 "numeric array."
 msgstr ""
+"スライス操作によってデータを分割したり、データセットの長さを計算することもできます。"
 
 #: ../../source/architecture/dataset.rst:80
 msgid ""
@@ -112,6 +144,10 @@ msgid ""
 "``dataset``. This code creates two new Dataset instances called "
 "``ds_train`` and ``ds_test``, which are both subset of ``dataset``."
 msgstr ""
+"`scikit-learnの交差検証機能 <http://scikit-learn.org/stable/modules/"
+"cross_validation.html>`_ を利用してデータをN分割することも簡単にできます。"
+"以下のコードでは、 ``KFold`` を利用してデータセットを"
+"学習用データ( ``ds_train`` ) と検証用データ( ``ds_test`` )に分割しています。"
 
 #: ../../source/architecture/dataset.rst:90
 msgid ""
@@ -119,16 +155,21 @@ msgid ""
 "accessing the current raw record in the iteration by specifying the index"
 " currently being iterated to ``get`` method."
 msgstr ""
+"非静的Datasetはランダムアクセスができないため、"
+"生データへアクセスするにはイテレーションを回し、インデックスを利用して"
+"``get`` 関数を呼ぶ必要がある点に注意してください。"
 
 #: ../../source/architecture/dataset.rst:93
 msgid "Transformation"
-msgstr ""
+msgstr "変換処理"
 
 #: ../../source/architecture/dataset.rst:95
 msgid ""
 "Static Datasets can be bulk transformed by a user-defined lambda function"
 " using ``convert`` method."
 msgstr ""
+"静的Datasetは ``convert`` 関数を利用することで、ユーザ定義のラムダ関数により"
+"一括して変換をかけることができます。"
 
 #: ../../source/architecture/dataset.rst:101
 msgid ""
@@ -136,16 +177,22 @@ msgid ""
 "to be processed. The lambda function must not modify the given list. The "
 "result will become an another Dataset instance."
 msgstr ""
+"ラムダ関数は必ず1つの引数を取る必要があり、各生レコードに対して"
+"変換処理を施します。ラムダ関数は入力として与えられた"
+"リスト構造自体を変更してはいけません。"
+"変換処理を行った結果として、新たなDatasetが生成されます。"
 
 #: ../../source/architecture/dataset.rst:105
 msgid ""
 "For convenience, Dataset class provides ``shuffle`` method, which "
 "shuffles the order of records."
 msgstr ""
+"利便性のため、Datasetにはレコードの順番をランダムに入れ替える"
+"``shuffle `` 関数が実装されています。"
 
 #: ../../source/architecture/dataset.rst:108
 msgid "Persisting Datasets"
-msgstr ""
+msgstr "永続化"
 
 #: ../../source/architecture/dataset.rst:110
 msgid ""
@@ -153,4 +200,7 @@ msgid ""
 "instance. Please note that pickled Dataset instances may not be able to "
 "be unpickled in other versions of Jubakit."
 msgstr ""
+"Datasetを永続化するために、``pickle`` モジュールを利用することができます。"
+"異なるバージョンで生成されたDatasetをUnpickleすることはできません。"
+
 
