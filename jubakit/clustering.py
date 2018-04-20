@@ -242,10 +242,7 @@ class Config(GenericConfig):
         self['compressor_parameter'] = compressor_parameter
 
     if distance is not None:
-      if 'distance' in self:
-        self['distance'].update(distance)
-      else:
-        self['distance'] = distance
+      self['distance'] = distance
 
   @classmethod
   def _default(cls, cfg):
