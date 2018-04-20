@@ -47,7 +47,7 @@ class Burst(BaseService):
   def _embedded_class(cls):  return jubatus.embedded.Burst
 
 class Clustering(BaseService):
-  CONFIG = {'method': 'kmeans', 'parameter': {'k': 3, 'seed': 0}, 'compressor_method': 'simple', 'compressor_parameter': {'bucket_size': 1000}, 'converter': {'string_types': {'bigram': {'method': 'ngram', 'char_num': '2'}, 'trigram': {'method': 'ngram', 'char_num': '3'}, 'unigram': {'method': 'ngram', 'char_num': '1'}}, 'num_filter_types': {}, 'num_rules': [{'type': 'num', 'key': '*'}], 'num_filter_rules': [], 'string_filter_rules': [], 'num_types': {}, 'string_filter_types': {}, 'string_rules': [{'sample_weight': 'tf', 'global_weight': 'idf', 'type': 'bigram', 'key': '*'}]}}
+  CONFIG = {'method': 'kmeans', 'parameter': {'k': 3, 'seed': 0}, 'compressor_method': 'simple', 'compressor_parameter': {'bucket_size': 1000}, 'distance': 'euclidean', 'converter': {'string_types': {'bigram': {'method': 'ngram', 'char_num': '2'}, 'trigram': {'method': 'ngram', 'char_num': '3'}, 'unigram': {'method': 'ngram', 'char_num': '1'}}, 'num_filter_types': {}, 'num_rules': [{'type': 'num', 'key': '*'}], 'num_filter_rules': [], 'string_filter_rules': [], 'num_types': {}, 'string_filter_types': {}, 'string_rules': [{'sample_weight': 'tf', 'global_weight': 'idf', 'type': 'bigram', 'key': '*'}]}}
 
   @classmethod
   def name(cls):           return 'clustering'

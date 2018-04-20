@@ -16,7 +16,7 @@ class BaseJubatusClustering(BaseEstimator, ClusterMixin):
                bucket_size=100, compressed_bucket_size=100,
                bicriteria_base_size=10, bucket_length=2,
                forgetting_factor=0.0, forgetting_threshold=0.5,
-               seed=0, embedded=True):
+               seed=0, embedded=True, distance='euclidean'):
     """
     Creates a base class for Jubatus Clustering
     """
@@ -29,6 +29,7 @@ class BaseJubatusClustering(BaseEstimator, ClusterMixin):
     self.forgetting_threshold = forgetting_threshold
     self.seed = seed
     self.embedded = embedded
+    self.distance = distance
     self.compressor_parameter = \
             self._make_compressor_parameter(self.compressor_method)
     self.fitted = False
@@ -89,10 +90,11 @@ class BaseKFixedClustering(BaseJubatusClustering):
                bucket_size=100, compressed_bucket_size=100,
                bicriteria_base_size=10, bucket_length=2,
                forgetting_factor=0.0, forgetting_threshold=0.5,
-               seed=0, embedded=True):
+               seed=0, embedded=True, distance='euclidean'):
     super(BaseKFixedClustering, self).__init__(
       compressor_method, bucket_size, compressed_bucket_size, bicriteria_base_size,
-      bucket_length, forgetting_factor, forgetting_threshold, seed, embedded)
+      bucket_length, forgetting_factor, forgetting_threshold, seed, embedded,
+      distance)
     self.k = k
 
   def _method(self):
@@ -106,7 +108,8 @@ class BaseKFixedClustering(BaseJubatusClustering):
     }
     self.config_ = Config(method=self.method, parameter=self.parameter,
                           compressor_method=self.compressor_method,
-                          compressor_parameter=self.compressor_parameter)
+                          compressor_parameter=self.compressor_parameter,
+                          distance=self.distance)
     self.clustering_ = Clustering.run(config=self.config_,
                                       embedded=self.embedded)
 
@@ -162,11 +165,12 @@ class DBSCAN(BaseJubatusClustering):
                bucket_size=100, compressed_bucket_size=100,
                bicriteria_base_size=10, bucket_length=2,
                forgetting_factor=0.0, forgetting_threshold=0.5,
-               seed=0, embedded=True):
+               seed=0, embedded=True, distance='euclidean'):
     super(DBSCAN, self).__init__('simple', bucket_size,
                                  compressed_bucket_size, bicriteria_base_size,
                                  bucket_length, forgetting_factor,
-                                 forgetting_threshold, seed, embedded)
+                                 forgetting_threshold, seed, embedded,
+                                 distance)
     self.eps = eps
     self.min_core_point = min_core_point
 
@@ -178,7 +182,8 @@ class DBSCAN(BaseJubatusClustering):
     }
     self.config_ = Config(method=self.method, parameter=self.parameter,
                           compressor_method=self.compressor_method,
-                          compressor_parameter=self.compressor_parameter)
+                          compressor_parameter=self.compressor_parameter,
+                          distance=self.distance)
     self.clustering_ = Clustering.run(config=self.config_,
                                       embedded=self.embedded)
 
