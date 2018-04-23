@@ -1,6 +1,15 @@
 ChangeLog
 ====================================================
 
+Release 0.5.5 (2018-04-23)
+---------------------------------------
+
+* New Features
+    * Add support for distance option of Clustering (#123)
+
+* Documentation
+    * Translate documents into Japanese (#104, #105, #108, #110, #111, #113-122)
+
 Release 0.5.4 (2018-02-26)
 ---------------------------------------
 
