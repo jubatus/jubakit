@@ -1,0 +1,86 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/architecture/loader.rst:2
+msgid "Loader"
+msgstr "Loader"
+
+#: ../../source/architecture/loader.rst:4
+msgid ""
+"Loader fetches data from data sources. Each Loader class is implemented "
+"for its corresponding data source. For example, you can use "
+":py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` class to load CSV "
+"dataset."
+msgstr ""
+"Loaderはデータソースからデータを取得する機能を提供します。"
+"Loaderクラスはデータソース毎に実装されています。"
+"例えばCSVのデータセットのロードには :py:class:`CSVLoader <jubakit.loader.csv.CSVLoader>` を使います。"
+#: ../../source/architecture/loader.rst:14
+msgid ""
+"The Loader outputs a dict-like (key-value) object for each record loaded "
+"from the data source:"
+msgstr ""
+"Loaderの出力はデータソースから読み込んだレコード毎に辞書形式のオブジェクトとなります。"
+
+
+#: ../../source/architecture/loader.rst:25
+msgid "List of Loaders"
+msgstr "Loader一覧"
+
+#: ../../source/architecture/loader.rst:27
+msgid "Loaders for the following data sources are bundled with Jubakit."
+msgstr "以下のLoaderがJubakitには含まれています。"
+
+#: ../../source/architecture/loader.rst:29
+msgid "Plain line-based streams and files -- :py:mod:`jubakit.loader.core`"
+msgstr "一行ごとに処理するプレーンテキストのストリームやファイル -- :py:mod:`jubakit.loader.core`"
+
+#: ../../source/architecture/loader.rst:30
+msgid ""
+"Array-like (Python lists, NumPy arrays, etc.) data structure -- "
+":py:mod:`jubakit.loader.array`"
+msgstr ""
+"配列形式(PythonのリストやNumPyのarrayなど) -- :py:mod:`jubakit.loader.array`"
+
+#: ../../source/architecture/loader.rst:31
+msgid "SciPy sparse matrix data structure -- :py:mod:`jubakit.loader.sparse`"
+msgstr "SciPyの疎行列データ -- :py:mod:`jubakit.loader.sparse`"
+
+#: ../../source/architecture/loader.rst:32
+msgid "CSV files -- :py:mod:`jubakit.loader.csv`"
+msgstr "CSVファイル -- :py:mod:`jubakit.loader.csv`"
+
+#: ../../source/architecture/loader.rst:33
+msgid "Twitter streams -- :py:mod:`jubakit.loader.twitter`"
+msgstr "Twitterのストリーム -- :py:mod:`jubakit.loader.twitter`"
+
+#: ../../source/architecture/loader.rst:34
+msgid ""
+"*Chain* Loaders (that wraps other Loaders) -- "
+":py:mod:`jubakit.loader.chain`"
+msgstr "他のLoaderをラップするLoader(*Chain* Loader) -- :py:mod:`jubakit.loader.chain`"
+
+#: ../../source/architecture/loader.rst:36
+msgid ""
+"You can extend these Loaders or even write your own one. See "
+":doc:`../guide/loader_develop` for details."
+msgstr ""
+"Loaderを拡張することや自分でLoaderを実装することもできます。"
+"詳しくは :doc:`../guide/loader_develop` を参照してください。"
+

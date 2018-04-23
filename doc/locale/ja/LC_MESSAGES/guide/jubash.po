@@ -1,0 +1,136 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/guide/jubash.rst:2
+msgid "Jubash Reference"
+msgstr "Jubash Reference"
+
+#: ../../source/guide/jubash.rst:5
+msgid "Synopsis"
+msgstr "書式"
+
+#: ../../source/guide/jubash.rst:15
+msgid "Description"
+msgstr "説明"
+
+#: ../../source/guide/jubash.rst:17
+msgid ""
+"``jubash`` is a command line interface to interactively communicate with "
+"Jubatus servers. See :doc:`../architecture/shell` for the detailed "
+"description."
+msgstr ""
+"``jubash`` は、Jubatusサーバを対話的に操作するコマンドラインインタフェースです。"
+"詳細な説明は :doc:`../architecture/shell` を参照ください。"
+
+#: ../../source/guide/jubash.rst:21
+msgid "Options"
+msgstr "オプション"
+
+#: ../../source/guide/jubash.rst:23
+msgid "``[]`` indicates the default value."
+msgstr "``[]`` 内の値はデフォルト値を示します。"
+
+#: ../../source/guide/jubash.rst:29
+msgid "Host name or IP address of the server or proxy.  [127.0.0.1]"
+msgstr "接続先のServerまたはProxyが稼働するホスト名またはIPアドレス。 [127.0.0.1]"
+
+#: ../../source/guide/jubash.rst:33
+msgid "Port number of the server or proxy.  [9199]"
+msgstr "接続先のServerまたはProxyのポート番号。 [9199]"
+
+#: ../../source/guide/jubash.rst:37
+msgid "Jubatus cluster name. Required when connecting to a proxy."
+msgstr "接続先のJubatusクラスタ名。接続先がProxyの場合は必須。"
+
+#: ../../source/guide/jubash.rst:42
+msgid ""
+"Name of Jubatus service (``classifier``, ``nearest_neighbor``, etc.) "
+"Generally you don't have to specify this option; it is auto-detected by "
+"default."
+msgstr ""
+"Jubatusサービス名(``classifier``, ``nearest_neighbor``, etc.)。"
+"自動的に判別されるため、通常は指定しなくて良い。"
+
+#: ../../source/guide/jubash.rst:47
+msgid "Deprecated; equivalent to :option:`--service`."
+msgstr ":option:`--service` と同じ (非推奨)。"
+
+#: ../../source/guide/jubash.rst:51
+msgid ""
+"When specified, run the specified one-shot command instead of starting an"
+" interactive shell."
+msgstr ""
+"指定された場合には、対話シェルを起動せず、引数に指定されたコマンドを"
+"実行する。"
+
+#: ../../source/guide/jubash.rst:55
+msgid "Client side timeout in seconds.  [10]"
+msgstr "通信タイムアウト(秒)。 [10]"
+
+#: ../../source/guide/jubash.rst:59
+msgid "Use keep-alive connection mode."
+msgstr "keep-alive通信モード。"
+
+#: ../../source/guide/jubash.rst:61
+msgid ""
+"By default, ``jubash`` establishes new TCP connection for each RPC call. "
+"When this option is specified, ``jubash`` reuses TCP connection. Keep-"
+"alive mode provides better performance."
+msgstr ""
+"デフォルトでは、 ``jubash`` はRPCの呼び出しのたびにTCPコネクションを確立する"
+"が、このオプションが指定された場合には、TCPコネクションを再利用する。"
+"デフォルトのコネクション確立方法と比べて、高い性能が期待できるモードである。"
+
+#: ../../source/guide/jubash.rst:65
+msgid ""
+"Note that timeout of server or proxy must be disabled (e.g., "
+"``jubaclassifier --timeout 0``) to use keep-alive mode."
+msgstr ""
+"このモードを利用する場合には、ServerやProxyのタイムアウトを無効にする"
+"必要がある(例: ``jubaclassifier --timeout 0``)。"
+
+#: ../../source/guide/jubash.rst:69
+msgid "Stop when error occurred when running script."
+msgstr "スクリプト実行時にエラーとなった場合に、処理を終了する。"
+
+#: ../../source/guide/jubash.rst:73
+msgid ""
+"Use specified shell prompt format in interactive mode.  "
+"[``[Jubatus:{service}<{cluster}>@{host}:{port}] #``]"
+msgstr ""
+"対話シェルのプロンプトフォーマット。"
+
+#: ../../source/guide/jubash.rst:77
+msgid ""
+"Enable verbose mode. In verbose mode, the contents of Datum are displayed"
+" when making RPC call."
+msgstr ""
+"冗長モード。本モードの場合、Datumの内容を出力する。"
+
+#: ../../source/guide/jubash.rst:82
+msgid ""
+"Enable debug mode. In debug mode, stacktrace will be displayed when fatal"
+" error occurred."
+msgstr ""
+"デバッグモード。本モードの場合、異常発生時にスタックトレースを出力する。"
+
+#: ../../source/guide/jubash.rst:87
+msgid "Show the usage of the command."
+msgstr "コマンドの使用方法を出力する。"
+

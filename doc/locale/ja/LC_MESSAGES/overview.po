@@ -1,0 +1,64 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-01-31 23:40+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/overview.rst:2
+msgid "Overview"
+msgstr "概要"
+
+#: ../../source/overview.rst:4
+msgid ""
+"Jubakit is a Python module to access Jubatus features easily. The goal of"
+" Jubakit is to:"
+msgstr ""
+"JubakitはJubatusの機能を簡単に使うためのPythonモジュールです。"
+"Jubakitの目標は次の通りです。"
+
+#: ../../source/overview.rst:7
+msgid ""
+"Accelerate cycles of data analysis by integrating powerful scikit-learn "
+"features into Jubatus"
+msgstr ""
+"強力なscikit-learnの機能をJubatusと統合することで、データ分析のサイクルを加速します。"
+
+#: ../../source/overview.rst:8
+msgid ""
+"Conceal the system architecture of Jubatus (config files, TCP port number"
+" assignment, process invocation, RPC call, etc.) to provide an interface "
+"that users can focus on data analysis"
+msgstr ""
+"ユーザがデータ分析に集中できるように、Jubatusの"
+"システムアーキテクチャ(configファイル、TCPポート番号、プロセス呼び出し、RPC callなど)を隠蔽します。"
+
+#: ../../source/overview.rst:10
+msgid ""
+"Here is a shortest example of code using Jubakit. You can perform anomaly"
+" detection on CSV dataset only by 4 lines of Python code:"
+msgstr ""
+"Jubakitを使うことで、わずか4行のコードでCSV形式のデータセットの"
+"異常検知を実行することができます。"
+
+#: ../../source/overview.rst:20
+msgid ""
+"Jubakit provides a simple-to-use APIs while allowing users to customize "
+"detailed behaviors. Jubakit also comes with configuration parameters that"
+" works well in most cases, so you don't have to configure them until "
+"necessary."
+msgstr ""
+"Jubakitは、簡単に使えるAPIを提供し、ユーザーは詳細な動作をカスタマイズできます。"
+"Jubakitには、ほとんどのユースケースでうまく動作するパラメータが予め設定されているため、必要になるまで"
+"パラメータを設定する必要はありません。"

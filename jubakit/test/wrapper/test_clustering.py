@@ -35,6 +35,7 @@ class KMeansTest(TestCase):
     self.assertEqual(0.5, clustering.forgetting_threshold)
     self.assertEqual(0, clustering.seed)
     self.asssrtTrue(not clustering.embedded)
+    self.assertEqual('euclidean', clustering.distance)
     clustering.stop()
 
   def test_method(self):
@@ -129,5 +130,6 @@ class DBSCANTest(testCase):
     self.assertEqual(0.5, clustering.forgetting_threshold)
     self.assertEqual(0, clustering.seed)
     self.asssrtTrue(not clustering.embedded)
+    self.assertEqual('euclidean', clustering.distance)
     clustering.stop()
 

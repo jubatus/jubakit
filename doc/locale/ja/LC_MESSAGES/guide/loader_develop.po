@@ -1,0 +1,183 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/guide/loader_develop.rst:2
+msgid "Loader Development Guide"
+msgstr "Loader開発ガイド"
+
+#: ../../source/guide/loader_develop.rst:4
+msgid ""
+"Although Jubakit provides various kinds of built-in Loaders, you can also"
+" extend existing Loader or even develop your own one to suit your needs."
+msgstr ""
+"Jubakitには予め様々な種類のLoaderが実装されていますが、それらを拡張したり"
+"新しいLoaderを実装することもできるようになっています。"
+
+#: ../../source/guide/loader_develop.rst:7
+msgid "Extending Existing Loader"
+msgstr "既存のLoaderの拡張"
+
+#: ../../source/guide/loader_develop.rst:9
+msgid ""
+"All Loaders have an extension point called ``preprocess``, which is a "
+"method you can override and perform operations on each record from the "
+"Loader. ``preprocess`` method takes only 1 argument, which is a single "
+"record loaded (dict-like object). The method must return the preprocessed"
+" dict-like object or ``None``."
+msgstr ""
+"全てのLoaderには ``preprocess`` という拡張するためのポイントがあります。"
+"このメソッドをオーバーライドすることでレコードに対して様々な処理を行うことができます。"
+"``preprocess`` メソッドの引数は、Loaderが読み込んだレコード(辞書形式)1つだけです。"
+"戻り値は処理をした辞書形式のオブジェクトか ``None`` でなければなりません。"
+
+#: ../../source/guide/loader_develop.rst:13
+msgid ""
+"The default implementation of ``preprocess`` method is as follows; it "
+"does nothing."
+msgstr ""
+"``preprocess`` のデフォルトの実装は以下の通り何もしません。"
+
+
+#: ../../source/guide/loader_develop.rst:20
+msgid ""
+"Although not mandatory, the output of ``preprocess`` method should be a "
+"flat dict-like object, i.e., values should not be objects."
+msgstr ""
+"必須ではありませんが、 ``preprocess`` の出力はフラットな辞書形式、つまり、"
+"valueをオブジェクトにしないことが推奨されます。"
+
+#: ../../source/guide/loader_develop.rst:23
+msgid "Transformation"
+msgstr "加工"
+
+#: ../../source/guide/loader_develop.rst:25
+msgid ""
+"For example, if you want to process JSONL files (files that contain one "
+"JSON record per line), you can create a class that inherits from "
+":py:class:`LineBasedFileLoader <jubakit.loader.core.LineBasedFileLoader>`"
+" which loads a single text file and emits record for each line, and "
+"implement ``preprocess`` method as follows:"
+msgstr ""
+"例えばJSONLファイル(1行が1つのJSONレコードとなっているファイル)を扱う場合、"
+"テキストファイルを読み込み、一行ずつ出力する "
+":py:class:`LineBasedFileLoader <jubakit.loader.core.LineBasedFileLoader>` を継承した"
+"クラスを作成すると良いでしょう。そして、 ``preprocess`` メソッドを"
+"以下のように実装します。"
+
+
+#: ../../source/guide/loader_develop.rst:37
+msgid "Filtering"
+msgstr "フィルタリング"
+
+#: ../../source/guide/loader_develop.rst:39
+msgid ""
+"You can also use ``preprocess`` method for filtering. If you want to skip"
+" the record, just return ``None``. The following Loader loads lines whose"
+" line number is odd."
+msgstr ""
+"``preprocess`` メソッドをフィルタリングに使うこともできます。"
+"あるレコードをスキップさせるには ``None`` を返すようにすれば良いでしょう。"
+"以下のLoaderは奇数行のみ返します。"
+
+#: ../../source/guide/loader_develop.rst:54
+msgid "Window Processing"
+msgstr "ウインドウ処理"
+
+#: ../../source/guide/loader_develop.rst:56
+msgid ""
+"As Loaders can be stateful, ``preprocess`` method can also be used for "
+"window processing. Here is an example of Loader that calculates moving "
+"average over ``x``."
+msgstr ""
+"Loaderは状態を持つことができるため、 ``preprocess`` メソッドをウインドウ"
+"処理に使うこともできます。 以下は ``x`` の移動平均を求めるLoaderの例です。"
+
+#: ../../source/guide/loader_develop.rst:87
+msgid "Implementing New Loader"
+msgstr "新しいLoaderの実装"
+
+#: ../../source/guide/loader_develop.rst:89
+msgid ""
+"If none of the existing Loaders work for you, create your own Loader from"
+" scratch. It is quite simple -- the minimum requirements for Loader "
+"classes are:"
+msgstr ""
+"既存のLoaderで対処できない場合には、Loaderを自分で実装することもできます。"
+"実装はとても簡単です。最低限必要なことは以下の２点です。"
+
+
+#: ../../source/guide/loader_develop.rst:92
+msgid "Loaders must inherit from :py:class:`jubakit.base.BaseLoader` class."
+msgstr ":py:class:`jubakit.base.BaseLoader` クラスを継承すること。"
+
+#: ../../source/guide/loader_develop.rst:93
+msgid "Loaders must implement ``rows`` method, which yields a ``dict`` object."
+msgstr "``rows`` メソッドを実装すること。このメソッドは"
+"辞書形式のオブジェクトを生成します。"
+
+#: ../../source/guide/loader_develop.rst:95
+msgid ""
+"Here is a simple example of a Loader, which emits 2-dimensional random "
+"number records for 5 times."
+msgstr ""
+"以下は2次元の乱数のレコードを5回出力する単純なLoaderの例です。"
+
+#: ../../source/guide/loader_develop.rst:108
+msgid "Loaders can easily be tested as follows."
+msgstr "Loaderのテストは以下のように簡単にできます。"
+
+#: ../../source/guide/loader_develop.rst:122
+msgid ""
+"It is advised to emit flat dict-like object (i.e., no objects in values) "
+"in ``rows`` method to avoid confusion."
+msgstr ""
+"``rows`` メソッドではわかりやすさのためフラットな辞書形式のオブジェクト、"
+"すなわちvalueにオブジェクトを持たない辞書形式のオブジェクトを返すように"
+"することが推奨されます。"
+
+#: ../../source/guide/loader_develop.rst:124
+msgid ""
+"If you are developing *infinite* Loader (e.g., Twitter streams), it "
+"should implement ``is_infinite`` method and return ``True``. Please note "
+"that all entries are loaded from Loader to memory when creating "
+"``Dataset`` by default, unless ``is_infinite`` returns ``True`` (or "
+"``static`` option of ``Dataset`` constructor is explicitly set to "
+"``False``)."
+msgstr ""
+"Twitterストリームのように永続するLoaderを実装する場合には、"
+"``is_infinite`` メソッドが ``True`` を返すよう実装してください。"
+"デフォルトでは ``Dataset`` を作成した際に全ての要素がメモリにロードされます。"
+"``is_infinite`` が ``True`` を返す場合、または ``Dataset`` のコンストラクタの "
+"``static`` オプションが明示的に ``False`` を指定された場合のみ、"
+"全ての要素のロードが行われません。"
+
+
+#: ../../source/guide/loader_develop.rst:141
+msgid "Now you need a parameter for your Loader? You can use a constructor."
+msgstr ""
+"Loaderにパラメータが必要な場合はコンストラクタを使います。"
+
+#: ../../source/guide/loader_develop.rst:161
+msgid ""
+"If you wrote a Loader that can be commonly used, please consider "
+"submitting `Pull-Request <https://github.com/jubatus/jubakit/pulls>`_ to "
+"make the Loader as a part of Jubakit!"
+msgstr ""
+"汎用的にも使えそうなLoaderを作成した際には是非 "
+"`Pull-Request <https://github.com/jubatus/jubakit/pulls>`_ をお送りください!"

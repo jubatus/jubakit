@@ -1,0 +1,37 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/guide/faq.rst:2
+msgid "Frequently Asked Questions"
+msgstr "よくある質問"
+
+#: ../../source/guide/faq.rst:7
+msgid "How can I debug Jubakit script?"
+msgstr "Jubakitスクリプトをデバッグする方法はありますか?"
+
+#: ../../source/guide/faq.rst:5
+msgid ""
+"Jubakit has a built-in logging feature. By default, logging is turned "
+"off. You can enable logging by setting the environment variable like "
+"``export JUBAKIT_LOG_LEVEL=DEBUG`` or adding the following two lines to "
+"your code:"
+msgstr ""
+"Jubakitはログ機能を有しています。デフォルトでは、ログ機能は無効になっています。"
+"``export JUBAKIT_LOG_LEVEL=DEBUG`` のように環境変数を使って、ログ機能を有効にすることができます。"
+"または、以下の２行をスクリプトに追加することで有効にすることができます。"

@@ -282,6 +282,7 @@ class ConfigTest(TestCase):
     self.assertEqual({'k': 3, 'seed': 0}, config['parameter'])
     self.assertEqual('simple', config['compressor_method'])
     self.assertEqual({'bucket_size': 100}, config.get('compressor_parameter'))
+    self.assertEqual('euclidean', config.get('distance'))
 
   def test_methods(self):
     config = Config()
@@ -290,6 +291,10 @@ class ConfigTest(TestCase):
   def test_compressor_methods(self):
     config = Config()
     self.assertTrue(isinstance(config.compressor_methods(), list))
+
+  def test_distances(self):
+    config = Config()
+    self.assertTrue(isinstance(config.distances(), list))
 
   def test_illegal_comporessor_method(self):
     self.assertRaises(RuntimeError,
@@ -300,6 +305,7 @@ class ConfigTest(TestCase):
     config = Config.default()
     self.assertEqual('kmeans', config['method'])
     self.assertEqual('simple', config['compressor_method'])
+    self.assertEqual('euclidean', config['distance'])
 
   def test_method_params(self):
     self.assertTrue('k' in Config(method='kmeans')['parameter'])

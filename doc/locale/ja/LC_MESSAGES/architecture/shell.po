@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2011-2016 PFN & NTT
+# This file is distributed under the same license as the jubakit package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: jubakit 0.5.3\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-02-03 22:56+0900\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.5.3\n"
+
+#: ../../source/architecture/shell.rst:2
+msgid "Shell"
+msgstr ""
+
+#: ../../source/architecture/shell.rst:4
+msgid ""
+"Shell provides an interactive command line interface, also known as REPL "
+"(read-eval-print loop), to communicate with Jubatus servers."
+msgstr ""
+"ShellはJubatusサーバとの対話型評価環境(REPL)を提供します。"
+
+#: ../../source/architecture/shell.rst:7
+msgid "Using REPL from Jubakit Script"
+msgstr "JubakitスクリプトからREPLを利用する"
+
+#: ../../source/architecture/shell.rst:9
+msgid "The REPL interface can be started from :doc:`service` instances."
+msgstr "REPLインタフェースは :doc:`service` インスタンスから開始することができます。"
+
+#: ../../source/architecture/shell.rst:17
+msgid ""
+"When :py:func:`shell() <jubakit.base.BaseService.shell>` method is "
+"called, an interactive shell to control the Service is started. You can "
+"interactively call RPC API to the Jubatus server in the shell. The "
+"jubakit script stops until you exit the shell."
+msgstr ""
+":py:func:`shell() <jubakit.base.BaseService.shell>` メソッドを呼び出すと、"
+"Service インスタンスを操作するための対話シェルが起動します。"
+"対話シェルでは、RPCを対話的に呼び出すことができます。"
+"対話シェルを終了するまで、jubakitスクリプトは停止します。"
+
+#: ../../source/architecture/shell.rst:21
+msgid "See the next section for the usage of the interactive shell."
+msgstr "対話シェルの使い方は、次のセクションで説明します。"
+
+#: ../../source/architecture/shell.rst:24
+msgid "Using REPL from Command Line"
+msgstr "コマンドラインからREPLを利用する"
+
+#: ../../source/architecture/shell.rst:26
+msgid ""
+"Jubakit also provides ``jubash`` command, which is a standalone version "
+"of the Shell feature. It can be used as a handy tool to briefly tasting "
+"Jubatus without writing code."
+msgstr ""
+"Jubakitは、Shell機能のスタンドアロンバージョンである ``jubash`` というコマンド"
+"を提供します。このツールを利用すれば、ソースコードを書かずに簡単にJubatusを利用"
+"することができます。"
+
+#: ../../source/architecture/shell.rst:29
+msgid ""
+"When using ``jubash`` command (outside Jubakit script), Jubatus servers "
+"needs to be started manually."
+msgstr ""
+"``jubash`` コマンドを利用する場合(Jubakitスクリプト外から利用する場合)、Jubatus"
+"サーバを手動で起動しておく必要があります。"
+
+#: ../../source/architecture/shell.rst:35
+msgid "Now you can connect to the Classifier server using ``jubash``."
+msgstr "これで ``jubash`` コマンドを使ってClassifierサーバに接続することができます。"
+
+#: ../../source/architecture/shell.rst:42
+msgid ""
+"The shell prompt appears when connected successfully. By default, "
+"``jubash`` tries to connect to ``127.0.0.1:9199``. You can also connect "
+"to a remote server and/or a custom port:"
+msgstr ""
+"接続に成功するとシェルプロンプトが現れます。デフォルトでは ``jubash`` コマンドは、 "
+"``127.0.0.1:9199`` に接続します。もちろん、接続先のサーバやポートを変更することが"
+"できます:"
+
+#: ../../source/architecture/shell.rst:50
+msgid "For other options refer to :doc:`../guide/jubash` or ``jubash --help``."
+msgstr "その他のオプションについては :doc:`../guide/jubash` または ``jubash --help`` で確認してください。"
+
+#: ../../source/architecture/shell.rst:52
+msgid ""
+"Now you can call any methods defined in `Jubatus RPC API "
+"<http://jubat.us/en/api/index.html>`_ as if it is a command. For "
+"Classifier, you can use ``train`` and ``classify`` command to communicate"
+" with Jubatus server interactively."
+msgstr ""
+"シェルプロンプトからは `Jubatus RPC API <http://jubat.us/ja/api/index.html>`_ で"
+"定義されている全てのRPCメソッドをコマンドのように呼び出すことができます。"
+"Classifierであれば、 ``train`` と ``classify`` コマンドをJubatusサーバに対して"
+"対話的に呼び出すことができます。"
+
+#: ../../source/architecture/shell.rst:65
+msgid ""
+"``train`` method takes the label and the Datum (key-value record) as "
+"arguments, whereas ``classify`` method only takes the Datum. The above "
+"example is almost equivalent to the following Python code:"
+msgstr ""
+"``train`` メソッドはラベルと Datum (key-value データ) を引数に取ります。"
+"一方、 ``classify`` メソッドは Datum だけを引数に取ります。上記の例は、"
+"以下のPythonコードとほぼ同等となります。"
+
+#: ../../source/architecture/shell.rst:83
+msgid ""
+"``help`` command shows a list of commands available. If a command name is"
+" given to the ``help`` command (like ``help train``), it will show you a "
+"brief description of its arguments."
+msgstr ""
+"``help`` コマンドは利用可能なコマンドの一覧を表示します。 ``help train`` "
+"のように、 ``help`` に続けてコマンド名が与えられた場合は、そのコマンドの"
+"引数についての簡単な説明を表示します。"
+
+#: ../../source/architecture/shell.rst:105
+msgid "Integrating with Command Line Workflow"
+msgstr "コマンドライン処理との統合"
+
+#: ../../source/architecture/shell.rst:107
+msgid ""
+"You can also use ``jubash`` to easily integrate Jubatus with your "
+"existing command-line workflow or command-based data sources."
+msgstr ""
+"``jubash`` を利用すれば、コマンドライン処理やコマンドから取得できる"
+"データをJubatusと簡単に統合することができます。"
+
+#: ../../source/architecture/shell.rst:109
+msgid ""
+"You can use ``-c, --command`` option to execute a shell command in batch "
+"mode. For example, you can periodically monitor the status of Jubatus "
+"servers like this:"
+msgstr ""
+"対話シェルで実行するコマンドを ``-c, --command`` オプションで指定すると、"
+"コマンドをバッチ実行することができます。例えば、Jubatusサーバの定期的な"
+"監視を行いたい場合には、以下のように実現することができます。"
+
+
+#: ../../source/architecture/shell.rst:116
+msgid ""
+"You can also execute ``jubash`` from shell scripts. The following example"
+" illustrates how to call Jubatus API from shell scripts."
+msgstr ""
+"``jubash`` はシェルスクリプトからも実行することができます。以下の例では、"
+"シェルスクリプトからJubatusのAPIを実行する方法を説明します。"
+
+#: ../../source/architecture/shell.rst:139
+msgid "Writing Jubash Script"
+msgstr "Jubashスクリプト"
+
+#: ../../source/architecture/shell.rst:141
+msgid ""
+"As with the usual shell programs, ``jubash`` also works as an interpreter"
+" (note the shebang line)."
+msgstr ""
+"一般的なシェルプログラムと同様に、 ``jubash`` はインタプリタとして動作します。"
+"(シバン行に注目してください)"
+
+#: ../../source/architecture/shell.rst:160
+msgid "Limitations"
+msgstr "制限事項"
+
+#: ../../source/architecture/shell.rst:162
+msgid ""
+"Although commands in ``jubash`` are designed to be similar to its "
+"corresponding APIs, there are some limitations due to the limit of "
+"expression in REPL."
+msgstr ""
+"``jubash`` のコマンドは対応するAPIに似たインタフェースに設計されています。"
+"しかし、REPL表現の制約のため、いくつかの制限事項があります。"
+
+#: ../../source/architecture/shell.rst:164
+msgid ""
+"Types of each data is automatically assumed as float or string. The "
+"interactive interface is not intended to handle data processing in use "
+"cases where strict consistency of data types is required."
+msgstr ""
+"それぞれのデータの型は自動的にfloatまたはstringに解釈されます。つまり、厳密な"
+"データ型が要求されるケースを想定していません。"
+
+#: ../../source/architecture/shell.rst:166
+msgid "Binary features are not supported."
+msgstr "バイナリ特徴量はサポートしていません。"
+
+#: ../../source/architecture/shell.rst:167
+msgid ""
+"Bulk RPC queries (throwing multiple records in single RPC call like "
+"``train`` method of Classifier service) is not supported."
+msgstr ""
+"Classifierの ``train`` メソッドのように、1回のRPC実行で複数のデータを"
+"登録する一括登録の仕組みはサポートしていません。"
