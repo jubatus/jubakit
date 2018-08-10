@@ -14,7 +14,7 @@ exec(_read('jubakit/_version.py'))
 def get_extras_requires():
   extras_requires = {
     'test': ['numpy', 'scipy',
-             'scikit-learn', 'tweepy', 'jq'],
+             'scikit-learn', 'tweepy', 'jq', 'psycopg2'],
   }
   return extras_requires
 

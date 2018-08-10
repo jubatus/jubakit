@@ -30,6 +30,7 @@ Loaders for the following data sources are bundled with Jubakit.
 * Array-like (Python lists, NumPy arrays, etc.) data structure -- :py:mod:`jubakit.loader.array`
 * SciPy sparse matrix data structure -- :py:mod:`jubakit.loader.sparse`
 * CSV files -- :py:mod:`jubakit.loader.csv`
+* PostgreSQL data -- :py:mod:`jubakit.loader.postgresql`
 * Twitter streams -- :py:mod:`jubakit.loader.twitter`
 * *Chain* Loaders (that wraps other Loaders) -- :py:mod:`jubakit.loader.chain`
 
