@@ -11,11 +11,18 @@ In this example we show how to perform K-fold cross validation and
 calculate metrics (`classification_report`) using scikit-learn.
 """
 
+import sklearn
 import sklearn.datasets
 import sklearn.metrics
-from sklearn.cross_validation import StratifiedKFold
-
 from jubakit.classifier import Classifier, Dataset, Config
+
+# switch StratifiedKFold API
+sklearn_version = int(sklearn.__version__.split('.')[1])
+if sklearn_version < 18:
+    from sklearn.cross_validation import StratifiedKFold
+else:
+    from sklearn.model_selection import StratifiedKFold
+
 
 # Load built-in `iris` dataset from scikit-learn.
 iris = sklearn.datasets.load_iris()
@@ -37,7 +44,14 @@ true_labels = []
 predicted_labels = []
 
 # Run stratified K-fold validation.
-for train_idx, test_idx in StratifiedKFold(list(dataset.get_labels()), n_folds=10):
+labels = list(dataset.get_labels())
+if sklearn_version < 18:
+    train_test_indices = StratifiedKFold(labels, n_folds=10)
+else:
+    skf = StratifiedKFold(n_splits=10)
+    train_test_indices = skf.split(labels, labels)
+
+for train_idx, test_idx in train_test_indices:
   # Clear the classifier (call `clear` RPC).
   classifier.clear()
 
