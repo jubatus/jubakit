@@ -68,7 +68,7 @@ class Recommender(BaseService):
 
   def complete_row_from_id(self, dataset):
     """
-    Returns data points from the row id in the recommender model, 
+    Returns data points from the row id in the recommender model,
     with missing value completed by predicted value.
     """
     cli = self._client()
@@ -76,7 +76,7 @@ class Recommender(BaseService):
       if row_id is None:
         raise RuntimeError('Non ID-based datasets must use `complete_row_from_datum`')
       result = cli.complete_row_from_id(row_id)
-      yield (idx, row_id, result) 
+      yield (idx, row_id, result)
 
   def complete_row_from_datum(self, dataset):
     """
@@ -97,7 +97,34 @@ class Recommender(BaseService):
       if row_id is None:
         raise RuntimeError('Non ID-based datasets must use `similar_row_from_datum`')
       result = cli.similar_row_from_id(row_id, size)
-      yield (idx, row_id, result) 
+      yield (idx, row_id, result)
+
+  def similar_row_from_id_and_score(self, dataset, score=0.8):
+    """
+    Returns rows which are most similar to the row id and have a greater similarity score than score.
+    """
+    cli = self._client()
+    for (idx, (row_id, d)) in dataset:
+      if row_id is None:
+        raise RuntimeError('Non ID-based datasets must use `similar_row_from_datum_and_score`')
+      result = cli.similar_row_from_id_and_score(row_id, score)
+      yield (idx, row_id, result)
+
+  def similar_row_from_id_and_rate(self, dataset, rate=0.1):
+    """
+    Returns the top rate of all the rows which are most similar to the row id.
+    For example, return the top 10% of all the rows when 0.1 is specified as rate.
+
+    The rate must be in (0, 1].
+    """
+    if rate <= 0.0 or 1.0 < rate:
+      raise ValueError('rate must be in (0, 1], but {}'.format(rate))
+    cli = self._client()
+    for (idx, (row_id, d)) in dataset:
+      if row_id is None:
+        raise RuntimeError('Non ID-based datasets must use `similar_row_from_datum_and_rate`')
+      result = cli.similar_row_from_id_and_rate(row_id, rate)
+      yield (idx, row_id, result)
 
   def similar_row_from_datum(self, dataset, size=10):
     """
@@ -107,7 +134,30 @@ class Recommender(BaseService):
     for (idx, (row_id, d)) in dataset:
       result = cli.similar_row_from_datum(d, size)
       yield (idx, row_id, result)
-       
+
+  def similar_row_from_datum_and_score(self, dataset, score=0.8):
+    """
+    Returns rows which are most similar to row and have a greater similarity score than score.
+    """
+    cli = self._client()
+    for (idx, (row_id, d)) in dataset:
+      result = cli.similar_row_from_datum_and_score(d, score)
+      yield (idx, row_id, result)
+
+  def similar_row_from_datum_and_rate(self, dataset, rate=0.1):
+    """
+    Returns the top rate of all the rows which are most similar to row.
+    For example, return the top 10% of all the rows when 0.1 is specified as rate.
+
+    The rate must be in (0, 1].
+    """
+    if rate <= 0.0 or 1.0 < rate:
+      raise ValueError('rate must be in (0, 1], but {}'.format(rate))
+    cli = self._client()
+    for (idx, (row_id, d)) in dataset:
+      result = cli.similar_row_from_datum_and_rate(d, rate)
+      yield (idx, row_id, result)
+
   def decode_row(self, dataset):
     """
     Returns data points in the row id.
@@ -117,7 +167,7 @@ class Recommender(BaseService):
       if row_id is None:
         raise RuntimeError('Each data in datasets must has `row_id`')
       result = cli.decode_row(row_id)
-      yield (idx, row_id, result) 
+      yield (idx, row_id, result)
 
 class Config(GenericConfig):
   """
@@ -126,7 +176,7 @@ class Config(GenericConfig):
 
   @classmethod
   def methods(cls):
-    return ['lsh', 'euclid_lsh', 'minhash', 'inverted_index', 
+    return ['lsh', 'euclid_lsh', 'minhash', 'inverted_index',
             'inverted_index_euclid', 'nearest_neighbor_recommender']
 
   @classmethod
@@ -139,7 +189,7 @@ class Config(GenericConfig):
       return None
     elif method in ('minhash'):
       return {
-        'hash_num': 128,        
+        'hash_num': 128,
       }
     elif method in ('lsh', 'euclid_lsh'):
       return {

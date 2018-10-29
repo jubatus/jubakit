@@ -54,7 +54,7 @@ class RecommenderTest(TestCase):
   def test_update_row(self):
     recommender = Recommender.run(Config())
     loader = StubLoader()
-   
+
     # dataset must have id when execute `update_row`
     schema = Schema({'v': Schema.NUMBER})
     dataset = Dataset(loader, schema)
@@ -72,7 +72,7 @@ class RecommenderTest(TestCase):
     filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
-    
+
     # dataset must have id when execute `complete_row_from_id`
     schema = Schema({'v': Schema.NUMBER})
     dataset = Dataset(loader, schema)
@@ -86,7 +86,7 @@ class RecommenderTest(TestCase):
       self.assertEqual(0, len(d.string_values))
       self.assertEqual(0, len(d.num_values))
       self.assertEqual(0, len(d.binary_values))
-      
+
     recommender.stop()
 
   def test_complete_row_from_datum(self):
@@ -115,7 +115,7 @@ class RecommenderTest(TestCase):
     filter_warning()
     recommender = Recommender.run(Config())
     loader = StubLoader()
-    
+
     # dataset must have id when execute `similar_row_from_id`
     schema = Schema({'v': Schema.NUMBER})
     dataset = Dataset(loader, schema)
@@ -129,7 +129,56 @@ class RecommenderTest(TestCase):
       self.assertEqual(0, len(d.string_values))
       self.assertEqual(0, len(d.num_values))
       self.assertEqual(0, len(d.binary_values))
- 
+
+    recommender.stop()
+
+  def test_similar_row_from_id_and_score(self):
+    filter_warning()
+    recommender = Recommender.run(Config())
+    loader = StubLoader()
+
+    # dataset must have id when execute `similar_row_from_id_and_score`
+    schema = Schema({'v': Schema.NUMBER})
+    dataset = Dataset(loader, schema)
+    def func():
+      for _ in recommender.similar_row_from_id_and_score(dataset): pass
+    self.assertRaises(RuntimeError, lambda: func())
+
+    schema = Schema({'v': Schema.ID})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_id_and_score(dataset):
+      self.assertEqual(str(idx+1), row_id)    # there is no id in column_table
+      self.assertEqual(0, len(result))  # there is no similar row in column_table
+
+    recommender.stop()
+
+  def test_similar_row_from_id_and_rate(self):
+    filter_warning()
+    recommender = Recommender.run(Config())
+    loader = StubLoader()
+
+    # dataset must have id when execute `similar_row_from_id_and_rate`
+    schema = Schema({'v': Schema.NUMBER})
+    dataset = Dataset(loader, schema)
+    def func():
+      for _ in recommender.similar_row_from_id_and_rate(dataset): pass
+    self.assertRaises(RuntimeError, lambda: func())
+
+    # rate must be in (0, 1].
+    def func():
+      for _ in recommender.similar_row_from_id_and_rate(dataset, rate=0.0): pass
+    self.assertRaises(ValueError, lambda: func())
+
+    def func():
+      for _ in recommender.similar_row_from_id_and_rate(dataset, rate=1.01): pass
+    self.assertRaises(ValueError, lambda: func())
+
+    schema = Schema({'v': Schema.ID})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_id_and_rate(dataset, 1.0):
+      self.assertEqual(str(idx+1), row_id)    # there is no id in column_table
+      self.assertEqual(0, len(result))  # there is no similar row in column_table
+
     recommender.stop()
 
   def test_similar_row_from_datum(self):
@@ -144,6 +193,49 @@ class RecommenderTest(TestCase):
     schema = Schema({'v': Schema.NUMBER})
     dataset = Dataset(loader, schema)
     for (idx, row_id, result) in recommender.similar_row_from_datum(dataset):
+      self.assertEqual(None, row_id)    # there is no id in column_table
+      self.assertEqual(0, len(result))  # there is no similar row in column_table
+
+    recommender.stop()
+
+  def test_similar_row_from_datum_and_score(self):
+    filter_warning()
+    recommender = Recommender.run(Config())
+    loader = StubLoader()
+    schema = Schema({'v': Schema.ID})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_datum_and_score(dataset):
+      self.assertEqual(0, len(result))
+
+    schema = Schema({'v': Schema.NUMBER})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_datum_and_score(dataset):
+      self.assertEqual(None, row_id)    # there is no id in column_table
+      self.assertEqual(0, len(result))  # there is no similar row in column_table
+
+    recommender.stop()
+
+  def test_similar_row_from_datum_and_rate(self):
+    filter_warning()
+    recommender = Recommender.run(Config())
+    loader = StubLoader()
+    schema = Schema({'v': Schema.ID})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_datum_and_rate(dataset):
+      self.assertEqual(0, len(result))
+
+    # rate must be in (0, 1].
+    def func():
+      for _ in recommender.similar_row_from_datum_and_rate(dataset, rate=0.0): pass
+    self.assertRaises(ValueError, lambda: func())
+
+    def func():
+      for _ in recommender.similar_row_from_datum_and_rate(dataset, rate=1.01): pass
+    self.assertRaises(ValueError, lambda: func())
+
+    schema = Schema({'v': Schema.NUMBER})
+    dataset = Dataset(loader, schema)
+    for (idx, row_id, result) in recommender.similar_row_from_datum_and_rate(dataset):
       self.assertEqual(None, row_id)    # there is no id in column_table
       self.assertEqual(0, len(result))  # there is no similar row in column_table
 
@@ -167,7 +259,7 @@ class RecommenderTest(TestCase):
       self.assertEqual(0, len(d.string_values))
       self.assertEqual(0, len(d.num_values))
       self.assertEqual(0, len(d.binary_values))
- 
+
     recommender.stop()
 
 class ConfigTest(TestCase):
@@ -185,14 +277,14 @@ class ConfigTest(TestCase):
 
   def test_method_param(self):
     self.assertTrue('parameter' not in Config(method='inverted_index'))
-    self.assertTrue('hash_num' in Config(method='minhash')['parameter']) 
-    self.assertTrue('hash_num' in Config(method='lsh')['parameter']) 
-    self.assertTrue('threads' in Config(method='lsh')['parameter']) 
-    self.assertTrue('method' in Config(method='nearest_neighbor_recommender')['parameter'])    
-    self.assertTrue('parameter' in Config(method='nearest_neighbor_recommender')['parameter'])    
-    self.assertTrue('threads' in 
+    self.assertTrue('hash_num' in Config(method='minhash')['parameter'])
+    self.assertTrue('hash_num' in Config(method='lsh')['parameter'])
+    self.assertTrue('threads' in Config(method='lsh')['parameter'])
+    self.assertTrue('method' in Config(method='nearest_neighbor_recommender')['parameter'])
+    self.assertTrue('parameter' in Config(method='nearest_neighbor_recommender')['parameter'])
+    self.assertTrue('threads' in
             Config(method='nearest_neighbor_recommender')['parameter']['parameter'])
-    self.assertTrue('hash_num' in 
+    self.assertTrue('hash_num' in
             Config(method='nearest_neighbor_recommender')['parameter']['parameter'])
 
   def test_invalid_method(self):
