@@ -1,6 +1,15 @@
 ChangeLog
 ====================================================
 
+Release 0.6.1 - 2018/10/29
+--------------------------
+
+* New Features
+    * Add postgresql loader (#125)
+    * Add support for filtering API of Recommender (#126, #127)
+* Bug Fixes
+    * Fix ``classifier_kfold.py`` example not working with sklearn 0.20 or later (#128)
+
 Release 0.6.0 (2018-08-27)
 --------------------------
 
