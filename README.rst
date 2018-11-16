@@ -102,6 +102,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | classifier_sklearn_grid_search.py | Grid Search example using scikit-learn wrapper| ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
+| classifier_tensorboard.py         | Visualize a training process using TensorBoard| ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
 | regression_boston.py              | Regression with toy dataset (boston)          | ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | regression_csv.py                 | Regression with CSV file                      |                       |
