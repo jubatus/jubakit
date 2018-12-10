@@ -78,17 +78,7 @@ class BaseSchema(object):
     loaders with the same configuration.
     """
     self._fallback = fallback
-    self._key2type = {}
-    self._key2name = {}
-
-    for (key, ent) in mapping.items():
-      if isinstance(ent, (tuple, list, )):
-        (key_type, key_name) = ent
-      else:
-        (key_type, key_name) = (ent, key)
-
-      self._key2type[key] = key_type
-      self._key2name[key] = key_name
+    self._key2type, self._key2name = BaseSchema._normalize_mapping(mapping)
 
   def transform(self, row):
     """
@@ -105,6 +95,25 @@ class BaseSchema(object):
     raise NotImplementedError()
 
   @staticmethod
+  def _normalize_mapping(mapping):
+    """
+    Normalizes the schema mapping.
+    """
+    key2type = {}
+    key2name = {}
+
+    for (key, ent) in mapping.items():
+      if isinstance(ent, (tuple, list, )):
+        (key_type, key_name) = ent
+      else:
+        (key_type, key_name) = (ent, key)
+
+      key2type[key] = key_type
+      key2name[key] = key_name
+
+    return key2type, key2name
+
+  @staticmethod
   def _get_unique_mapping(mapping, fallback, key_type, name, optional=False):
     """
     Validates the schema key uniqueness.
@@ -113,7 +122,8 @@ class BaseSchema(object):
     if fallback == key_type:
       raise RuntimeError('{0} key cannot be specified as fallback in schema'.format(name))
 
-    keys = [k for k in mapping.keys() if mapping[k] == key_type]
+    key2type, _ = BaseSchema._normalize_mapping(mapping)
+    keys = [k for k in key2type.keys() if key2type[k] == key_type]
     if len(keys) == 0:
       if optional: return None
       raise RuntimeError('{0} key must be specified in schema'.format(name))
