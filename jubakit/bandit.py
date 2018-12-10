@@ -45,7 +45,9 @@ class Bandit(BaseService):
 
   def get_arm_info(self, player_id):
     player_id = str(player_id)
-    return self._client().get_arm_info(player_id)
+    arm_info = self._client().get_arm_info(player_id)
+    # convert key object to string type.
+    return {str(name): info for name, info in arm_info.items()}
 
   def reset(self, player_id):
     player_id = str(player_id)
