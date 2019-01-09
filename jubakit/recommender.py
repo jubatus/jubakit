@@ -55,6 +55,17 @@ class Recommender(BaseService):
   def _embedded_class(cls):
     return jubatus.embedded.Recommender
 
+  def clear_row(self, dataset):
+    """
+    Removes the given rows from the recommendation table.
+    """
+    cli = self._client()
+    for (idx, (row_id, d)) in dataset:
+      if row_id is None:
+        raise RuntimeError('dataset must have `id`.')
+      result = cli.clear_row(row_id)
+      yield (idx, row_id, result)
+
   def update_row(self, dataset):
     """
     Update data points to the recommender model using the given dataset.
@@ -168,6 +179,7 @@ class Recommender(BaseService):
         raise RuntimeError('Each data in datasets must has `row_id`')
       result = cli.decode_row(row_id)
       yield (idx, row_id, result)
+
 
 class Config(GenericConfig):
   """
