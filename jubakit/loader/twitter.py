@@ -80,7 +80,7 @@ class TwitterStreamLoader(BaseLoader):
     if start_stream is None:
       raise RuntimeError('unknown stream mode: {0}'.format(mode))
 
-    kwargs['async'] = False
+    kwargs['is_async'] = False
     self._thread = threading.Thread(target=start_stream, kwargs=kwargs)
     self._thread.daemon = True
 
