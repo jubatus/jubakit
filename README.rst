@@ -24,6 +24,7 @@ Currently jubakit supports
 `NearestNeighbor <http://jubat.us/en/api/api_nearest_neighbor.html>`_,
 `Clustering <http://jubat.us/en/api/api_clustering.html>`_,
 `Burst <http://jubat.us/en/api/api_burst.html>`_,
+`Bandit <http://jubat.us/en/api/api_bandit.html>`_ and
 `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
 
 Install
@@ -118,6 +119,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | clustering_2d.py                  | Clustering 2-dimensional dataset              |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | burst_dummy_stream.py             | Burst detection with stream data              |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| bandit_slot.py                    | Multi-armed bandit with slot machine example  |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
