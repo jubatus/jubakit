@@ -51,6 +51,26 @@ class RecommenderTest(TestCase):
   def test_embedded(self):
     recommender = Recommender.run(Config(), embedded=True)
 
+  def test_clear_row(self):
+    recommender = Recommender.run(Config())
+    loader = StubLoader()
+
+    # dataset must have id when execute `clear_row`.
+    schema = Schema({'v': Schema.NUMBER})
+    dataset = Dataset(loader, schema)
+    def func():
+      for _ in recommender.clear_row(dataset): pass
+    self.assertRaises(RuntimeError, lambda: func())
+
+    schema = Schema({'v': Schema.ID})
+    dataset = Dataset(loader, schema)
+
+    # expect to get False when table is empty.
+    for (idx, row_id, result) in recommender.clear_row(dataset):
+      self.assertEqual(result, True)
+
+    recommender.stop()
+
   def test_update_row(self):
     recommender = Recommender.run(Config())
     loader = StubLoader()
