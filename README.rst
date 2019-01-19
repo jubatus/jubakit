@@ -23,6 +23,7 @@ Currently jubakit supports
 `Recommender <http://jubat.us/en/api/api_recommender.html>`_,
 `NearestNeighbor <http://jubat.us/en/api/api_nearest_neighbor.html>`_,
 `Clustering <http://jubat.us/en/api/api_clustering.html>`_,
+`Burst <http://jubat.us/en/api/api_burst.html>`_,
 `Bandit <http://jubat.us/en/api/api_bandit.html>`_ and
 `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
 
@@ -116,6 +117,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | nearest_neighbor_aaai.py          | Search neighbor items                         |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | clustering_2d.py                  | Clustering 2-dimensional dataset              |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| burst_dummy_stream.py             | Burst detection with stream data              |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | bandit_slot.py                    | Multi-armed bandit with slot machine example  |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
