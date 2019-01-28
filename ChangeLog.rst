@@ -1,6 +1,20 @@
 ChangeLog
 ====================================================
 
+Release 0.6.2 - 2019/01/28
+--------------------------
+
+* New Features
+    * Add Bandit service (#129, #131)
+    * Add support for clear_row method of Recommender (#136, #137)
+
+* Improvements
+    * Add visualize example using TensorBoard (#131)
+
+* Bug Fixes
+    * Fix schema not working with service specialized column definition (#134, #135)
+    * Fix Twitter Loader not working with latest tweepy (#138)
+
 Release 0.6.1 - 2018/10/29
 --------------------------
 

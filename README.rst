@@ -22,7 +22,9 @@ Currently jubakit supports
 `Anomaly <http://jubat.us/en/api/api_anomaly.html>`_,
 `Recommender <http://jubat.us/en/api/api_recommender.html>`_,
 `NearestNeighbor <http://jubat.us/en/api/api_nearest_neighbor.html>`_,
-`Clustering <http://jubat.us/en/api/api_clustering.html>`_ and
+`Clustering <http://jubat.us/en/api/api_clustering.html>`_,
+`Burst <http://jubat.us/en/api/api_burst.html>`_,
+`Bandit <http://jubat.us/en/api/api_bandit.html>`_ and
 `Weight <http://jubat.us/en/api/api_weight.html>`_ engines.
 
 Install
@@ -102,6 +104,8 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | classifier_sklearn_grid_search.py | Grid Search example using scikit-learn wrapper| ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
+| classifier_tensorboard.py         | Visualize a training process using TensorBoard| ✓                     |
++-----------------------------------+-----------------------------------------------+-----------------------+
 | regression_boston.py              | Regression with toy dataset (boston)          | ✓                     |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | regression_csv.py                 | Regression with CSV file                      |                       |
@@ -115,6 +119,10 @@ See the `example <https://github.com/jubatus/jubakit/tree/master/example>`_ dire
 | nearest_neighbor_aaai.py          | Search neighbor items                         |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | clustering_2d.py                  | Clustering 2-dimensional dataset              |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| burst_dummy_stream.py             | Burst detection with stream data              |                       |
++-----------------------------------+-----------------------------------------------+-----------------------+
+| bandit_slot.py                    | Multi-armed bandit with slot machine example  |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
 | weight_shogun.py                  | Tracing fv_converter behavior using Weight    |                       |
 +-----------------------------------+-----------------------------------------------+-----------------------+
