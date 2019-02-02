@@ -83,7 +83,7 @@ msgid ""
 "learn.org/stable/install.html>`_ is required to use some features like "
 "K-fold cross validation."
 msgstr ""
-"必須ではありませんが、K-分割交差検証のようないくつかの機能をしようする場合は `scikit-learn のインストール <http"
+"必須ではありませんが、K-分割交差検証のようないくつかの機能を使用する場合は `scikit-learn のインストール <http"
 "://scikit-learn.org/stable/install.html>`_ をする必要があります。"
 
 #: ../../../README.rst:45
