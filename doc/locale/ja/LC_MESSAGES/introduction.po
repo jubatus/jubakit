@@ -3,19 +3,18 @@
 # This file is distributed under the same license as the jubakit package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, 2018.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: jubakit 0.5.3\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-04-03 14:42+0900\n"
+"POT-Creation-Date: 2019-02-02 20:33+0900\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.5.1\n"
+"Generated-By: Babel 2.5.3\n"
 
 #: ../../../README.rst:1
 msgid "|Travis|_ |Coveralls|_ |PyPi|_"
@@ -46,7 +45,9 @@ msgid ""
 "<http://jubat.us/en/api/api_anomaly.html>`_, `Recommender "
 "<http://jubat.us/en/api/api_recommender.html>`_, `NearestNeighbor "
 "<http://jubat.us/en/api/api_nearest_neighbor.html>`_, `Clustering "
-"<http://jubat.us/en/api/api_clustering.html>`_ and `Weight "
+"<http://jubat.us/en/api/api_clustering.html>`_, `Burst "
+"<http://jubat.us/en/api/api_burst.html>`_, `Bandit "
+"<http://jubat.us/en/api/api_bandit.html>`_ and `Weight "
 "<http://jubat.us/en/api/api_weight.html>`_ engines."
 msgstr ""
 "現在のjubakitは `Classifier "
@@ -55,251 +56,276 @@ msgstr ""
 "<http://jubat.us/ja/api/api_anomaly.html>`_, `Recommender "
 "<http://jubat.us/ja/api/api_recommender.html>`_, `NearestNeighbor "
 "<http://jubat.us/ja/api/api_nearest_neighbor.html>`_, `Clustering "
+"<http://jubat.us/en/api/api_clustering.html>`_, `Burst "
+"<http://jubat.us/en/api/api_burst.html>`_, `Bandit "
 "<http://jubat.us/ja/api/api_clustering.html>`_ および `Weight "
 "<http://jubat.us/ja/api/api_weight.html>`_ エンジンをサポートします。"
 
-#: ../../../README.rst:29
+#: ../../../README.rst:31
 msgid "Install"
 msgstr "インストール"
 
-#: ../../../README.rst:36
+#: ../../../README.rst:38
 msgid "Requirements"
 msgstr "要件"
 
-#: ../../../README.rst:38
+#: ../../../README.rst:40
 msgid "Python 2.7, 3.3, 3.4 or 3.5."
 msgstr "Python 2.7, 3.3, 3.4 または 3.5。"
 
-#: ../../../README.rst:39
+#: ../../../README.rst:41
 msgid "`Jubatus <http://jubat.us/en/quickstart.html>`_ needs to be installed."
 msgstr "`Jubatus <http://jubat.us/ja/quickstart.html>`_ がインストール済みであること。"
 
-#: ../../../README.rst:40
+#: ../../../README.rst:42
 msgid ""
 "Although not mandatory, `installing scikit-learn <http://scikit-"
 "learn.org/stable/install.html>`_ is required to use some features like "
 "K-fold cross validation."
 msgstr ""
-"必須ではありませんが、K-分割交差検証のようないくつかの機能をしようする場合は `scikit-learn のインストール <http"
+"必須ではありませんが、K-分割交差検証のようないくつかの機能を使用する場合は `scikit-learn のインストール <http"
 "://scikit-learn.org/stable/install.html>`_ をする必要があります。"
 
-#: ../../../README.rst:43
+#: ../../../README.rst:45
 msgid "Quick Start"
 msgstr "クイックスタート"
 
-#: ../../../README.rst:45
+#: ../../../README.rst:47
 msgid ""
 "The following example shows how to perform train/classify using CSV "
 "dataset."
-msgstr ""
-"CSVのデータセットを使用して学習/分類を"
-"行う例です。"
+msgstr "CSVのデータセットを使用して学習/分類を行う例です。"
 
-#: ../../../README.rst:74
+#: ../../../README.rst:76
 msgid "Examples by Topics"
 msgstr "使用例"
 
-#: ../../../README.rst:76
+#: ../../../README.rst:78
 msgid ""
 "See the `example "
 "<https://github.com/jubatus/jubakit/tree/master/example>`_ directory for "
 "working examples."
 msgstr ""
 "実際の例については、 `example "
-"<https://github.com/jubatus/jubakit/tree/master/example>`_ ディレクトリを"
-"参照してください。"
+"<https://github.com/jubatus/jubakit/tree/master/example>`_ "
+"ディレクトリを参照してください。"
 
-#: ../../../README.rst:79
+#: ../../../README.rst:81
 msgid "Example"
 msgstr "例"
 
-#: ../../../README.rst:79
+#: ../../../README.rst:81
 msgid "Topics"
 msgstr "トピック"
 
-#: ../../../README.rst:79
+#: ../../../README.rst:81
 msgid "Requires scikit-learn"
 msgstr ""
 
-#: ../../../README.rst:81
+#: ../../../README.rst:83
 msgid "classifier_csv.py"
 msgstr ""
 
-#: ../../../README.rst:81
+#: ../../../README.rst:83
 msgid "Handling CSV file and numeric features"
 msgstr "CSVファイルと数値特徴量を扱う。"
 
-#: ../../../README.rst:83
+#: ../../../README.rst:85
 msgid "classifier_shogun.py"
 msgstr ""
 
-#: ../../../README.rst:83
+#: ../../../README.rst:85
 msgid "Handling CSV file and string features"
 msgstr "CSVファイルと文字列特徴量を扱う。"
 
-#: ../../../README.rst:85
+#: ../../../README.rst:87
 msgid "classifier_digits.py"
 msgstr ""
 
-#: ../../../README.rst:85
+#: ../../../README.rst:87
 msgid "Handling toy dataset (digits)"
 msgstr "toyデータセット (digits) を扱う。"
 
-#: ../../../README.rst:85 ../../../README.rst:87 ../../../README.rst:89
-#: ../../../README.rst:91 ../../../README.rst:93 ../../../README.rst:101
-#: ../../../README.rst:103 ../../../README.rst:105 ../../../README.rst:109
+#: ../../../README.rst:87 ../../../README.rst:89 ../../../README.rst:91
+#: ../../../README.rst:93 ../../../README.rst:95 ../../../README.rst:103
+#: ../../../README.rst:105 ../../../README.rst:107 ../../../README.rst:109
+#: ../../../README.rst:113
 msgid "✓"
 msgstr ""
 
-#: ../../../README.rst:87
+#: ../../../README.rst:89
 msgid "classifier_libsvm.py"
 msgstr ""
 
-#: ../../../README.rst:87
+#: ../../../README.rst:89
 msgid "Handling LIBSVM file"
 msgstr "LIBSVMファイルを扱う。"
 
-#: ../../../README.rst:89
+#: ../../../README.rst:91
 msgid "classifier_kfold.py"
 msgstr ""
 
-#: ../../../README.rst:89
+#: ../../../README.rst:91
 msgid "K-fold cross validation and metrics"
 msgstr "K-分割交差検証と評価指標。"
 
-#: ../../../README.rst:91
+#: ../../../README.rst:93
 msgid "classifier_parameter.py"
 msgstr ""
 
-#: ../../../README.rst:91
+#: ../../../README.rst:93
 msgid "Finding best hyper parameter"
 msgstr "最適なハイパーパラメータを見つける。"
 
-#: ../../../README.rst:93
+#: ../../../README.rst:95
 msgid "classifier_hyperopt_tuning.py"
 msgstr ""
 
-#: ../../../README.rst:93
+#: ../../../README.rst:95
 msgid "Finding best hyper parameter using hyperopt"
 msgstr "hyperoptを使用して最適なハイパーパラメータを見つける。"
 
-#: ../../../README.rst:95
+#: ../../../README.rst:97
 msgid "classifier_bulk.py"
 msgstr ""
 
-#: ../../../README.rst:95
+#: ../../../README.rst:97
 msgid "Bulk Train-Test Classifier"
 msgstr "分類モデルの学習-テストの一括化。"
 
-#: ../../../README.rst:97
+#: ../../../README.rst:99
 msgid "classifier_twitter.py"
 msgstr ""
 
-#: ../../../README.rst:97
+#: ../../../README.rst:99
 msgid "Handling Twitter Streams"
 msgstr "Twitter Streams を扱う。"
 
-#: ../../../README.rst:99
+#: ../../../README.rst:101
 msgid "classifier_model_extract.py"
 msgstr ""
 
-#: ../../../README.rst:99
+#: ../../../README.rst:101
 msgid "Extract contents of Classfier model file"
 msgstr "分類モデルファイルの内容を抽出する。"
 
-#: ../../../README.rst:101
+#: ../../../README.rst:103
 msgid "classifier_sklearn_wrapper.py"
 msgstr ""
 
-#: ../../../README.rst:101
+#: ../../../README.rst:103
 msgid "Classification using scikit-learn wrapper"
 msgstr "scikit-learnラッパーを使用した分類。"
 
-#: ../../../README.rst:103
+#: ../../../README.rst:105
 msgid "classifier_sklearn_grid_search.py"
 msgstr ""
 
-#: ../../../README.rst:103
+#: ../../../README.rst:105
 msgid "Grid Search example using scikit-learn wrapper"
 msgstr "scikit-learnラッパーを使用したグリッドサーチ例。"
 
-#: ../../../README.rst:105
+#: ../../../README.rst:107
+msgid "classifier_tensorboard.py"
+msgstr ""
+
+#: ../../../README.rst:107
+msgid "Visualize a training process using TensorBoard"
+msgstr "TensorBoardを使った学習プロセスの可視化。"
+
+#: ../../../README.rst:109
 msgid "regression_boston.py"
 msgstr ""
 
-#: ../../../README.rst:105
+#: ../../../README.rst:109
 msgid "Regression with toy dataset (boston)"
 msgstr "toyデータセット (boston) を使用した回帰。"
 
-#: ../../../README.rst:107
+#: ../../../README.rst:111
 msgid "regression_csv.py"
 msgstr ""
 
-#: ../../../README.rst:107
+#: ../../../README.rst:111
 msgid "Regression with CSV file"
 msgstr "CSVファイルを使用した回帰。"
 
-#: ../../../README.rst:109
+#: ../../../README.rst:113
 msgid "regression_sklearn_wrapper.py"
 msgstr ""
 
-#: ../../../README.rst:109
+#: ../../../README.rst:113
 msgid "Regression using scikit-learn wrapper"
 msgstr "scikit-learnラッパーを使用した回帰。"
 
-#: ../../../README.rst:111
+#: ../../../README.rst:115
 msgid "anomaly_auc.py"
 msgstr ""
 
-#: ../../../README.rst:111
+#: ../../../README.rst:115
 msgid "Anomaly detection and metrics"
 msgstr "異常検知と評価指標。"
 
-#: ../../../README.rst:113
+#: ../../../README.rst:117
 msgid "recommender_npb.py"
 msgstr ""
 
-#: ../../../README.rst:113
+#: ../../../README.rst:117
 msgid "Recommend similar items"
 msgstr "類似アイテムの推薦。"
 
-#: ../../../README.rst:115
+#: ../../../README.rst:119
 msgid "nearest_neighbor_aaai.py"
 msgstr ""
 
-#: ../../../README.rst:115
+#: ../../../README.rst:119
 msgid "Search neighbor items"
 msgstr "近傍アイテムの探索。"
 
-#: ../../../README.rst:117
+#: ../../../README.rst:121
 msgid "clustering_2d.py"
 msgstr ""
 
-#: ../../../README.rst:117
+#: ../../../README.rst:121
 msgid "Clustering 2-dimensional dataset"
 msgstr "2次元データセットのクラスタリング。"
 
-#: ../../../README.rst:119
+#: ../../../README.rst:123
+msgid "burst_dummy_stream.py"
+msgstr ""
+
+#: ../../../README.rst:123
+msgid "Burst detection with stream data"
+msgstr "ストリームデータを使ったバースト検知。"
+
+#: ../../../README.rst:125
+msgid "bandit_slot.py"
+msgstr ""
+
+#: ../../../README.rst:125
+msgid "Multi-armed bandit with slot machine example"
+msgstr "スロットマシーン例を使った多腕バンディット。"
+
+#: ../../../README.rst:127
 msgid "weight_shogun.py"
 msgstr ""
 
-#: ../../../README.rst:119
+#: ../../../README.rst:127
 msgid "Tracing fv_converter behavior using Weight"
 msgstr "Weightを使用したfv_converterのふるまいの追跡。"
 
-#: ../../../README.rst:121
+#: ../../../README.rst:129
 msgid "weight_model_extract.py"
 msgstr ""
 
-#: ../../../README.rst:121
+#: ../../../README.rst:129
 msgid "Extract contents of Weight model file"
 msgstr "Weightモデルファイルの内容を抽出する。"
 
-#: ../../../README.rst:125
+#: ../../../README.rst:133
 msgid "License"
 msgstr "ライセンス"
 
-#: ../../../README.rst:127
+#: ../../../README.rst:135
 msgid "MIT License"
 msgstr ""
 
